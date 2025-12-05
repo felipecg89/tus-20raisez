@@ -1,10 +1,15 @@
 import { PagePlaceholder } from "@/components/PagePlaceholder";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
 
 export default function Casas() {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
     <PagePlaceholder
-      title="Casas y Terrenos para Paisanos"
-      description="Descubre propiedades premium en México. Desde apartamentos hasta terrenos, todo verificado y seguro para paisanos en Estados Unidos."
+      title={t.casas.title}
+      description={t.casas.description}
     />
   );
 }
