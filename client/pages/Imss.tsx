@@ -1,10 +1,15 @@
 import { PagePlaceholder } from "@/components/PagePlaceholder";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
 
 export default function Imss() {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
     <PagePlaceholder
-      title="IMSS e Infonavit Sin Fronteras"
-      description="Modalidad 40, modalidad 44 y crédito hipotecario para paisanos. Regístrate desde Estados Unidos y accede a beneficios exclusivos."
+      title={t.imss.title}
+      description={t.imss.description}
     />
   );
 }
