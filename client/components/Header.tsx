@@ -4,10 +4,12 @@ import { Menu, X, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
-import { useState as useStateDropdown } from "react";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [langDropdown, setLangDropdown] = useState(false);
+  const { language, setLanguage } = useLanguage();
+  const t = translations[language];
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-border shadow-sm">
@@ -30,48 +32,128 @@ export const Header = () => {
               to="/"
               className="text-foreground hover:text-primary transition-colors font-medium"
             >
-              Inicio
+              {t.header.inicio}
             </Link>
             <Link
               to="/casas"
               className="text-foreground hover:text-primary transition-colors font-medium"
             >
-              Casas
+              {t.header.casas}
             </Link>
             <Link
               to="/imss"
               className="text-foreground hover:text-primary transition-colors font-medium"
             >
-              IMSS/Infonavit
+              {t.header.imssInfonavit}
             </Link>
             <Link
               to="/legal"
               className="text-foreground hover:text-primary transition-colors font-medium"
             >
-              Asesoría Legal
+              {t.header.asesoriaLegal}
             </Link>
             <a
               href="#contacto"
               className="text-foreground hover:text-primary transition-colors font-medium"
             >
-              Contacto
+              {t.header.contacto}
             </a>
+
+            {/* Language Selector */}
+            <div className="relative">
+              <button
+                onClick={() => setLangDropdown(!langDropdown)}
+                className="flex items-center gap-2 p-2 rounded-lg hover:bg-muted transition-colors border border-border"
+              >
+                <Globe className="w-4 h-4" />
+                <span className="text-sm font-medium uppercase">{language}</span>
+              </button>
+              {langDropdown && (
+                <div className="absolute right-0 mt-2 w-32 bg-white border border-border rounded-lg shadow-lg">
+                  <button
+                    onClick={() => {
+                      setLanguage("es");
+                      setLangDropdown(false);
+                    }}
+                    className={cn(
+                      "w-full text-left px-4 py-2 hover:bg-muted transition-colors",
+                      language === "es" && "bg-primary/10 text-primary font-semibold"
+                    )}
+                  >
+                    🇪🇸 Español
+                  </button>
+                  <button
+                    onClick={() => {
+                      setLanguage("en");
+                      setLangDropdown(false);
+                    }}
+                    className={cn(
+                      "w-full text-left px-4 py-2 hover:bg-muted transition-colors",
+                      language === "en" && "bg-primary/10 text-primary font-semibold"
+                    )}
+                  >
+                    🇬🇧 English
+                  </button>
+                </div>
+              )}
+            </div>
+
             <button className="bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors">
-              Habla con un asesor
+              {t.header.hablaConAsesor}
             </button>
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 hover:bg-muted rounded-lg transition-colors"
-          >
-            {isOpen ? (
-              <X className="w-6 h-6 text-foreground" />
-            ) : (
-              <Menu className="w-6 h-6 text-foreground" />
-            )}
-          </button>
+          <div className="md:hidden flex items-center gap-2">
+            {/* Mobile Language Selector */}
+            <div className="relative">
+              <button
+                onClick={() => setLangDropdown(!langDropdown)}
+                className="p-2 hover:bg-muted rounded-lg transition-colors"
+              >
+                <Globe className="w-5 h-5 text-foreground" />
+              </button>
+              {langDropdown && (
+                <div className="absolute right-0 mt-2 w-32 bg-white border border-border rounded-lg shadow-lg z-50">
+                  <button
+                    onClick={() => {
+                      setLanguage("es");
+                      setLangDropdown(false);
+                    }}
+                    className={cn(
+                      "w-full text-left px-4 py-2 hover:bg-muted transition-colors text-sm",
+                      language === "es" && "bg-primary/10 text-primary font-semibold"
+                    )}
+                  >
+                    🇪🇸 Español
+                  </button>
+                  <button
+                    onClick={() => {
+                      setLanguage("en");
+                      setLangDropdown(false);
+                    }}
+                    className={cn(
+                      "w-full text-left px-4 py-2 hover:bg-muted transition-colors text-sm",
+                      language === "en" && "bg-primary/10 text-primary font-semibold"
+                    )}
+                  >
+                    🇬🇧 English
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 hover:bg-muted rounded-lg transition-colors"
+            >
+              {isOpen ? (
+                <X className="w-6 h-6 text-foreground" />
+              ) : (
+                <Menu className="w-6 h-6 text-foreground" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
@@ -83,38 +165,38 @@ export const Header = () => {
                 className="text-foreground hover:text-primary transition-colors font-medium py-2"
                 onClick={() => setIsOpen(false)}
               >
-                Inicio
+                {t.header.inicio}
               </Link>
               <Link
                 to="/casas"
                 className="text-foreground hover:text-primary transition-colors font-medium py-2"
                 onClick={() => setIsOpen(false)}
               >
-                Casas
+                {t.header.casas}
               </Link>
               <Link
                 to="/imss"
                 className="text-foreground hover:text-primary transition-colors font-medium py-2"
                 onClick={() => setIsOpen(false)}
               >
-                IMSS/Infonavit
+                {t.header.imssInfonavit}
               </Link>
               <Link
                 to="/legal"
                 className="text-foreground hover:text-primary transition-colors font-medium py-2"
                 onClick={() => setIsOpen(false)}
               >
-                Asesoría Legal
+                {t.header.asesoriaLegal}
               </Link>
               <a
                 href="#contacto"
                 className="text-foreground hover:text-primary transition-colors font-medium py-2"
                 onClick={() => setIsOpen(false)}
               >
-                Contacto
+                {t.header.contacto}
               </a>
               <button className="bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors w-full">
-                Habla con un asesor
+                {t.header.hablaConAsesor}
               </button>
             </div>
           </div>
