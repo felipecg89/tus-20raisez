@@ -3,9 +3,13 @@ import { useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Link } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
 
 const NotFound = () => {
   const location = useLocation();
+  const { language } = useLanguage();
+  const t = translations[language];
 
   useEffect(() => {
     console.error(
@@ -26,12 +30,11 @@ const NotFound = () => {
           </div>
 
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Página no encontrada
+            {t.notFound.title}
           </h2>
 
           <p className="text-lg text-foreground/70 mb-8">
-            Parece que la página que buscas no existe. Por favor, regresa al
-            inicio o contacta con nosotros si necesitas ayuda.
+            {t.notFound.message} {t.notFound.help}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -39,13 +42,13 @@ const NotFound = () => {
               to="/"
               className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
             >
-              Volver al inicio
+              {t.notFound.backHome}
             </Link>
             <a
               href="#contacto"
               className="border-2 border-primary text-primary px-8 py-3 rounded-lg font-semibold hover:bg-primary/5 transition-colors"
             >
-              Contactar
+              {t.notFound.contact}
             </a>
           </div>
         </div>
