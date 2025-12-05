@@ -1,5 +1,8 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { Link } from "react-router-dom";
 
 const NotFound = () => {
   const location = useLocation();
@@ -12,14 +15,42 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
-          Return to Home
-        </a>
-      </div>
+    <div className="flex flex-col min-h-screen bg-white">
+      <Header />
+      <main className="flex-1 flex items-center justify-center py-20 md:py-32">
+        <div className="container mx-auto px-4 text-center max-w-2xl">
+          <div className="mb-8">
+            <h1 className="text-6xl md:text-7xl font-bold text-primary mb-4">
+              404
+            </h1>
+          </div>
+
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            Página no encontrada
+          </h2>
+
+          <p className="text-lg text-foreground/70 mb-8">
+            Parece que la página que buscas no existe. Por favor, regresa al
+            inicio o contacta con nosotros si necesitas ayuda.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/"
+              className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+            >
+              Volver al inicio
+            </Link>
+            <a
+              href="#contacto"
+              className="border-2 border-primary text-primary px-8 py-3 rounded-lg font-semibold hover:bg-primary/5 transition-colors"
+            >
+              Contactar
+            </a>
+          </div>
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 };
