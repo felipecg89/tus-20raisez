@@ -1,10 +1,15 @@
 import { PagePlaceholder } from "@/components/PagePlaceholder";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
 
 export default function Legal() {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
     <PagePlaceholder
-      title="Asesoría Legal Completa"
-      description="Representación legal en México. Trámites, herencias, poderes notariales y más. Abogados certificados listos para ayudarte."
+      title={t.legal.title}
+      description={t.legal.description}
     />
   );
 }
