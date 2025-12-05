@@ -1,28 +1,32 @@
 import { Check } from "lucide-react";
-
-const benefits = [
-  "Atención en tu idioma - español e inglés",
-  "Pagos seguros desde Estados Unidos",
-  "Asesor legal incluido en todos los servicios",
-  "Acompañamiento total en cada paso",
-  "Respuesta garantizada en menos de 1 hora",
-  "Servicio 100% digital y presencial en México",
-  "Sin sorpresas - precios transparentes",
-  "Años de experiencia con paisanos",
-];
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
 
 export const Benefits = () => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
+  const benefits = [
+    t.benefits.benefit1,
+    t.benefits.benefit2,
+    t.benefits.benefit3,
+    t.benefits.benefit4,
+    t.benefits.benefit5,
+    t.benefits.benefit6,
+    t.benefits.benefit7,
+    t.benefits.benefit8,
+  ];
+
   return (
     <section className="py-20 md:py-28 bg-gradient-to-br from-primary/5 to-secondary/5">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-              ¿Por qué elegirnos?
+              {t.benefits.title}
             </h2>
             <p className="text-lg text-foreground/70">
-              Ofrecemos lo mejor para paisanos que desean invertir en su futuro
-              en México.
+              {t.benefits.subtitle}
             </p>
           </div>
 
@@ -44,14 +48,13 @@ export const Benefits = () => {
 
           <div className="mt-12 bg-gradient-to-r from-primary to-secondary rounded-2xl p-8 md:p-12 text-white text-center">
             <h3 className="text-2xl md:text-3xl font-bold mb-4">
-              Listo para empezar?
+              {t.benefits.cta}
             </h3>
             <p className="text-white/90 mb-6 text-lg">
-              Habla con uno de nuestros asesores hoy mismo. Tu consulta inicial
-              es completamente gratis.
+              {t.benefits.ctaSubtitle}
             </p>
             <button className="bg-white text-primary px-8 py-3 rounded-lg font-bold hover:bg-white/90 transition-colors text-lg">
-              Agendar llamada gratis
+              {t.benefits.ctaButton}
             </button>
           </div>
         </div>
