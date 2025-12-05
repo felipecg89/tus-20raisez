@@ -1,40 +1,44 @@
 import { Star } from "lucide-react";
-
-const testimonials = [
-  {
-    name: "María García",
-    location: "California, USA",
-    text: "Gracias a Tus Raíces MX logré comprar una casa en Jalisco sin tener que viajar. El proceso fue fácil y seguro. Los asesores fueron muy profesionales.",
-    rating: 5,
-    initials: "MG",
-  },
-  {
-    name: "Carlos López",
-    location: "Texas, USA",
-    text: "Excelente servicio. Me ayudaron con el trámite de IMSS modalidad 40 y todo se resolvió rápido. Definitivamente los recomiendo a mis paisanos.",
-    rating: 5,
-    initials: "CL",
-  },
-  {
-    name: "Ana Martínez",
-    location: "Nueva York, USA",
-    text: "Necesitaba asesoría legal para una herencia en México. El equipo de abogados fue muy profesional y transparente en los costos. 100% recomendado.",
-    rating: 5,
-    initials: "AM",
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
 
 export const Testimonials = () => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
+  const testimonials = [
+    {
+      text: t.testimonials.testimonial1.text,
+      name: t.testimonials.testimonial1.name,
+      location: t.testimonials.testimonial1.location,
+      initials: "MG",
+      rating: 5,
+    },
+    {
+      text: t.testimonials.testimonial2.text,
+      name: t.testimonials.testimonial2.name,
+      location: t.testimonials.testimonial2.location,
+      initials: "CL",
+      rating: 5,
+    },
+    {
+      text: t.testimonials.testimonial3.text,
+      name: t.testimonials.testimonial3.name,
+      location: t.testimonials.testimonial3.location,
+      initials: "AM",
+      rating: 5,
+    },
+  ];
+
   return (
     <section className="py-20 md:py-28 bg-gradient-to-br from-primary/5 to-secondary/5">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-            Lo que dicen nuestros clientes
+            {t.testimonials.title}
           </h2>
           <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
-            Historias de éxito de paisanos que realizaron sus sueños con nuestra
-            ayuda.
+            {t.testimonials.subtitle}
           </p>
         </div>
 
