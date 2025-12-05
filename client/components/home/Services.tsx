@@ -1,40 +1,53 @@
 import { Home, FileText, Scale } from "lucide-react";
-
-const services = [
-  {
-    icon: Home,
-    title: "Venta de Casas y Terrenos",
-    description:
-      "Encuentra propiedades premium en México desde EE.UU. Asesoría completa en todo el proceso de compra sin complicaciones.",
-    features: ["Propiedades verificadas", "Pagos desde EE.UU.", "Sin trámites complejos"],
-  },
-  {
-    icon: FileText,
-    title: "IMSS e Infonavit Sin Fronteras",
-    description:
-      "Modalidad 40, modalidad 44 y crédito hipotecario para paisanos. Regístrate y accede a beneficios exclusivos.",
-    features: ["Registro desde EE.UU.", "Asesoría especializada", "Respuesta rápida"],
-  },
-  {
-    icon: Scale,
-    title: "Asesoría Legal Completa",
-    description:
-      "Representación legal en México para trámites, herencias, poderes notariales y más. Abogados certificados.",
-    features: ["Abogados certificados", "Atención en español", "Confidencialidad garantizada"],
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
 
 export const Services = () => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
+  const services = [
+    {
+      icon: Home,
+      title: t.services.service1.title,
+      description: t.services.service1.description,
+      features: [
+        t.services.service1.feature1,
+        t.services.service1.feature2,
+        t.services.service1.feature3,
+      ],
+    },
+    {
+      icon: FileText,
+      title: t.services.service2.title,
+      description: t.services.service2.description,
+      features: [
+        t.services.service2.feature1,
+        t.services.service2.feature2,
+        t.services.service2.feature3,
+      ],
+    },
+    {
+      icon: Scale,
+      title: t.services.service3.title,
+      description: t.services.service3.description,
+      features: [
+        t.services.service3.feature1,
+        t.services.service3.feature2,
+        t.services.service3.feature3,
+      ],
+    },
+  ];
+
   return (
     <section className="py-20 md:py-28 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-            Nuestros Servicios Principales
+            {t.services.title}
           </h2>
           <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
-            Soluciones integrales para paisanos que desean invertir en México y
-            realizar sus trámites desde Estados Unidos.
+            {t.services.subtitle}
           </p>
         </div>
 
@@ -62,7 +75,7 @@ export const Services = () => {
                   ))}
                 </ul>
                 <button className="mt-6 w-full bg-gradient-to-r from-primary to-secondary text-white py-2 rounded-lg font-semibold hover:shadow-lg transition-all">
-                  Saber más
+                  {t.services.learnMore}
                 </button>
               </div>
             );
