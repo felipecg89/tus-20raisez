@@ -1,3 +1,2 @@
-// This file is kept for backwards compatibility
-// The actual app is now in main.tsx
-export { default } from "./main";
+// App component is defined in main.tsx
+// This file can be used for app-level exports if needed
