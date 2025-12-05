@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
+import { useState as useStateDropdown } from "react";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
