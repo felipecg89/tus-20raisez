@@ -1,6 +1,10 @@
-import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
 
 export const Hero = () => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-primary/5 via-white to-secondary/5 flex items-center">
       <div className="absolute inset-0 overflow-hidden">
@@ -14,21 +18,20 @@ export const Hero = () => {
           <div className="flex flex-col justify-center space-y-6 animate-fade-in-up">
             <div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-                Conecta tus sueños de{" "}
-                <span className="text-primary">Estados Unidos</span> con tu hogar
-                en <span className="text-secondary">México</span>
+                {t.hero.title1}{" "}
+                <span className="text-primary">{t.hero.title2}</span> {t.hero.title3}{" "}
+                <span className="text-secondary">{t.hero.title4}</span>
               </h1>
             </div>
             <p className="text-lg md:text-xl text-foreground/70">
-              Casas, trámites y asesoría legal para paisanos. Realizamos tus
-              sueños de propiedad desde cualquier lugar.
+              {t.hero.subtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors text-lg">
-                Quiero empezar
+                {t.hero.cta1}
               </button>
               <button className="border-2 border-primary text-primary px-8 py-4 rounded-lg font-semibold hover:bg-primary/5 transition-colors text-lg">
-                Conocer más
+                {t.hero.cta2}
               </button>
             </div>
           </div>
@@ -40,7 +43,7 @@ export const Hero = () => {
               <div className="w-full h-64 md:h-96 bg-gradient-to-br from-primary to-secondary rounded-3xl shadow-2xl flex items-center justify-center">
                 <div className="text-center text-white">
                   <div className="text-6xl mb-2">🏠</div>
-                  <p className="text-xl font-semibold">Tu casa en México</p>
+                  <p className="text-xl font-semibold">{t.hero.imageAlt}</p>
                 </div>
               </div>
             </div>
