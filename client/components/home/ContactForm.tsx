@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
 
 export const ContactForm = () => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   const [formData, setFormData] = useState({
     name: "",
     whatsapp: "",
@@ -33,14 +38,14 @@ export const ContactForm = () => {
       });
 
       if (response.ok) {
-        setSubmitMessage("¡Gracias! Nos pondremos en contacto en menos de 1 hora.");
+        setSubmitMessage(t.contactForm.successMessage);
         setFormData({ name: "", whatsapp: "", email: "", city: "" });
         setTimeout(() => setSubmitMessage(""), 5000);
       } else {
-        setSubmitMessage("Error al enviar. Por favor intenta de nuevo.");
+        setSubmitMessage(t.contactForm.errorMessage);
       }
     } catch (error) {
-      setSubmitMessage("Error al enviar. Por favor intenta de nuevo.");
+      setSubmitMessage(t.contactForm.errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -55,11 +60,10 @@ export const ContactForm = () => {
             <div className="space-y-8">
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                  ¿Listo para empezar?
+                  {t.contactForm.title}
                 </h2>
                 <p className="text-lg text-foreground/70">
-                  Cuéntanos más sobre ti y uno de nuestros asesores se pondrá en
-                  contacto en menos de 1 hora.
+                  {t.contactForm.subtitle}
                 </p>
               </div>
 
@@ -71,7 +75,9 @@ export const ContactForm = () => {
                     </div>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground">WhatsApp</h3>
+                    <h3 className="font-semibold text-foreground">
+                      {t.contactForm.whatsappLabel}
+                    </h3>
                     <a
                       href="https://wa.me/1234567890"
                       target="_blank"
@@ -90,7 +96,9 @@ export const ContactForm = () => {
                     </div>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground">Email</h3>
+                    <h3 className="font-semibold text-foreground">
+                      {t.contactForm.emailLabel}
+                    </h3>
                     <a
                       href="mailto:info@tusraicesmx.com"
                       className="text-primary hover:text-primary/80 transition-colors"
@@ -107,8 +115,10 @@ export const ContactForm = () => {
                     </div>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground">Horarios</h3>
-                    <p className="text-foreground/70">Lunes - Viernes: 9am - 6pm CST</p>
+                    <h3 className="font-semibold text-foreground">
+                      {t.contactForm.hoursLabel}
+                    </h3>
+                    <p className="text-foreground/70">{t.contactForm.hours}</p>
                   </div>
                 </div>
               </div>
@@ -119,7 +129,7 @@ export const ContactForm = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold text-foreground mb-2">
-                    Nombre Completo
+                    {t.contactForm.nameLabel}
                   </label>
                   <input
                     type="text"
@@ -128,13 +138,13 @@ export const ContactForm = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-lg border border-border bg-white text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-                    placeholder="Tu nombre"
+                    placeholder={t.contactForm.namePlaceholder}
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-foreground mb-2">
-                    WhatsApp
+                    {t.contactForm.whatsappLabel}
                   </label>
                   <input
                     type="tel"
@@ -143,13 +153,13 @@ export const ContactForm = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-lg border border-border bg-white text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-                    placeholder="+1 (234) 567-8900"
+                    placeholder={t.contactForm.whatsappPlaceholder}
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-foreground mb-2">
-                    Email
+                    {t.contactForm.emailLabel}
                   </label>
                   <input
                     type="email"
@@ -158,13 +168,13 @@ export const ContactForm = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-lg border border-border bg-white text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-                    placeholder="tu@email.com"
+                    placeholder={t.contactForm.emailPlaceholder}
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-foreground mb-2">
-                    Ciudad donde vives en EE.UU.
+                    {t.contactForm.cityLabel}
                   </label>
                   <input
                     type="text"
@@ -173,7 +183,7 @@ export const ContactForm = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-lg border border-border bg-white text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-                    placeholder="Nueva York, California, Texas..."
+                    placeholder={t.contactForm.cityPlaceholder}
                   />
                 </div>
 
@@ -183,13 +193,13 @@ export const ContactForm = () => {
                   className="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   <Send className="w-4 h-4" />
-                  {isSubmitting ? "Enviando..." : "Enviar"}
+                  {isSubmitting ? t.contactForm.submitting : t.contactForm.submitButton}
                 </button>
 
                 {submitMessage && (
                   <div
                     className={`p-4 rounded-lg text-center text-sm font-medium ${
-                      submitMessage.includes("Gracias")
+                      submitMessage.includes(language === "es" ? "Gracias" : "Thank")
                         ? "bg-emerald-50 text-emerald-700"
                         : "bg-red-50 text-red-700"
                     }`}
@@ -199,7 +209,7 @@ export const ContactForm = () => {
                 )}
 
                 <p className="text-xs text-foreground/60 text-center">
-                  ✓ Responderemos en menos de 1 hora
+                  {t.contactForm.responseTime}
                 </p>
               </form>
             </div>
