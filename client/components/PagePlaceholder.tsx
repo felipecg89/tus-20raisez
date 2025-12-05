@@ -2,6 +2,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
 
 interface PagePlaceholderProps {
   title: string;
@@ -12,6 +14,9 @@ export const PagePlaceholder = ({
   title,
   description,
 }: PagePlaceholderProps) => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
@@ -30,8 +35,8 @@ export const PagePlaceholder = ({
           <p className="text-lg text-foreground/70 mb-8">{description}</p>
 
           <p className="text-foreground/60 mb-8">
-            Esta página está en desarrollo. Puedes seguir explorando otras
-            secciones o contactarnos directamente.
+            {t.pagePlaceholder.inDevelopment}{" "}
+            {t.pagePlaceholder.explore}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -39,26 +44,23 @@ export const PagePlaceholder = ({
               to="/"
               className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
             >
-              Volver al inicio
+              {t.notFound.backHome}
             </Link>
             <a
               href="#contacto"
               className="border-2 border-primary text-primary px-8 py-3 rounded-lg font-semibold hover:bg-primary/5 transition-colors"
             >
-              Habla con un asesor
+              {t.header.hablaConAsesor}
             </a>
           </div>
 
           <div className="mt-12 p-8 bg-primary/5 rounded-2xl border border-primary/20">
             <p className="text-foreground/70">
-              🎯 Si deseas información específica sobre este tema, por favor
-              <a
-                href="#contacto"
-                className="text-primary font-semibold hover:underline ml-1"
-              >
-                contáctanos
+              🎯 {t.pagePlaceholder.note}{" "}
+              <a href="#contacto" className="text-primary font-semibold hover:underline">
+                {t.pagePlaceholder.contactUs}
               </a>{" "}
-              o envíanos un mensaje por WhatsApp.
+              {t.pagePlaceholder.orSend}
             </p>
           </div>
         </div>
