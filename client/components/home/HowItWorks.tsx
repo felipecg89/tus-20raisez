@@ -1,46 +1,47 @@
 import { Phone, CheckCircle, FileCheck, Handshake } from "lucide-react";
-
-const steps = [
-  {
-    number: 1,
-    icon: Phone,
-    title: "Nos Contactas",
-    description:
-      "Envía un mensaje por WhatsApp o completa nuestro formulario. Nos pondremos en contacto en menos de 1 hora.",
-  },
-  {
-    number: 2,
-    icon: CheckCircle,
-    title: "Evaluamos tu Caso",
-    description:
-      "Nuestro equipo analiza tus necesidades y te proporciona opciones personalizadas basadas en tu situación.",
-  },
-  {
-    number: 3,
-    icon: FileCheck,
-    title: "Te Presentamos Opciones",
-    description:
-      "Recibirás información detallada sobre las mejores alternativas para tu caso. Preguntas sin compromiso.",
-  },
-  {
-    number: 4,
-    icon: Handshake,
-    title: "Formalizamos tu Trámite",
-    description:
-      "Comenzamos el proceso. Te acompañamos en cada paso hasta que todo esté 100% completo y legalizado.",
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
 
 export const HowItWorks = () => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
+  const steps = [
+    {
+      number: 1,
+      icon: Phone,
+      title: t.howItWorks.step1.title,
+      description: t.howItWorks.step1.description,
+    },
+    {
+      number: 2,
+      icon: CheckCircle,
+      title: t.howItWorks.step2.title,
+      description: t.howItWorks.step2.description,
+    },
+    {
+      number: 3,
+      icon: FileCheck,
+      title: t.howItWorks.step3.title,
+      description: t.howItWorks.step3.description,
+    },
+    {
+      number: 4,
+      icon: Handshake,
+      title: t.howItWorks.step4.title,
+      description: t.howItWorks.step4.description,
+    },
+  ];
+
   return (
     <section className="py-20 md:py-28 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-            ¿Cómo Funciona?
+            {t.howItWorks.title}
           </h2>
           <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
-            Un proceso simple y seguro en 4 pasos para realizarte tus sueños.
+            {t.howItWorks.subtitle}
           </p>
         </div>
 
@@ -48,7 +49,7 @@ export const HowItWorks = () => {
           {steps.map((step, index) => {
             const Icon = step.icon;
             const isLast = index === steps.length - 1;
-            
+
             return (
               <div key={index} className="relative">
                 {/* Connector line */}
