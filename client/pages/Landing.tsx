@@ -92,7 +92,8 @@ export default function Landing() {
         "Response guaranteed within 1 hour",
       ],
       formTitle: "Tell us about yourself",
-      formSubtitle: "To better help you, we need to understand what you're looking for",
+      formSubtitle:
+        "To better help you, we need to understand what you're looking for",
       formName: "Full Name",
       formEmail: "Email",
       formPhone: "WhatsApp",
@@ -138,7 +139,7 @@ export default function Landing() {
   const lang = language === "es" ? content.es : content.en;
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));

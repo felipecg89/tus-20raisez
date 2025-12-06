@@ -44,9 +44,7 @@ export default function Legal() {
             "Impuestos sobre herencias",
           ],
           timeframe:
-            language === "es"
-              ? "Generalmente 3-6 meses"
-              : "Usually 3-6 months",
+            language === "es" ? "Generalmente 3-6 meses" : "Usually 3-6 months",
           commonIssues: [
             "Hermanos disputando herencia",
             "Testamento no actualizado",
@@ -350,10 +348,7 @@ export default function Legal() {
     },
     {
       id: "4",
-      question:
-        language === "es"
-          ? "¿Hablan inglés?"
-          : "Do you speak English?",
+      question: language === "es" ? "¿Hablan inglés?" : "Do you speak English?",
       answer:
         language === "es"
           ? "Sí, contamos con abogados bilingües. La atención puede ser en español o inglés según tu preferencia."
@@ -374,10 +369,7 @@ export default function Legal() {
 
   const benefits = [
     {
-      title:
-        language === "es"
-          ? "Abogados Certificados"
-          : "Certified Lawyers",
+      title: language === "es" ? "Abogados Certificados" : "Certified Lawyers",
       description:
         language === "es"
           ? "Especialistas en derecho migratorio, familiar y civil"
@@ -394,10 +386,7 @@ export default function Legal() {
       icon: Briefcase,
     },
     {
-      title:
-        language === "es"
-          ? "Proceso Remoto"
-          : "Remote Process",
+      title: language === "es" ? "Proceso Remoto" : "Remote Process",
       description:
         language === "es"
           ? "Gestiona tus trámites sin salir de Estados Unidos"
@@ -405,8 +394,7 @@ export default function Legal() {
       icon: Home,
     },
     {
-      title:
-        language === "es" ? "Confidencialidad" : "Confidentiality",
+      title: language === "es" ? "Confidencialidad" : "Confidentiality",
       description:
         language === "es"
           ? "Tus datos y asuntos legales están protegidos bajo secreto profesional"
@@ -558,7 +546,9 @@ export default function Legal() {
                         <h4 className="font-bold text-foreground mb-2">
                           {benefit.title}
                         </h4>
-                        <p className="text-foreground/70">{benefit.description}</p>
+                        <p className="text-foreground/70">
+                          {benefit.description}
+                        </p>
                       </div>
                     </div>
                   </div>

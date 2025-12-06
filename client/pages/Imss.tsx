@@ -284,8 +284,7 @@ export default function Imss() {
       icon: Shield,
     },
     {
-      title:
-        language === "es" ? "Proceso 100% Remoto" : "100% Remote Process",
+      title: language === "es" ? "Proceso 100% Remoto" : "100% Remote Process",
       description:
         language === "es"
           ? "Gestión completa desde Estados Unidos, sin necesidad de viajar"
@@ -294,9 +293,7 @@ export default function Imss() {
     },
     {
       title:
-        language === "es"
-          ? "Transparencia en Costos"
-          : "Transparent Costs",
+        language === "es" ? "Transparencia en Costos" : "Transparent Costs",
       description:
         language === "es"
           ? "Sin sorpresas. Sabes exactamente qué pagas y cuándo"
@@ -304,10 +301,7 @@ export default function Imss() {
       icon: TrendingUp,
     },
     {
-      title:
-        language === "es"
-          ? "Soporte en Español"
-          : "Spanish Support",
+      title: language === "es" ? "Soporte en Español" : "Spanish Support",
       description:
         language === "es"
           ? "Atención personalizada en tu idioma durante todo el proceso"
@@ -620,17 +614,13 @@ export default function Imss() {
                 rel="noopener noreferrer"
                 className="bg-white text-primary px-8 py-3 rounded-lg font-bold hover:bg-white/90 transition-colors"
               >
-                {language === "es"
-                  ? "Hablar por WhatsApp"
-                  : "Chat on WhatsApp"}
+                {language === "es" ? "Hablar por WhatsApp" : "Chat on WhatsApp"}
               </a>
               <a
                 href="#contacto"
                 className="bg-white/20 text-white border-2 border-white px-8 py-3 rounded-lg font-bold hover:bg-white/30 transition-colors"
               >
-                {language === "es"
-                  ? "Agendar Cita"
-                  : "Schedule Call"}
+                {language === "es" ? "Agendar Cita" : "Schedule Call"}
               </a>
             </div>
           </section>

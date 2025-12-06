@@ -106,7 +106,8 @@ const properties: Property[] = [
     bedrooms: 2,
     bathrooms: 1,
     area: 100,
-    description: "Acogedora casa en el centro histórico, perfecta para inversor.",
+    description:
+      "Acogedora casa en el centro histórico, perfecta para inversor.",
     type: "casa",
     state: "Oaxaca",
   },
@@ -129,7 +130,7 @@ export default function Casas() {
   const { language } = useLanguage();
   const t = translations[language];
   const [filterType, setFilterType] = useState<"all" | "casa" | "terreno">(
-    "all"
+    "all",
   );
   const [filterState, setFilterState] = useState("all");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000]);
@@ -164,9 +165,7 @@ export default function Casas() {
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
               {t.casas.title}
             </h1>
-            <p className="text-lg text-foreground/70">
-              {t.casas.description}
-            </p>
+            <p className="text-lg text-foreground/70">{t.casas.description}</p>
           </div>
         </div>
       </section>

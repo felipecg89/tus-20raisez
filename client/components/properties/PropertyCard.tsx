@@ -40,7 +40,7 @@ export const PropertyCard = ({
 
   const handleWhatsApp = () => {
     const message = encodeURIComponent(
-      `Hola, me interesa la propiedad: ${title} en ${location}`
+      `Hola, me interesa la propiedad: ${title} en ${location}`,
     );
     window.open(`https://wa.me/1234567890?text=${message}`, "_blank");
   };

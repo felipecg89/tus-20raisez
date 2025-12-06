@@ -21,7 +21,8 @@ export const Hero = () => {
             <div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
                 {t.hero.title1}{" "}
-                <span className="text-primary">{t.hero.title2}</span> {t.hero.title3}{" "}
+                <span className="text-primary">{t.hero.title2}</span>{" "}
+                {t.hero.title3}{" "}
                 <span className="text-secondary">{t.hero.title4}</span>
               </h1>
             </div>

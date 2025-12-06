@@ -62,7 +62,16 @@ renderApp();
 
 // Handle HMR
 if (import.meta.hot) {
-  import.meta.hot.accept(["./pages/Index", "./pages/Casas", "./pages/Imss", "./pages/Legal", "./pages/Landing"], () => {
-    renderApp();
-  });
+  import.meta.hot.accept(
+    [
+      "./pages/Index",
+      "./pages/Casas",
+      "./pages/Imss",
+      "./pages/Legal",
+      "./pages/Landing",
+    ],
+    () => {
+      renderApp();
+    },
+  );
 }
