@@ -1,6 +1,7 @@
 import "./global.css";
+import React from "react";
+import { createRoot, Root } from "react-dom/client";
 import { Toaster } from "@/components/ui/toaster";
-import { createRoot } from "react-dom/client";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -37,21 +38,31 @@ const AppRoutes = () => (
   </LanguageProvider>
 );
 
-declare global {
-  interface Window {
-    __REACT_ROOT__?: ReturnType<typeof createRoot>;
+let root: Root | null = null;
+
+function renderApp() {
+  const rootElement = document.getElementById("root");
+
+  if (!rootElement) {
+    throw new Error("Root element not found");
   }
+
+  // Unmount existing root before creating a new one during HMR
+  if (root) {
+    root.unmount();
+    root = null;
+  }
+
+  root = createRoot(rootElement);
+  root.render(<AppRoutes />);
 }
 
-const rootElement = document.getElementById("root");
+// Initial render
+renderApp();
 
-if (!rootElement) {
-  throw new Error("Root element not found");
+// Handle HMR
+if (import.meta.hot) {
+  import.meta.hot.accept(["./pages/Index", "./pages/Casas", "./pages/Imss", "./pages/Legal", "./pages/Landing"], () => {
+    renderApp();
+  });
 }
-
-// Use a global reference to ensure we only create the root once
-if (!window.__REACT_ROOT__) {
-  window.__REACT_ROOT__ = createRoot(rootElement);
-}
-
-window.__REACT_ROOT__.render(<AppRoutes />);
