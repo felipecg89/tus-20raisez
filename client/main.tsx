@@ -37,27 +37,20 @@ const AppRoutes = () => (
   </LanguageProvider>
 );
 
-let root: ReturnType<typeof createRoot> | null = null;
+const rootElement = document.getElementById("root");
 
-function render() {
-  const rootElement = document.getElementById("root");
-
-  if (!rootElement) {
-    throw new Error("Root element not found");
-  }
-
-  if (!root) {
-    root = createRoot(rootElement);
-  }
-
-  root.render(<AppRoutes />);
+if (!rootElement) {
+  throw new Error("Root element not found");
 }
 
-render();
+// Check if root already exists on the element
+const existingRoot = (rootElement as any)._reactRootContainer;
 
-// Handle HMR
-if (import.meta.hot) {
-  import.meta.hot.dispose(() => {
-    root = null;
-  });
+if (existingRoot) {
+  // Re-render to existing root during HMR
+  existingRoot.render(<AppRoutes />);
+} else {
+  // Initial render
+  const root = createRoot(rootElement);
+  root.render(<AppRoutes />);
 }
