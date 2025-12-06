@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Casas from "./pages/Casas";
 import Imss from "./pages/Imss";
 import Legal from "./pages/Legal";
+import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
