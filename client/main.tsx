@@ -37,18 +37,27 @@ const AppRoutes = () => (
   </LanguageProvider>
 );
 
-const rootElement = document.getElementById("root");
+let root: ReturnType<typeof createRoot> | null = null;
 
-if (!rootElement) {
-  throw new Error("Root element not found");
+function render() {
+  const rootElement = document.getElementById("root");
+
+  if (!rootElement) {
+    throw new Error("Root element not found");
+  }
+
+  if (!root) {
+    root = createRoot(rootElement);
+  }
+
+  root.render(<AppRoutes />);
 }
 
-const root = createRoot(rootElement);
-root.render(<AppRoutes />);
+render();
 
-// Handle HMR properly
+// Handle HMR
 if (import.meta.hot) {
-  import.meta.hot.accept(() => {
-    root.render(<AppRoutes />);
+  import.meta.hot.dispose(() => {
+    root = null;
   });
 }
