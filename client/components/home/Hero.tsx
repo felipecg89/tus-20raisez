@@ -29,7 +29,10 @@ export const Hero = () => {
               {t.hero.subtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <button className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors text-lg">
+              <button
+                onClick={() => navigate("/landing")}
+                className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors text-lg"
+              >
                 {t.hero.cta1}
               </button>
               <button className="border-2 border-primary text-primary px-8 py-4 rounded-lg font-semibold hover:bg-primary/5 transition-colors text-lg">
