@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 
 export const Hero = () => {
+  const navigate = useNavigate();
   const { language } = useLanguage();
   const t = translations[language];
 
