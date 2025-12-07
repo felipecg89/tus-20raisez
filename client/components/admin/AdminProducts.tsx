@@ -128,6 +128,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
       image: product.image,
       features: product.features.join(", "),
     });
+    setImagePreview(product.image);
     setEditing(product.id);
     setShowForm(true);
   };
