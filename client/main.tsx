@@ -1,5 +1,5 @@
 import "./global.css";
-import React from "react";
+import React, { useEffect } from "react";
 import { createRoot, Root } from "react-dom/client";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { initializeHubSpot } from "@/lib/hubspotService";
 import Index from "./pages/Index";
 import Casas from "./pages/Casas";
 import PropertyDetail from "./pages/PropertyDetail";
@@ -20,27 +21,37 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const AppContent = () => {
+  useEffect(() => {
+    initializeHubSpot();
+  }, []);
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/landing" element={<Landing />} />
+        <Route path="/casas" element={<Casas />} />
+        <Route path="/casas/:id" element={<PropertyDetail />} />
+        <Route path="/rentals" element={<Rentals />} />
+        <Route path="/imss" element={<Imss />} />
+        <Route path="/legal" element={<Legal />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/productos/:id" element={<AdminProductDetail />} />
+        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
 const AppRoutes = () => (
   <LanguageProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/landing" element={<Landing />} />
-            <Route path="/casas" element={<Casas />} />
-            <Route path="/casas/:id" element={<PropertyDetail />} />
-            <Route path="/rentals" element={<Rentals />} />
-            <Route path="/imss" element={<Imss />} />
-            <Route path="/legal" element={<Legal />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/admin/productos/:id" element={<AdminProductDetail />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <AppContent />
       </TooltipProvider>
     </QueryClientProvider>
   </LanguageProvider>
