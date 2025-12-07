@@ -71,6 +71,7 @@ if (import.meta.hot) {
       "./pages/Imss",
       "./pages/Legal",
       "./pages/Landing",
+      "./pages/Admin",
     ],
     () => {
       renderApp();
