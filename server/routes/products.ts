@@ -8,12 +8,40 @@ const SUPABASE_ANON_KEY =
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-export const getProducts: RequestHandler = async (_req, res) => {
+export const getProducts: RequestHandler = async (req, res) => {
   try {
-    const { data, error } = await supabase
-      .from("products")
-      .select("*")
-      .order("created_at", { ascending: false });
+    const page = Math.max(1, parseInt(req.query.page as string) || 1);
+    const limit = Math.min(100, parseInt(req.query.limit as string) || 20);
+    const offset = (page - 1) * limit;
+
+    const city = req.query.city as string;
+    const type = req.query.type as string;
+    const search = req.query.search as string;
+    const minPrice = req.query.minPrice ? parseFloat(req.query.minPrice as string) : undefined;
+    const maxPrice = req.query.maxPrice ? parseFloat(req.query.maxPrice as string) : undefined;
+
+    let query = supabase.from("products").select("*", { count: "exact" });
+
+    // Apply filters
+    if (type) {
+      query = query.eq("type", type);
+    }
+    if (city) {
+      query = query.ilike("city", `%${city}%`);
+    }
+    if (minPrice !== undefined) {
+      query = query.gte("price", minPrice);
+    }
+    if (maxPrice !== undefined) {
+      query = query.lte("price", maxPrice);
+    }
+    if (search) {
+      query = query.or(`name.ilike.%${search}%,description.ilike.%${search}%`);
+    }
+
+    const { data, error, count } = await query
+      .order("created_at", { ascending: false })
+      .range(offset, offset + limit - 1);
 
     if (error) throw error;
 
@@ -30,7 +58,17 @@ export const getProducts: RequestHandler = async (_req, res) => {
       updatedAt: p.updated_at,
     }));
 
-    res.json(products);
+    res.json({
+      data: products,
+      pagination: {
+        page,
+        limit,
+        total: count || 0,
+        totalPages: Math.ceil((count || 0) / limit),
+        hasNext: page < Math.ceil((count || 0) / limit),
+        hasPrev: page > 1,
+      },
+    });
   } catch (error: any) {
     console.error("Error fetching products:", error);
     res.status(500).json({ error: "Error al obtener productos" });
