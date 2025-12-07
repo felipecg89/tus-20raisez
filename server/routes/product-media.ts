@@ -132,3 +132,54 @@ export const reorderProductMedia: RequestHandler = async (req, res) => {
     res.status(500).json({ error: "Error al reordenar medios" });
   }
 };
+
+export const bulkAddProductMedia: RequestHandler = async (req, res) => {
+  try {
+    const { productId, mediaItems } = req.body;
+
+    if (!productId || !Array.isArray(mediaItems) || mediaItems.length === 0) {
+      res.status(400).json({ error: "Campos requeridos faltantes" });
+      return;
+    }
+
+    // Validate array size to prevent massive uploads
+    if (mediaItems.length > 100) {
+      res.status(400).json({ error: "No se pueden agregar más de 100 archivos a la vez" });
+      return;
+    }
+
+    // Get current max order
+    const { data: existingMedia } = await supabase
+      .from("product_media")
+      .select("display_order")
+      .eq("product_id", productId)
+      .order("display_order", { ascending: false })
+      .limit(1);
+
+    const startOrder = (existingMedia?.[0]?.display_order ?? -1) + 1;
+
+    // Prepare items with display order
+    const itemsToInsert = mediaItems.map((item: any, index: number) => ({
+      product_id: productId,
+      media_type: item.mediaType,
+      media_url: item.mediaUrl,
+      storage_path: item.storagePath,
+      display_order: startOrder + index,
+    }));
+
+    const { data, error } = await supabase
+      .from("product_media")
+      .insert(itemsToInsert)
+      .select();
+
+    if (error) throw error;
+
+    res.status(201).json({
+      message: `${data.length} archivos agregados correctamente`,
+      data,
+    });
+  } catch (error: any) {
+    console.error("Error bulk adding product media:", error);
+    res.status(500).json({ error: "Error al agregar archivos en lote" });
+  }
+};
