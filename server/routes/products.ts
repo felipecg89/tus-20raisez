@@ -1,33 +1,12 @@
 import { RequestHandler } from "express";
 import { Product } from "@shared/api";
+import { createClient } from "@supabase/supabase-js";
 
-// In-memory storage (in production, use a database)
-let products: Product[] = [
-  {
-    id: "1",
-    name: "Casa moderna en Monterrey",
-    description: "Hermosa casa de 3 recamaras con piscina",
-    price: 250000,
-    city: "Monterrey",
-    type: "casa",
-    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop",
-    features: ["3 recamaras", "2 baños", "Piscina", "Jardín"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    name: "Terreno en Guadalajara",
-    description: "Excelente ubicación para inversión",
-    price: 150000,
-    city: "Guadalajara",
-    type: "terreno",
-    image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=400&h=300&fit=crop",
-    features: ["500m2", "Acceso fácil", "Zona residencial"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
+const SUPABASE_URL = "https://ajnenxygedrazpvjdbdo.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqbmVueHlnZWRyYXpwdmpkYmRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNjg3NzgsImV4cCI6MjA4MDY0NDc3OH0.TQ3eoWUZWncx9EHt_T1oZruTVVQmXtrztyc8ZHC64RY";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export const getProducts: RequestHandler = (_req, res) => {
   res.json(products);
