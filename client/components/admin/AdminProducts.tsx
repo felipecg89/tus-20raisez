@@ -314,7 +314,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
                 className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input
                   placeholder="Precio"
                   type="number"
@@ -335,7 +335,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
                   }
                 >
                   <SelectTrigger className="bg-slate-600 border-slate-500 text-white">
-                    <SelectValue />
+                    <SelectValue placeholder="Tipo" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-600 border-slate-500">
                     <SelectItem value="casa" className="text-white">
@@ -344,6 +344,27 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
                     <SelectItem value="terreno" className="text-white">
                       Terreno
                     </SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) =>
+                    setFormData({
+                      ...formData,
+                      category: value as ProductCategory,
+                    })
+                  }
+                >
+                  <SelectTrigger className="bg-slate-600 border-slate-500 text-white">
+                    <SelectValue placeholder="Categoría" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-600 border-slate-500">
+                    {PRODUCT_CATEGORIES.map((cat) => (
+                      <SelectItem key={cat.value} value={cat.value} className="text-white">
+                        {cat.labelEs}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
 
