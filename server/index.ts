@@ -2,6 +2,28 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import {
+  getProducts,
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from "./routes/products";
+import {
+  getMessages,
+  getMessage,
+  createMessage,
+  markMessageAsRead,
+  deleteMessage,
+  getStats,
+} from "./routes/messages";
+import {
+  getContent,
+  getContentBlock,
+  updateContent,
+  createContent,
+  deleteContent,
+} from "./routes/content";
 
 export function createServer() {
   const app = express();
@@ -18,6 +40,28 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Products API
+  app.get("/api/products", getProducts);
+  app.get("/api/products/:id", getProduct);
+  app.post("/api/products", createProduct);
+  app.put("/api/products/:id", updateProduct);
+  app.delete("/api/products/:id", deleteProduct);
+
+  // Messages API
+  app.get("/api/messages", getMessages);
+  app.get("/api/messages/:id", getMessage);
+  app.post("/api/messages", createMessage);
+  app.put("/api/messages/:id/read", markMessageAsRead);
+  app.delete("/api/messages/:id", deleteMessage);
+  app.get("/api/stats", getStats);
+
+  // Content API
+  app.get("/api/content", getContent);
+  app.get("/api/content/:id", getContentBlock);
+  app.post("/api/content", createContent);
+  app.put("/api/content/:id", updateContent);
+  app.delete("/api/content/:id", deleteContent);
 
   return app;
 }
