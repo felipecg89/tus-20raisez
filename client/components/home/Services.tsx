@@ -1,4 +1,5 @@
 import { Home, FileText, Scale, Building2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 
