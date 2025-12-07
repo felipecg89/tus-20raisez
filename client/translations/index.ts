@@ -238,6 +238,14 @@ export const translations = {
         feature2: "English service available",
         feature3: "Confidentiality guaranteed",
       },
+      service4: {
+        title: "Property Rentals",
+        description:
+          "Rent your property in Mexico and earn passive income. We handle everything: marketing, tenants, payments.",
+        feature1: "Complete rental management",
+        feature2: "Verified tenants",
+        feature3: "Payments in foreign currency",
+      },
       learnMore: "Learn More",
     },
     // Benefits
