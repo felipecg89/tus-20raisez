@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import Index from "./pages/Index";
 import Casas from "./pages/Casas";
+import PropertyDetail from "./pages/PropertyDetail";
 import Imss from "./pages/Imss";
 import Legal from "./pages/Legal";
 import Landing from "./pages/Landing";
