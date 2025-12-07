@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/select";
 import { Trash2, Edit2, Plus, Upload, X } from "lucide-react";
 import { toast } from "sonner";
-import { uploadProductImage } from "@/lib/uploadService";
+import { uploadProductImage, MediaFile } from "@/lib/uploadService";
+import ProductMediaGallery from "./ProductMediaGallery";
 
 interface AdminProductsProps {
   onUpdate: () => void;
