@@ -198,6 +198,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
       features: "",
     });
     setImagePreview("");
+    setMediaList([]);
   };
 
   if (loading) {
