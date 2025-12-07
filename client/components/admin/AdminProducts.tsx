@@ -333,6 +333,17 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
                 className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
               />
 
+              {imagePreview && (
+                <div className="relative">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-full h-48 object-cover rounded border border-slate-500"
+                  />
+                  <p className="text-xs text-slate-400 mt-1">Vista previa de la imagen</p>
+                </div>
+              )}
+
               <div className="flex gap-2">
                 <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700">
                   {editing ? "Guardar Cambios" : "Crear Producto"}
