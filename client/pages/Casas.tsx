@@ -158,6 +158,7 @@ export default function Casas() {
           description: product.description,
           type: product.type,
           state: product.city,
+          image: product.image,
         }));
 
         // Combinar con datos locales si hay
