@@ -138,42 +138,68 @@ export default function Casas() {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000]);
   const [showFilters, setShowFilters] = useState(false);
   const [loadedProperties, setLoadedProperties] = useState<Property[]>(properties);
+  const [supabaseProperties, setSupabaseProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("/api/products");
-        const products: Product[] = await response.json();
+        const params = new URLSearchParams();
+        params.append("page", currentPage.toString());
+        params.append("limit", "20");
+        if (filterType !== "all") {
+          params.append("type", filterType);
+        }
 
-        // Convertir productos de Supabase a formato Property
-        const convertedProperties: Property[] = products.map((product) => ({
-          id: product.id,
-          title: product.name,
-          price: product.price,
-          location: product.city,
-          bedrooms: 0,
-          bathrooms: 0,
-          area: 0,
-          description: product.description,
-          type: product.type,
-          state: product.city,
-          image: product.image,
-        }));
+        const response = await fetch(`/api/products?${params}`);
+        const result = await response.json();
 
-        // Combinar con datos locales si hay
-        setLoadedProperties([...convertedProperties, ...properties]);
+        if (result.data) {
+          const convertedProperties: Property[] = result.data.map((product: Product) => ({
+            id: product.id,
+            title: product.name,
+            price: product.price,
+            location: product.city,
+            bedrooms: 0,
+            bathrooms: 0,
+            area: 0,
+            description: product.description,
+            type: product.type,
+            state: product.city,
+            image: product.image,
+          }));
+
+          setSupabaseProperties(convertedProperties);
+          setTotalPages(result.pagination.totalPages);
+        } else {
+          const convertedProperties: Property[] = result.map((product: Product) => ({
+            id: product.id,
+            title: product.name,
+            price: product.price,
+            location: product.city,
+            bedrooms: 0,
+            bathrooms: 0,
+            area: 0,
+            description: product.description,
+            type: product.type,
+            state: product.city,
+            image: product.image,
+          }));
+
+          setSupabaseProperties(convertedProperties);
+        }
       } catch (error) {
         console.error("Error fetching products:", error);
-        // Si falla, usar datos locales
-        setLoadedProperties(properties);
+        setSupabaseProperties([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProducts();
-  }, []);
+  }, [currentPage, filterType]);
 
   const states = ["all", ...new Set(loadedProperties.map((p) => p.state))];
 
