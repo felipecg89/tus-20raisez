@@ -288,14 +288,40 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
                   </SelectContent>
                 </Select>
 
-                <Input
-                  placeholder="URL de imagen"
-                  value={formData.image}
-                  onChange={(e) =>
-                    setFormData({ ...formData, image: e.target.value })
-                  }
-                  className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
-                />
+                <div className="col-span-1 md:col-span-1">
+                  <label className="block text-sm font-medium text-slate-300 mb-2">
+                    Imagen
+                  </label>
+                  <div className="flex gap-2">
+                    <label className="flex-1">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        disabled={uploading}
+                        className="hidden"
+                      />
+                      <div className="flex items-center justify-center w-full h-10 bg-slate-600 border border-slate-500 rounded cursor-pointer hover:bg-slate-500 transition-colors">
+                        <Upload className="h-4 w-4 text-slate-300 mr-2" />
+                        <span className="text-sm text-slate-300">
+                          {uploading ? "Subiendo..." : "Seleccionar"}
+                        </span>
+                      </div>
+                    </label>
+                    {formData.image && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData({ ...formData, image: "" });
+                          setImagePreview("");
+                        }}
+                        className="px-3 bg-red-600 hover:bg-red-700 text-white rounded transition-colors"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
 
               <Textarea
