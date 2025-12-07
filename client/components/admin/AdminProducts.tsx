@@ -231,6 +231,11 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
     setMediaList([]);
   };
 
+  const handleViewProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setModalOpen(true);
+  };
+
   if (loading) {
     return <div className="text-slate-400">Cargando productos...</div>;
   }
