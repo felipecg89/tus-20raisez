@@ -43,6 +43,7 @@ const AppRoutes = () => (
 declare global {
   interface Window {
     __REACT_ROOT__?: Root;
+    __APP_INITIALIZED__?: boolean;
   }
 }
 
@@ -61,8 +62,11 @@ function renderApp() {
   window.__REACT_ROOT__.render(<AppRoutes />);
 }
 
-// Initial render
-renderApp();
+// Initial render (only on first load, not on HMR)
+if (!window.__APP_INITIALIZED__) {
+  window.__APP_INITIALIZED__ = true;
+  renderApp();
+}
 
 // Handle HMR
 if (import.meta.hot) {
