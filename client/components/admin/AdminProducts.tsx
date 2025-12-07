@@ -480,6 +480,28 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
           </CardContent>
         </Card>
       )}
+
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-6">
+          <Button
+            onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+            disabled={currentPage === 1}
+            className="bg-slate-600 hover:bg-slate-500 disabled:opacity-50"
+          >
+            Anterior
+          </Button>
+          <span className="text-white">
+            Página {currentPage} de {totalPages}
+          </span>
+          <Button
+            onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+            disabled={currentPage === totalPages}
+            className="bg-slate-600 hover:bg-slate-500 disabled:opacity-50"
+          >
+            Siguiente
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
