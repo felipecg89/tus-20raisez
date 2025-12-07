@@ -49,13 +49,11 @@ function renderApp() {
     throw new Error("Root element not found");
   }
 
-  // Unmount existing root before creating a new one during HMR
-  if (root) {
-    root.unmount();
-    root = null;
+  // Create root only once, reuse on HMR
+  if (!root) {
+    root = createRoot(rootElement);
   }
 
-  root = createRoot(rootElement);
   root.render(<AppRoutes />);
 }
 
