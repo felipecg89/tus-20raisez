@@ -32,6 +32,10 @@ async function compressImage(file: File): Promise<Blob> {
   });
 }
 
+function compressVideo(file: File): Promise<Blob> {
+  return Promise.resolve(file);
+}
+
 export async function uploadProductImage(file: File): Promise<string> {
   try {
     // Compress image before upload
