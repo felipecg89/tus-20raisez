@@ -16,6 +16,7 @@ export const getProducts: RequestHandler = async (req, res) => {
 
     const city = req.query.city as string;
     const type = req.query.type as string;
+    const category = req.query.category as string;
     const search = req.query.search as string;
     const minPrice = req.query.minPrice ? parseFloat(req.query.minPrice as string) : undefined;
     const maxPrice = req.query.maxPrice ? parseFloat(req.query.maxPrice as string) : undefined;
@@ -25,6 +26,9 @@ export const getProducts: RequestHandler = async (req, res) => {
     // Apply filters
     if (type) {
       query = query.eq("type", type);
+    }
+    if (category) {
+      query = query.eq("category", category);
     }
     if (city) {
       query = query.ilike("city", `%${city}%`);
