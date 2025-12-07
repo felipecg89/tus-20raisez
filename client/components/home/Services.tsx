@@ -1,4 +1,4 @@
-import { Home, FileText, Scale } from "lucide-react";
+import { Home, FileText, Scale, Building2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 
