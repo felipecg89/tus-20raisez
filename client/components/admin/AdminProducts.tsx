@@ -152,6 +152,36 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast.error("Por favor selecciona una imagen válida");
+      return;
+    }
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("La imagen debe ser menor a 5MB");
+      return;
+    }
+
+    try {
+      setUploading(true);
+      const url = await uploadProductImage(file);
+      setFormData({ ...formData, image: url });
+      setImagePreview(url);
+      toast.success("Imagen subida correctamente");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error("Error al subir la imagen");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleCancel = () => {
     setShowForm(false);
     setEditing(null);
@@ -164,6 +194,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
       image: "",
       features: "",
     });
+    setImagePreview("");
   };
 
   if (loading) {
