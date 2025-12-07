@@ -86,6 +86,7 @@ if (import.meta.hot) {
       "./pages/Legal",
       "./pages/Landing",
       "./pages/Admin",
+      "./pages/AdminProductDetail",
     ],
     () => {
       renderApp();
