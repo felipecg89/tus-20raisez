@@ -59,6 +59,14 @@ export const Header = () => {
               {t.header.contacto}
             </a>
 
+            <Link
+              to="/admin"
+              className="text-foreground/60 hover:text-primary transition-colors"
+              title="Panel Administrativo"
+            >
+              <Settings className="w-5 h-5" />
+            </Link>
+
             {/* Language Selector */}
             <div className="relative">
               <button
