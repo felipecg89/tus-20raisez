@@ -218,6 +218,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
       price: "",
       city: "",
       type: "casa",
+      category: "venta_casa",
       image: "",
       features: "",
     });
