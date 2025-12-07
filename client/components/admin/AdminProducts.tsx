@@ -258,14 +258,14 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
             className="bg-slate-600 border-slate-500 text-white placeholder-slate-400 flex-1"
           />
           <Select value={categoryFilter} onValueChange={(value) => {
-            setCategoryFilter(value);
+            setCategoryFilter(value === "all" ? "" : value);
             setCurrentPage(1);
           }}>
             <SelectTrigger className="bg-slate-600 border-slate-500 text-white w-full md:w-64">
               <SelectValue placeholder="Filtrar por categoría" />
             </SelectTrigger>
             <SelectContent className="bg-slate-600 border-slate-500">
-              <SelectItem value="" className="text-white">Todas las categorías</SelectItem>
+              <SelectItem value="all" className="text-white">Todas las categorías</SelectItem>
               {PRODUCT_CATEGORIES.map((cat) => (
                 <SelectItem key={cat.value} value={cat.value} className="text-white">
                   {cat.labelEs}
