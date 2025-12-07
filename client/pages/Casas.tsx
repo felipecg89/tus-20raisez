@@ -405,11 +405,35 @@ export default function Casas() {
                   </p>
                 </div>
               ) : filteredProperties.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {filteredProperties.map((property) => (
-                    <PropertyCard key={property.id} {...property} />
-                  ))}
-                </div>
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    {filteredProperties.map((property) => (
+                      <PropertyCard key={property.id} {...property} />
+                    ))}
+                  </div>
+
+                  {totalPages > 1 && (
+                    <div className="flex justify-center items-center gap-4 mt-8">
+                      <button
+                        onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                        disabled={currentPage === 1}
+                        className="px-4 py-2 border border-primary text-primary rounded-lg font-semibold hover:bg-primary/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {language === "es" ? "Anterior" : "Previous"}
+                      </button>
+                      <span className="text-foreground font-medium">
+                        {language === "es" ? "Página" : "Page"} {currentPage} {language === "es" ? "de" : "of"} {totalPages}
+                      </span>
+                      <button
+                        onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                        disabled={currentPage === totalPages}
+                        className="px-4 py-2 border border-primary text-primary rounded-lg font-semibold hover:bg-primary/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {language === "es" ? "Siguiente" : "Next"}
+                      </button>
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="text-center py-20">
                   <p className="text-lg text-foreground/70 mb-4">
@@ -422,6 +446,7 @@ export default function Casas() {
                       setFilterType("all");
                       setFilterState("all");
                       setPriceRange([0, 500000]);
+                      setCurrentPage(1);
                     }}
                     className="text-primary font-semibold hover:underline"
                   >
