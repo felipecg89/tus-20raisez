@@ -48,9 +48,22 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/products");
-      const data = await response.json();
-      setProducts(data);
+      const params = new URLSearchParams();
+      params.append("page", currentPage.toString());
+      params.append("limit", "20");
+      if (searchTerm) {
+        params.append("search", searchTerm);
+      }
+
+      const response = await fetch(`/api/products?${params}`);
+      const result = await response.json();
+
+      if (result.data) {
+        setProducts(result.data);
+        setTotalPages(result.pagination.totalPages);
+      } else {
+        setProducts(result);
+      }
     } catch (error) {
       console.error("Error fetching products:", error);
       toast.error("Error al cargar productos");
