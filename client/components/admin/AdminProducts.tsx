@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Product } from "@shared/api";
+import { Product, PRODUCT_CATEGORIES, ProductCategory } from "@shared/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Trash2, Edit2, Plus, Upload, X } from "lucide-react";
+import { Trash2, Edit2, Plus, Upload, X, Filter } from "lucide-react";
 import { toast } from "sonner";
 import { uploadProductImage, MediaFile } from "@/lib/uploadService";
 import ProductMediaGallery from "./ProductMediaGallery";
