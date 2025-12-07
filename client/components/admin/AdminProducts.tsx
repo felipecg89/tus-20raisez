@@ -32,6 +32,9 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
