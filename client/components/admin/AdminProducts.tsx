@@ -94,6 +94,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
       const payload = {
         ...formData,
         price: parseFloat(formData.price),
+        category: formData.category,
         features: formData.features
           .split(",")
           .map((f) => f.trim())
