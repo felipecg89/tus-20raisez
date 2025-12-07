@@ -10,16 +10,30 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 export const getProductMedia: RequestHandler = async (req, res) => {
   try {
     const { productId } = req.params;
+    const page = Math.max(1, parseInt(req.query.page as string) || 1);
+    const limit = Math.min(100, parseInt(req.query.limit as string) || 50);
+    const offset = (page - 1) * limit;
 
-    const { data, error } = await supabase
+    const { data, error, count } = await supabase
       .from("product_media")
-      .select("*")
+      .select("*", { count: "exact" })
       .eq("product_id", productId)
-      .order("display_order", { ascending: true });
+      .order("display_order", { ascending: true })
+      .range(offset, offset + limit - 1);
 
     if (error) throw error;
 
-    res.json(data || []);
+    res.json({
+      data: data || [],
+      pagination: {
+        page,
+        limit,
+        total: count || 0,
+        totalPages: Math.ceil((count || 0) / limit),
+        hasNext: page < Math.ceil((count || 0) / limit),
+        hasPrev: page > 1,
+      },
+    });
   } catch (error: any) {
     console.error("Error fetching product media:", error);
     res.status(500).json({ error: "Error al obtener medios del producto" });
