@@ -175,7 +175,7 @@ export default function Casas() {
 
   const states = ["all", ...new Set(loadedProperties.map((p) => p.state))];
 
-  const filteredProperties = properties.filter((property) => {
+  const filteredProperties = loadedProperties.filter((property) => {
     const typeMatch = filterType === "all" || property.type === filterType;
     const stateMatch = filterState === "all" || property.state === filterState;
     const priceMatch =
