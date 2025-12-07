@@ -28,6 +28,7 @@ export const PropertyCard = ({
   image,
   type,
 }: PropertyCardProps) => {
+  const navigate = useNavigate();
   const { language } = useLanguage();
   const t = translations[language];
 
@@ -37,6 +38,10 @@ export const PropertyCard = ({
       currency: "USD",
       maximumFractionDigits: 0,
     }).format(price);
+  };
+
+  const handleViewDetails = () => {
+    navigate(`/casas/${id}`);
   };
 
   const handleWhatsApp = () => {
