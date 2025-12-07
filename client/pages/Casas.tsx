@@ -136,8 +136,44 @@ export default function Casas() {
   const [filterState, setFilterState] = useState("all");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000]);
   const [showFilters, setShowFilters] = useState(false);
+  const [loadedProperties, setLoadedProperties] = useState<Property[]>(properties);
+  const [loading, setLoading] = useState(true);
 
-  const states = ["all", ...new Set(properties.map((p) => p.state))];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("/api/products");
+        const products: Product[] = await response.json();
+
+        // Convertir productos de Supabase a formato Property
+        const convertedProperties: Property[] = products.map((product) => ({
+          id: product.id,
+          title: product.name,
+          price: product.price,
+          location: product.city,
+          bedrooms: 0,
+          bathrooms: 0,
+          area: 0,
+          description: product.description,
+          type: product.type,
+          state: product.city,
+        }));
+
+        // Combinar con datos locales si hay
+        setLoadedProperties([...convertedProperties, ...properties]);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        // Si falla, usar datos locales
+        setLoadedProperties(properties);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const states = ["all", ...new Set(loadedProperties.map((p) => p.state))];
 
   const filteredProperties = properties.filter((property) => {
     const typeMatch = filterType === "all" || property.type === filterType;
