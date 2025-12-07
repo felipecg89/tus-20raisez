@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Product, PRODUCT_CATEGORIES, ProductCategory } from "@shared/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,7 +16,6 @@ import { Trash2, Edit2, Plus, Upload, X, Filter, Grid3x3, List } from "lucide-re
 import { toast } from "sonner";
 import { uploadProductImage, MediaFile } from "@/lib/uploadService";
 import ProductMediaGallery from "./ProductMediaGallery";
-import ProductDetailModal from "./ProductDetailModal";
 import ProductTableView from "./ProductTableView";
 
 interface AdminProductsProps {
