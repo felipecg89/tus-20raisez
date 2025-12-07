@@ -18,6 +18,7 @@ interface Property {
   description: string;
   type: "casa" | "terreno";
   state: string;
+  image?: string;
 }
 
 const properties: Property[] = [
