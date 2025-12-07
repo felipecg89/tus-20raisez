@@ -79,6 +79,7 @@ if (import.meta.hot) {
       "./pages/Index",
       "./pages/Casas",
       "./pages/PropertyDetail",
+      "./pages/Rentals",
       "./pages/Imss",
       "./pages/Legal",
       "./pages/Landing",
