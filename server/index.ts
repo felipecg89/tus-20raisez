@@ -29,6 +29,7 @@ import {
   addProductMedia,
   deleteProductMedia,
   reorderProductMedia,
+  bulkAddProductMedia,
 } from "./routes/product-media";
 
 export function createServer() {
