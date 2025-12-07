@@ -150,6 +150,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
       price: product.price.toString(),
       city: product.city,
       type: product.type,
+      category: product.category,
       image: product.image,
       features: product.features.join(", "),
     });
