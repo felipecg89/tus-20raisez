@@ -215,16 +215,36 @@ export default function PropertyDetail() {
     }).format(price);
   };
 
+  const getPropertyName = () => {
+    if ("name" in property) return property.name;
+    return property.title;
+  };
+
+  const getPropertyCity = () => {
+    if ("city" in property) return property.city;
+    return property.location;
+  };
+
+  const getPropertyImage = () => {
+    if ("image" in property) return property.image;
+    return undefined;
+  };
+
+  const getPropertyFeatures = () => {
+    if ("features" in property) return property.features;
+    return [];
+  };
+
   const handleWhatsApp = () => {
     const message = encodeURIComponent(
-      `Hola, me interesa la propiedad: ${property.name} en ${property.city}`
+      `Hola, me interesa la propiedad: ${getPropertyName()} en ${getPropertyCity()}`
     );
     window.open(`https://wa.me/1234567890?text=${message}`, "_blank");
   };
 
   const images = media.filter((m) => m.type === "image");
   const videos = media.filter((m) => m.type === "video");
-  const mainImage = selectedImage || property.image || images[0]?.url;
+  const mainImage = selectedImage || getPropertyImage() || images[0]?.url;
 
   const goToPreviousImage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
