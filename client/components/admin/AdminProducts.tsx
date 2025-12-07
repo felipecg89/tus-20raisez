@@ -11,10 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Trash2, Edit2, Plus, Upload, X, Filter } from "lucide-react";
+import { Trash2, Edit2, Plus, Upload, X, Filter, Grid3x3, List } from "lucide-react";
 import { toast } from "sonner";
 import { uploadProductImage, MediaFile } from "@/lib/uploadService";
 import ProductMediaGallery from "./ProductMediaGallery";
+import ProductDetailModal from "./ProductDetailModal";
+import ProductTableView from "./ProductTableView";
 
 interface AdminProductsProps {
   onUpdate: () => void;
