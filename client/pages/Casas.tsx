@@ -201,9 +201,10 @@ export default function Casas() {
     fetchProducts();
   }, [currentPage, filterType]);
 
-  const states = ["all", ...new Set(loadedProperties.map((p) => p.state))];
+  const allProperties = [...supabaseProperties, ...properties];
+  const states = ["all", ...new Set(allProperties.map((p) => p.state))];
 
-  const filteredProperties = loadedProperties.filter((property) => {
+  const filteredProperties = allProperties.filter((property) => {
     const typeMatch = filterType === "all" || property.type === filterType;
     const stateMatch = filterState === "all" || property.state === filterState;
     const priceMatch =
