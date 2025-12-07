@@ -134,18 +134,18 @@ export default function ProductMediaGallery({
       <CardContent>
         <div className="space-y-4">
           {/* Upload Buttons */}
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             <label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleMediaUpload}
-                disabled={uploading}
+                disabled={uploading || batchUploadActive}
                 className="hidden"
               />
-              <div className="flex items-center justify-center w-full h-12 bg-blue-600 hover:bg-blue-700 rounded cursor-pointer transition-colors text-white font-medium">
+              <div className="flex items-center justify-center w-full h-12 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 rounded cursor-pointer transition-colors text-white font-medium">
                 <ImageIcon className="h-4 w-4 mr-2" />
-                {uploading ? "Subiendo..." : "Agregar Foto"}
+                {uploading ? "Subiendo..." : "Foto"}
               </div>
             </label>
             <label>
@@ -153,15 +153,70 @@ export default function ProductMediaGallery({
                 type="file"
                 accept="video/*"
                 onChange={handleMediaUpload}
-                disabled={uploading}
+                disabled={uploading || batchUploadActive}
                 className="hidden"
               />
-              <div className="flex items-center justify-center w-full h-12 bg-purple-600 hover:bg-purple-700 rounded cursor-pointer transition-colors text-white font-medium">
+              <div className="flex items-center justify-center w-full h-12 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 rounded cursor-pointer transition-colors text-white font-medium">
                 <Video className="h-4 w-4 mr-2" />
-                {uploading ? "Subiendo..." : "Agregar Video"}
+                {uploading ? "Subiendo..." : "Video"}
+              </div>
+            </label>
+            <label>
+              <input
+                type="file"
+                multiple
+                accept="image/*,video/*"
+                onChange={handleBatchUpload}
+                disabled={uploading || batchUploadActive}
+                className="hidden"
+              />
+              <div className="flex items-center justify-center w-full h-12 bg-green-600 hover:bg-green-700 disabled:bg-green-400 rounded cursor-pointer transition-colors text-white font-medium text-sm">
+                <Upload className="h-4 w-4 mr-1" />
+                {batchUploadActive ? "Cargando..." : "Lote"}
               </div>
             </label>
           </div>
+
+          {/* Upload Progress */}
+          {batchUploadActive && (
+            <div className="space-y-2">
+              <div className="w-full bg-slate-600 rounded-full h-2">
+                <div
+                  className="bg-green-500 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
+              <p className="text-xs text-slate-300">{Math.round(uploadProgress)}% completado</p>
+            </div>
+          )}
+
+          {/* Upload Errors */}
+          {uploadErrors.length > 0 && (
+            <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-3">
+              <div className="flex items-start gap-2 mb-2">
+                <AlertCircle className="h-4 w-4 text-red-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-red-300 mb-1">
+                    {uploadErrors.length} error(es) durante la carga
+                  </p>
+                  <ul className="text-xs text-red-200 space-y-1">
+                    {uploadErrors.slice(0, 3).map((err, idx) => (
+                      <li key={idx}>• {err.file}: {err.error}</li>
+                    ))}
+                    {uploadErrors.length > 3 && (
+                      <li>• ... y {uploadErrors.length - 3} más</li>
+                    )}
+                  </ul>
+                </div>
+              </div>
+              <button
+                onClick={() => setUploadErrors([])}
+                className="text-xs text-red-300 hover:text-red-200 underline"
+              >
+                Descartar
+              </button>
+            </div>
+          )}
 
           {/* Media Grid */}
           {mediaList.length > 0 ? (
