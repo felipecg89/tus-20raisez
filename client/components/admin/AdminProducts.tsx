@@ -244,7 +244,33 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
     <div className="space-y-4">
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <h3 className="text-lg font-semibold text-white">Productos</h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-white">Productos</h3>
+            <div className="flex gap-1 border border-slate-600 rounded-lg p-1">
+              <Button
+                size="sm"
+                onClick={() => setViewMode("cards")}
+                className={`${
+                  viewMode === "cards"
+                    ? "bg-slate-600 text-white"
+                    : "bg-transparent text-slate-400 hover:text-white"
+                } transition-colors`}
+              >
+                <Grid3x3 className="h-4 w-4" />
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => setViewMode("table")}
+                className={`${
+                  viewMode === "table"
+                    ? "bg-slate-600 text-white"
+                    : "bg-transparent text-slate-400 hover:text-white"
+                } transition-colors`}
+              >
+                <List className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
           <Button
             onClick={() => {
               setShowForm(!showForm);
