@@ -231,6 +231,7 @@ export const deleteProduct: RequestHandler = async (req, res) => {
       price: Number(data.price),
       city: data.city,
       type: data.type,
+      category: data.category,
       image: data.main_image_url,
       features: data.features || [],
       createdAt: data.created_at,
