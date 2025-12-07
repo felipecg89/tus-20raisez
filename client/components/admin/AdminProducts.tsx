@@ -247,15 +247,33 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
           </Button>
         </div>
 
-        <Input
-          placeholder="Buscar productos..."
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
+        <div className="flex gap-2 flex-col md:flex-row">
+          <Input
+            placeholder="Buscar productos..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="bg-slate-600 border-slate-500 text-white placeholder-slate-400 flex-1"
+          />
+          <Select value={categoryFilter} onValueChange={(value) => {
+            setCategoryFilter(value);
             setCurrentPage(1);
-          }}
-          className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
-        />
+          }}>
+            <SelectTrigger className="bg-slate-600 border-slate-500 text-white w-full md:w-64">
+              <SelectValue placeholder="Filtrar por categoría" />
+            </SelectTrigger>
+            <SelectContent className="bg-slate-600 border-slate-500">
+              <SelectItem value="" className="text-white">Todas las categorías</SelectItem>
+              {PRODUCT_CATEGORIES.map((cat) => (
+                <SelectItem key={cat.value} value={cat.value} className="text-white">
+                  {cat.labelEs}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Form */}
