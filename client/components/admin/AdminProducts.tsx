@@ -24,6 +24,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -33,6 +34,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
     image: "",
     features: "",
   });
+  const [imagePreview, setImagePreview] = useState<string>("");
 
   useEffect(() => {
     fetchProducts();
