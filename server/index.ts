@@ -69,5 +69,11 @@ export function createServer() {
   app.put("/api/content/:id", updateContent);
   app.delete("/api/content/:id", deleteContent);
 
+  // Product Media API
+  app.get("/api/products/:productId/media", getProductMedia);
+  app.post("/api/products/media", addProductMedia);
+  app.delete("/api/products/media/:mediaId", deleteProductMedia);
+  app.put("/api/products/media/reorder", reorderProductMedia);
+
   return app;
 }
