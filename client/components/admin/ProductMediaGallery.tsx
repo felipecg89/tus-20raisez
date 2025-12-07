@@ -13,11 +13,15 @@ interface ProductMediaGalleryProps {
 }
 
 export default function ProductMediaGallery({
+  productId,
   mediaList,
   onMediaAdded,
   onMediaRemoved,
 }: ProductMediaGalleryProps) {
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [batchUploadActive, setBatchUploadActive] = useState(false);
+  const [uploadErrors, setUploadErrors] = useState<Array<{ file: string; error: string }>>([]);
 
   const handleMediaUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -53,6 +57,58 @@ export default function ProductMediaGallery({
       toast.error("Error al subir el archivo");
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleBatchUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    try {
+      setBatchUploadActive(true);
+      setUploadErrors([]);
+      setUploadProgress(0);
+
+      const result = await batchUploadMedia(files, {
+        onProgress: setUploadProgress,
+        batchSize: 10,
+      });
+
+      // Add successful uploads to media list
+      result.successful.forEach((media) => {
+        onMediaAdded(media);
+      });
+
+      // Record failed uploads
+      if (result.failed.length > 0) {
+        const errors = result.failed.map((f) => ({
+          file: f.file.name,
+          error: f.error,
+        }));
+        setUploadErrors(errors);
+
+        toast.warning(
+          `${result.successful.length} archivo(s) subido(s), ${result.failed.length} error(es)`
+        );
+      } else {
+        toast.success(`${result.successful.length} archivo(s) subido(s) correctamente`);
+      }
+
+      // If product exists and uploads were successful, add to database
+      if (productId && result.successful.length > 0) {
+        try {
+          await bulkAddProductMediaToAPI(productId, result.successful);
+        } catch (error) {
+          console.error("Error adding to database:", error);
+          toast.error("Los archivos se subieron pero no se guardaron en la base de datos");
+        }
+      }
+    } catch (error) {
+      console.error("Error in batch upload:", error);
+      toast.error("Error durante la carga por lotes");
+    } finally {
+      setBatchUploadActive(false);
+      setUploadProgress(0);
     }
   };
 
