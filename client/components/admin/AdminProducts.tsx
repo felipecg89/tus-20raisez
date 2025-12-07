@@ -365,13 +365,13 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
       {/* Products List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {products.map((product) => (
-          <Card key={product.id} className="bg-slate-700 border-slate-600 overflow-hidden">
+          <Card key={product.id} className="bg-slate-700 border-slate-600 overflow-hidden flex flex-col">
             {product.image && (
-              <div className="w-full h-48 overflow-hidden bg-slate-600">
+              <div className="w-full aspect-video bg-slate-600 overflow-hidden">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>
             )}
