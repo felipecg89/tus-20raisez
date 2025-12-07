@@ -157,3 +157,130 @@ export async function deleteProductImage(path: string): Promise<void> {
     throw error;
   }
 }
+
+export interface BatchUploadOptions {
+  onProgress?: (progress: number) => void;
+  batchSize?: number;
+}
+
+export interface BatchUploadResult {
+  successful: MediaFile[];
+  failed: Array<{ file: File; error: string }>;
+}
+
+export async function batchUploadMedia(
+  files: File[],
+  options: BatchUploadOptions = {}
+): Promise<BatchUploadResult> {
+  const { onProgress, batchSize = 10 } = options;
+  const successful: MediaFile[] = [];
+  const failed: Array<{ file: File; error: string }> = [];
+
+  // Validate files before upload
+  const validFiles = files.filter((file) => {
+    // Check file size
+    if (file.type.startsWith("image/")) {
+      if (file.size > 5 * 1024 * 1024) {
+        failed.push({
+          file,
+          error: `Image too large: ${file.name} (max 5MB)`,
+        });
+        return false;
+      }
+    } else if (file.type.startsWith("video/")) {
+      if (file.size > 50 * 1024 * 1024) {
+        failed.push({
+          file,
+          error: `Video too large: ${file.name} (max 50MB)`,
+        });
+        return false;
+      }
+    } else {
+      failed.push({
+        file,
+        error: `Invalid file type: ${file.name}`,
+      });
+      return false;
+    }
+    return true;
+  });
+
+  // Upload in batches
+  for (let i = 0; i < validFiles.length; i += batchSize) {
+    const batch = validFiles.slice(i, i + batchSize);
+
+    try {
+      const batchResults = await Promise.allSettled(
+        batch.map((file) => {
+          const mediaType = file.type.startsWith("video/") ? "video" : "image";
+          return uploadProductMedia(file, mediaType);
+        })
+      );
+
+      batchResults.forEach((result, idx) => {
+        if (result.status === "fulfilled") {
+          successful.push(result.value);
+        } else {
+          failed.push({
+            file: batch[idx],
+            error: result.reason?.message || "Unknown error",
+          });
+        }
+      });
+    } catch (error) {
+      batch.forEach((file) => {
+        failed.push({
+          file,
+          error: "Batch upload failed",
+        });
+      });
+    }
+
+    // Report progress
+    const totalProcessed = successful.length + failed.length;
+    const progress = (totalProcessed / files.length) * 100;
+    if (onProgress) {
+      onProgress(Math.min(progress, 99));
+    }
+  }
+
+  if (onProgress) {
+    onProgress(100);
+  }
+
+  return {
+    successful,
+    failed,
+  };
+}
+
+export async function bulkAddProductMediaToAPI(
+  productId: string,
+  mediaItems: MediaFile[]
+): Promise<any> {
+  try {
+    const response = await fetch("/api/products/media/bulk", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        productId,
+        mediaItems: mediaItems.map((media) => ({
+          mediaType: media.type,
+          mediaUrl: media.url,
+          storagePath: media.path,
+        })),
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to add media to database");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error bulk adding media to API:", error);
+    throw error;
+  }
+}
