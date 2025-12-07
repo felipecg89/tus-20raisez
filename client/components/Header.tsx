@@ -41,6 +41,12 @@ export const Header = () => {
               {t.header.casas}
             </Link>
             <Link
+              to="/rentals"
+              className="text-foreground hover:text-primary transition-colors font-medium"
+            >
+              {language === "es" ? "Alquilar" : "Rentals"}
+            </Link>
+            <Link
               to="/imss"
               className="text-foreground hover:text-primary transition-colors font-medium"
             >
