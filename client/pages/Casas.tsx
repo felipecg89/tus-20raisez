@@ -371,7 +371,13 @@ export default function Casas() {
                 </h2>
               </div>
 
-              {filteredProperties.length > 0 ? (
+              {loading ? (
+                <div className="text-center py-20">
+                  <p className="text-lg text-foreground/70">
+                    {language === "es" ? "Cargando propiedades..." : "Loading properties..."}
+                  </p>
+                </div>
+              ) : filteredProperties.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {filteredProperties.map((property) => (
                     <PropertyCard key={property.id} {...property} />
