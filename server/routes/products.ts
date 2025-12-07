@@ -56,6 +56,7 @@ export const getProducts: RequestHandler = async (req, res) => {
       price: Number(p.price),
       city: p.city,
       type: p.type,
+      category: p.category || "venta_casa",
       image: p.main_image_url,
       features: p.features || [],
       createdAt: p.created_at,
