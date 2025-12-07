@@ -231,8 +231,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
   };
 
   const handleViewProduct = (product: Product) => {
-    setSelectedProduct(product);
-    setModalOpen(true);
+    navigate(`/admin/productos/${product.id}`);
   };
 
   if (loading) {
