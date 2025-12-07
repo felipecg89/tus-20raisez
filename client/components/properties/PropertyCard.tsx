@@ -49,9 +49,17 @@ export const PropertyCard = ({
     <div className="bg-white rounded-2xl border border-border shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group">
       {/* Image */}
       <div className="relative h-64 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
-        <div className="w-full h-full flex items-center justify-center text-6xl group-hover:scale-105 transition-transform duration-300">
-          {type === "casa" ? "🏡" : "🏞️"}
-        </div>
+        {image ? (
+          <img
+            src={image}
+            alt={title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-6xl group-hover:scale-105 transition-transform duration-300">
+            {type === "casa" ? "🏡" : "🏞️"}
+          </div>
+        )}
         <div className="absolute top-4 right-4 bg-primary text-white px-4 py-2 rounded-lg font-bold">
           {formatPrice(price)}
         </div>
