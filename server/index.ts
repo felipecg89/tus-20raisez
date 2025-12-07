@@ -73,6 +73,7 @@ export function createServer() {
   // Product Media API
   app.get("/api/products/:productId/media", getProductMedia);
   app.post("/api/products/media", addProductMedia);
+  app.post("/api/products/media/bulk", bulkAddProductMedia);
   app.delete("/api/products/media/:mediaId", deleteProductMedia);
   app.put("/api/products/media/reorder", reorderProductMedia);
 
