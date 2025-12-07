@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
+import { submitHubSpotForm } from "@/lib/hubspotService";
 
 export const ContactForm = () => {
   const { language } = useLanguage();
@@ -26,18 +27,14 @@ export const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          whatsapp: formData.whatsapp,
-          email: formData.email,
-          city: formData.city,
-        }),
+      const result = await submitHubSpotForm({
+        name: formData.name,
+        whatsapp: formData.whatsapp,
+        email: formData.email,
+        city: formData.city,
       });
 
-      if (response.ok) {
+      if (result.success) {
         setSubmitMessage(t.contactForm.successMessage);
         setFormData({ name: "", whatsapp: "", email: "", city: "" });
         setTimeout(() => setSubmitMessage(""), 5000);
