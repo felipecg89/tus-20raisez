@@ -50,6 +50,14 @@ export const translations = {
         feature2: "Atención en español",
         feature3: "Confidencialidad garantizada",
       },
+      service4: {
+        title: "Alquiler de Casas y Terrenos",
+        description:
+          "Renta tu propiedad en México y gana dinero pasivo. Nos encargamos de todo: publicidad, inquilinos, pagos.",
+        feature1: "Gestión integral del alquiler",
+        feature2: "Inquilinos verificados",
+        feature3: "Pagos en moneda extranjera",
+      },
       learnMore: "Saber más",
     },
     // Benefits
