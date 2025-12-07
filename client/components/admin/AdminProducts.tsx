@@ -23,6 +23,7 @@ interface AdminProductsProps {
 }
 
 export default function AdminProducts({ onUpdate }: AdminProductsProps) {
+  const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<string | null>(null);
@@ -33,8 +34,6 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
