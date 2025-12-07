@@ -11,8 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Trash2, Edit2, Plus } from "lucide-react";
+import { Trash2, Edit2, Plus, Upload, X } from "lucide-react";
 import { toast } from "sonner";
+import { uploadProductImage } from "@/lib/uploadService";
 
 interface AdminProductsProps {
   onUpdate: () => void;
