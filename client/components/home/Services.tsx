@@ -66,7 +66,7 @@ export const Services = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {services.map((service, index) => {
             const Icon = service.icon;
             return (
@@ -80,18 +80,21 @@ export const Services = () => {
                 <h3 className="text-xl font-bold text-foreground mb-3">
                   {service.title}
                 </h3>
-                <p className="text-foreground/70 mb-6">{service.description}</p>
-                <ul className="space-y-2">
+                <p className="text-foreground/70 mb-6 text-sm">{service.description}</p>
+                <ul className="space-y-2 mb-6">
                   {service.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm text-foreground/70">
-                      <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
+                    <li key={idx} className="flex items-center gap-2 text-xs text-foreground/70">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></div>
                       {feature}
                     </li>
                   ))}
                 </ul>
-                <button className="mt-6 w-full bg-gradient-to-r from-primary to-secondary text-white py-2 rounded-lg font-semibold hover:shadow-lg transition-all">
+                <Link
+                  to={service.link}
+                  className="block w-full bg-gradient-to-r from-primary to-secondary text-white py-2 rounded-lg font-semibold hover:shadow-lg transition-all text-center"
+                >
                   {t.services.learnMore}
-                </button>
+                </Link>
               </div>
             );
           })}
