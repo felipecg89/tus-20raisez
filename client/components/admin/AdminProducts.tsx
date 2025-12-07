@@ -223,18 +223,30 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-white">Productos ({products.length})</h3>
-        <Button
-          onClick={() => {
-            setShowForm(!showForm);
-            setEditing(null);
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-white">Productos</h3>
+          <Button
+            onClick={() => {
+              setShowForm(!showForm);
+              setEditing(null);
+            }}
+            className="bg-emerald-600 hover:bg-emerald-700"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Nuevo Producto
+          </Button>
+        </div>
+
+        <Input
+          placeholder="Buscar productos..."
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setCurrentPage(1);
           }}
-          className="bg-emerald-600 hover:bg-emerald-700"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Nuevo Producto
-        </Button>
+          className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+        />
       </div>
 
       {/* Form */}
