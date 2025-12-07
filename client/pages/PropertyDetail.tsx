@@ -116,6 +116,31 @@ const localProperties: LocalProperty[] = [
     type: "terreno",
     state: "Querétaro",
   },
+  {
+    id: "7",
+    title: "Casita Cozy Oaxaca",
+    price: 85000,
+    location: "Oaxaca, OAX",
+    bedrooms: 2,
+    bathrooms: 1,
+    area: 100,
+    description: "Acogedora casa en el centro histórico, perfecta para inversor.",
+    type: "casa",
+    state: "Oaxaca",
+  },
+  {
+    id: "8",
+    title: "Quinta Turística Veracruz",
+    price: 320000,
+    location: "Veracruz, VER",
+    bedrooms: 5,
+    bathrooms: 4,
+    area: 450,
+    description:
+      "Propiedad con potencial turístico, entre naturaleza y comodidades.",
+    type: "casa",
+    state: "Veracruz",
+  },
 ];
 
 export default function PropertyDetail() {
