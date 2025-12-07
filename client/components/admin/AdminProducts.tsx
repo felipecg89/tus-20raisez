@@ -348,6 +348,17 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
                 </div>
               )}
 
+              {editing && (
+                <ProductMediaGallery
+                  productId={editing}
+                  mediaList={mediaList}
+                  onMediaAdded={(media) => setMediaList([...mediaList, media])}
+                  onMediaRemoved={(path) =>
+                    setMediaList(mediaList.filter((m) => m.path !== path))
+                  }
+                />
+              )}
+
               <div className="flex gap-2">
                 <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700">
                   {editing ? "Guardar Cambios" : "Crear Producto"}
