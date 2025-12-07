@@ -22,22 +22,129 @@ interface PropertyMedia {
   path: string;
 }
 
+interface LocalProperty {
+  id: string;
+  title: string;
+  price: number;
+  location: string;
+  bedrooms: number;
+  bathrooms: number;
+  area: number;
+  description: string;
+  type: "casa" | "terreno";
+  state: string;
+  image?: string;
+}
+
+// Local properties data
+const localProperties: LocalProperty[] = [
+  {
+    id: "1",
+    title: "Casa Colonial en Guanajuato",
+    price: 180000,
+    location: "Guanajuato, GTO",
+    bedrooms: 3,
+    bathrooms: 2,
+    area: 250,
+    description:
+      "Hermosa casa colonial con patio interior, acabados de lujo y vista a la ciudad.",
+    type: "casa",
+    state: "Guanajuato",
+  },
+  {
+    id: "2",
+    title: "Departamento Playa Jalisco",
+    price: 250000,
+    location: "Puerto Vallarta, JAL",
+    bedrooms: 2,
+    bathrooms: 2,
+    area: 150,
+    description:
+      "Moderno departamento con vista al mar, acceso a playa privada y amenidades.",
+    type: "casa",
+    state: "Jalisco",
+  },
+  {
+    id: "3",
+    title: "Terreno Desarrollo Nuevo",
+    price: 120000,
+    location: "Monterrey, NL",
+    bedrooms: 0,
+    bathrooms: 0,
+    area: 1200,
+    description:
+      "Terreno en desarrollo inmobiliario con servicios incluidos e infraestructura lista.",
+    type: "terreno",
+    state: "Nuevo León",
+  },
+  {
+    id: "4",
+    title: "Casa Campestre Michoacán",
+    price: 200000,
+    location: "Morelia, MICH",
+    bedrooms: 4,
+    bathrooms: 3,
+    area: 320,
+    description:
+      "Casa campestre con grandes extensiones, alberca y jardín amplío.",
+    type: "casa",
+    state: "Michoacán",
+  },
+  {
+    id: "5",
+    title: "Penthouse Centro CDMX",
+    price: 450000,
+    location: "CDMX",
+    bedrooms: 3,
+    bathrooms: 3,
+    area: 280,
+    description:
+      "Elegante penthouse en zona exclusiva con terraza panorámica y seguridad 24/7.",
+    type: "casa",
+    state: "Ciudad de México",
+  },
+  {
+    id: "6",
+    title: "Lote Residencial Querétaro",
+    price: 95000,
+    location: "Querétaro, QRO",
+    bedrooms: 0,
+    bathrooms: 0,
+    area: 800,
+    description:
+      "Lote residencial en fraccionamiento consolidado, todos los servicios disponibles.",
+    type: "terreno",
+    state: "Querétaro",
+  },
+];
+
 export default function PropertyDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { language } = useLanguage();
   const t = translations[language];
 
-  const [property, setProperty] = useState<Product | null>(null);
+  const [property, setProperty] = useState<Product | LocalProperty | null>(null);
   const [media, setMedia] = useState<PropertyMedia[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isLocalProperty, setIsLocalProperty] = useState(false);
 
   useEffect(() => {
     const fetchProperty = async () => {
       try {
         setLoading(true);
+
+        // First, check if it's a local property
+        const localProp = localProperties.find((p) => p.id === id);
+        if (localProp) {
+          setProperty(localProp);
+          setIsLocalProperty(true);
+          return;
+        }
+
+        // Otherwise, try Supabase
         const response = await fetch(`/api/products/${id}`);
         if (!response.ok) {
           navigate("/casas");
@@ -45,8 +152,9 @@ export default function PropertyDetail() {
         }
         const data = await response.json();
         setProperty(data);
+        setIsLocalProperty(false);
 
-        // Fetch media
+        // Fetch media from Supabase only
         try {
           const mediaResponse = await fetch(`/api/products/${id}/media`);
           if (mediaResponse.ok) {
