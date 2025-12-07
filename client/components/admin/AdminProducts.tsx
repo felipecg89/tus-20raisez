@@ -26,6 +26,9 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
   const [editing, setEditing] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -40,7 +43,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [currentPage, searchTerm]);
 
   const fetchProducts = async () => {
     try {
