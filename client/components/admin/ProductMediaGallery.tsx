@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Trash2, Upload, Image as ImageIcon, Video } from "lucide-react";
+import { Trash2, Upload, Image as ImageIcon, Video, AlertCircle, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
-import { uploadProductMedia, deleteProductMedia, MediaFile } from "@/lib/uploadService";
+import { uploadProductMedia, deleteProductMedia, MediaFile, batchUploadMedia, bulkAddProductMediaToAPI } from "@/lib/uploadService";
 
 interface ProductMediaGalleryProps {
   productId?: string;
