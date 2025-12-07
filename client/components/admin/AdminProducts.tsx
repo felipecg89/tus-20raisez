@@ -365,7 +365,16 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
       {/* Products List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {products.map((product) => (
-          <Card key={product.id} className="bg-slate-700 border-slate-600">
+          <Card key={product.id} className="bg-slate-700 border-slate-600 overflow-hidden">
+            {product.image && (
+              <div className="w-full h-48 overflow-hidden bg-slate-600">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
             <CardHeader>
               <div className="flex justify-between items-start">
                 <div>
