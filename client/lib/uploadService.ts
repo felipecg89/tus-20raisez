@@ -73,6 +73,76 @@ export async function uploadProductImage(file: File): Promise<string> {
   }
 }
 
+export interface MediaFile {
+  type: "image" | "video";
+  url: string;
+  path: string;
+}
+
+export async function uploadProductMedia(
+  file: File,
+  mediaType: "image" | "video"
+): Promise<MediaFile> {
+  try {
+    let uploadedFile = file;
+
+    // Compress if it's an image
+    if (mediaType === "image" && file.type.startsWith("image/")) {
+      const compressedBlob = await compressImage(file);
+      uploadedFile = new File([compressedBlob], file.name, {
+        type: "image/jpeg",
+      });
+    }
+
+    // Create unique filename
+    const timestamp = Date.now();
+    const extension = mediaType === "video" ? "mp4" : "jpg";
+    const filename = `${timestamp}-${Date.now().toString(36)}.${extension}`;
+    const path = `product-media/${filename}`;
+
+    // Upload to Supabase Storage
+    const { data, error } = await supabase.storage
+      .from("product-images")
+      .upload(path, uploadedFile, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (error) {
+      throw new Error(`Upload failed: ${error.message}`);
+    }
+
+    // Get public URL
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("product-images").getPublicUrl(path);
+
+    return {
+      type: mediaType,
+      url: publicUrl,
+      path: path,
+    };
+  } catch (error) {
+    console.error("Error uploading media:", error);
+    throw error;
+  }
+}
+
+export async function deleteProductMedia(path: string): Promise<void> {
+  try {
+    const { error } = await supabase.storage
+      .from("product-images")
+      .remove([path]);
+
+    if (error) {
+      throw new Error(`Delete failed: ${error.message}`);
+    }
+  } catch (error) {
+    console.error("Error deleting media:", error);
+    throw error;
+  }
+}
+
 export async function deleteProductImage(path: string): Promise<void> {
   try {
     const { error } = await supabase.storage
