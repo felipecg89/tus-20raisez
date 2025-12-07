@@ -40,7 +40,11 @@ const AppRoutes = () => (
   </LanguageProvider>
 );
 
-let root: Root | null = null;
+declare global {
+  interface Window {
+    __REACT_ROOT__?: Root;
+  }
+}
 
 function renderApp() {
   const rootElement = document.getElementById("root");
@@ -49,12 +53,12 @@ function renderApp() {
     throw new Error("Root element not found");
   }
 
-  // Create root only once, reuse on HMR
-  if (!root) {
-    root = createRoot(rootElement);
+  // Create root only once, store in window to survive HMR
+  if (!window.__REACT_ROOT__) {
+    window.__REACT_ROOT__ = createRoot(rootElement);
   }
 
-  root.render(<AppRoutes />);
+  window.__REACT_ROOT__.render(<AppRoutes />);
 }
 
 // Initial render
