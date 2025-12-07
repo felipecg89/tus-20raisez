@@ -6,6 +6,7 @@ import { Benefits } from "@/components/home/Benefits";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { Testimonials } from "@/components/home/Testimonials";
 import { ContactForm } from "@/components/home/ContactForm";
+import { HubSpotDebug } from "@/components/HubSpotDebug";
 
 export default function Index() {
   return (
@@ -20,6 +21,7 @@ export default function Index() {
         <ContactForm />
       </main>
       <Footer />
+      <HubSpotDebug />
     </div>
   );
 }
