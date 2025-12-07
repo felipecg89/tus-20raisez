@@ -56,6 +56,9 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
       if (searchTerm) {
         params.append("search", searchTerm);
       }
+      if (categoryFilter) {
+        params.append("category", categoryFilter);
+      }
 
       const response = await fetch(`/api/products?${params}`);
       const result = await response.json();
