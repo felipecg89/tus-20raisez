@@ -45,7 +45,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
 
   useEffect(() => {
     fetchProducts();
-  }, [currentPage, searchTerm]);
+  }, [currentPage, searchTerm, categoryFilter]);
 
   const fetchProducts = async () => {
     try {
