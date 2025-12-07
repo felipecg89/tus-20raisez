@@ -15,6 +15,7 @@ import Imss from "./pages/Imss";
 import Legal from "./pages/Legal";
 import Landing from "./pages/Landing";
 import Admin from "./pages/Admin";
+import AdminProductDetail from "./pages/AdminProductDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
