@@ -589,6 +589,15 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
           </Button>
         </div>
       )}
+
+      {/* Product Detail Modal */}
+      <ProductDetailModal
+        product={selectedProduct}
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        onUpdate={fetchProducts}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }
