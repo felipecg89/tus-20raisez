@@ -29,12 +29,14 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     price: "",
     city: "",
     type: "casa" as "casa" | "terreno",
+    category: "venta_casa" as ProductCategory,
     image: "",
     features: "",
   });
