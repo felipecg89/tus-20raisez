@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PropertyCard } from "@/components/properties/PropertyCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 import { Sliders } from "lucide-react";
+import { Product } from "@shared/api";
 
 interface Property {
   id: string;
