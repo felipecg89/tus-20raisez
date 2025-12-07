@@ -115,14 +115,23 @@ export const PropertyCard = ({
           </div>
         </div>
 
-        {/* Action Button */}
-        <button
-          onClick={handleWhatsApp}
-          className="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2"
-        >
-          <MessageCircle className="w-4 h-4" />
-          {language === "es" ? "Consultar" : "Inquire"}
-        </button>
+        {/* Action Buttons */}
+        <div className="space-y-2">
+          <button
+            onClick={handleViewDetails}
+            className="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2"
+          >
+            <Eye className="w-4 h-4" />
+            {language === "es" ? "Ver Detalles" : "View Details"}
+          </button>
+          <button
+            onClick={handleWhatsApp}
+            className="w-full border-2 border-primary text-primary py-2 rounded-lg font-semibold hover:bg-primary/5 transition-all flex items-center justify-center gap-2"
+          >
+            <MessageCircle className="w-4 h-4" />
+            {language === "es" ? "Consultar" : "Inquire"}
+          </button>
+        </div>
       </div>
     </div>
   );
