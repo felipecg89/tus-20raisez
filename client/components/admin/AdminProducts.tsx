@@ -488,77 +488,75 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
         </Card>
       )}
 
-      {/* Products List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {products.map((product) => (
-          <Card key={product.id} className="bg-slate-700 border-slate-600 overflow-hidden flex flex-col">
-            {product.image && (
-              <div className="w-full aspect-video bg-slate-600 overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-            )}
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div>
-                  <CardTitle className="text-white">{product.name}</CardTitle>
-                  <p className="text-sm text-slate-400 mt-1">{product.city}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-lg font-bold text-emerald-400">
-                    ${product.price.toLocaleString()}
-                  </p>
-                  <div className="flex gap-1 justify-end mt-1">
-                    <span className="inline-block px-2 py-1 text-xs bg-slate-600 text-slate-200 rounded">
-                      {product.type}
-                    </span>
-                    <span className="inline-block px-2 py-1 text-xs bg-blue-600 text-white rounded">
-                      {PRODUCT_CATEGORIES.find(c => c.value === product.category)?.labelEs || product.category}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-slate-300 text-sm mb-3">{product.description}</p>
-              {product.features.length > 0 && (
-                <div className="mb-3">
-                  <p className="text-xs text-slate-400 mb-2">Características:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {product.features.map((feature, idx) => (
-                      <span
-                        key={idx}
-                        className="px-2 py-1 text-xs bg-slate-600 text-slate-200 rounded"
-                      >
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
+      {/* Products List - Table View */}
+      {viewMode === "table" ? (
+        <div className="bg-slate-700 rounded-lg border border-slate-600">
+          <ProductTableView
+            products={products}
+            onViewProduct={handleViewProduct}
+          />
+        </div>
+      ) : (
+        /* Card View */
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {products.map((product) => (
+            <Card
+              key={product.id}
+              className="bg-slate-700 border-slate-600 overflow-hidden flex flex-col cursor-pointer hover:border-slate-500 transition-colors"
+              onClick={() => handleViewProduct(product)}
+            >
+              {product.image && (
+                <div className="w-full aspect-video bg-slate-600 overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
               )}
-              <div className="flex gap-2 mt-4">
-                <Button
-                  size="sm"
-                  onClick={() => handleEdit(product)}
-                  className="bg-blue-600 hover:bg-blue-700"
-                >
-                  <Edit2 className="h-4 w-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={() => handleDelete(product.id)}
-                  className="bg-red-600 hover:bg-red-700"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+              <CardHeader>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle className="text-white">{product.name}</CardTitle>
+                    <p className="text-sm text-slate-400 mt-1">{product.city}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-bold text-emerald-400">
+                      ${product.price.toLocaleString()}
+                    </p>
+                    <div className="flex gap-1 justify-end mt-1">
+                      <span className="inline-block px-2 py-1 text-xs bg-slate-600 text-slate-200 rounded">
+                        {product.type}
+                      </span>
+                      <span className="inline-block px-2 py-1 text-xs bg-blue-600 text-white rounded">
+                        {PRODUCT_CATEGORIES.find(c => c.value === product.category)?.labelEs || product.category}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-300 text-sm mb-3">{product.description}</p>
+                {product.features.length > 0 && (
+                  <div className="mb-3">
+                    <p className="text-xs text-slate-400 mb-2">Características:</p>
+                    <div className="flex flex-wrap gap-1">
+                      {product.features.map((feature, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2 py-1 text-xs bg-slate-600 text-slate-200 rounded"
+                        >
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
 
       {products.length === 0 && !showForm && (
         <Card className="bg-slate-700 border-slate-600">
