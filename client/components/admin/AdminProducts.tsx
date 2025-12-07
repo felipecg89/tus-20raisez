@@ -475,9 +475,14 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
                   <p className="text-lg font-bold text-emerald-400">
                     ${product.price.toLocaleString()}
                   </p>
-                  <span className="inline-block px-2 py-1 text-xs bg-slate-600 text-slate-200 rounded mt-1">
-                    {product.type}
-                  </span>
+                  <div className="flex gap-1 justify-end mt-1">
+                    <span className="inline-block px-2 py-1 text-xs bg-slate-600 text-slate-200 rounded">
+                      {product.type}
+                    </span>
+                    <span className="inline-block px-2 py-1 text-xs bg-blue-600 text-white rounded">
+                      {PRODUCT_CATEGORIES.find(c => c.value === product.category)?.labelEs || product.category}
+                    </span>
+                  </div>
                 </div>
               </div>
             </CardHeader>
