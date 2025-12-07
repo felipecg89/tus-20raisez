@@ -116,9 +116,9 @@ export const getProduct: RequestHandler = async (req, res) => {
 
 export const createProduct: RequestHandler = async (req, res) => {
   try {
-    const { name, description, price, city, type, image, features } = req.body;
+    const { name, description, price, city, type, category, image, features } = req.body;
 
-    if (!name || !description || price === undefined || !city || !type) {
+    if (!name || !description || price === undefined || !city || !type || !category) {
       res.status(400).json({ error: "Campos requeridos faltantes" });
       return;
     }
@@ -132,6 +132,7 @@ export const createProduct: RequestHandler = async (req, res) => {
           price: Number(price),
           city,
           type,
+          category,
           main_image_url: image || null,
           features: features || [],
         },
@@ -148,6 +149,7 @@ export const createProduct: RequestHandler = async (req, res) => {
       price: Number(data.price),
       city: data.city,
       type: data.type,
+      category: data.category,
       image: data.main_image_url,
       features: data.features || [],
       createdAt: data.created_at,
