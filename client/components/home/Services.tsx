@@ -16,6 +16,7 @@ export const Services = () => {
         t.services.service1.feature2,
         t.services.service1.feature3,
       ],
+      link: "/casas",
     },
     {
       icon: FileText,
@@ -26,6 +27,7 @@ export const Services = () => {
         t.services.service2.feature2,
         t.services.service2.feature3,
       ],
+      link: "/imss",
     },
     {
       icon: Scale,
@@ -36,6 +38,18 @@ export const Services = () => {
         t.services.service3.feature2,
         t.services.service3.feature3,
       ],
+      link: "/legal",
+    },
+    {
+      icon: Building2,
+      title: t.services.service4.title,
+      description: t.services.service4.description,
+      features: [
+        t.services.service4.feature1,
+        t.services.service4.feature2,
+        t.services.service4.feature3,
+      ],
+      link: "/rentals",
     },
   ];
 
