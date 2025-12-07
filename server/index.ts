@@ -24,6 +24,12 @@ import {
   createContent,
   deleteContent,
 } from "./routes/content";
+import {
+  getProductMedia,
+  addProductMedia,
+  deleteProductMedia,
+  reorderProductMedia,
+} from "./routes/product-media";
 
 export function createServer() {
   const app = express();
