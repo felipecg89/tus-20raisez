@@ -8,71 +8,190 @@ const SUPABASE_ANON_KEY =
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-export const getProducts: RequestHandler = (_req, res) => {
-  res.json(products);
+export const getProducts: RequestHandler = async (_req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    const products = (data || []).map((p: any) => ({
+      id: p.id,
+      name: p.name,
+      description: p.description,
+      price: Number(p.price),
+      city: p.city,
+      type: p.type,
+      image: p.main_image_url,
+      features: p.features || [],
+      createdAt: p.created_at,
+      updatedAt: p.updated_at,
+    }));
+
+    res.json(products);
+  } catch (error: any) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ error: "Error al obtener productos" });
+  }
 };
 
-export const getProduct: RequestHandler = (req, res) => {
-  const product = products.find((p) => p.id === req.params.id);
-  if (!product) {
-    res.status(404).json({ error: "Producto no encontrado" });
-    return;
+export const getProduct: RequestHandler = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("id", req.params.id)
+      .single();
+
+    if (error || !data) {
+      res.status(404).json({ error: "Producto no encontrado" });
+      return;
+    }
+
+    const product: Product = {
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      price: Number(data.price),
+      city: data.city,
+      type: data.type,
+      image: data.main_image_url,
+      features: data.features || [],
+      createdAt: data.created_at,
+      updatedAt: data.updated_at,
+    };
+
+    res.json(product);
+  } catch (error: any) {
+    console.error("Error fetching product:", error);
+    res.status(500).json({ error: "Error al obtener producto" });
   }
-  res.json(product);
 };
 
-export const createProduct: RequestHandler = (req, res) => {
-  const { name, description, price, city, type, image, features } = req.body;
+export const createProduct: RequestHandler = async (req, res) => {
+  try {
+    const { name, description, price, city, type, image, features } = req.body;
 
-  if (!name || !description || price === undefined || !city || !type) {
-    res.status(400).json({ error: "Campos requeridos faltantes" });
-    return;
+    if (!name || !description || price === undefined || !city || !type) {
+      res.status(400).json({ error: "Campos requeridos faltantes" });
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("products")
+      .insert([
+        {
+          name,
+          description,
+          price: Number(price),
+          city,
+          type,
+          main_image_url: image || null,
+          features: features || [],
+        },
+      ])
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    const newProduct: Product = {
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      price: Number(data.price),
+      city: data.city,
+      type: data.type,
+      image: data.main_image_url,
+      features: data.features || [],
+      createdAt: data.created_at,
+      updatedAt: data.updated_at,
+    };
+
+    res.status(201).json(newProduct);
+  } catch (error: any) {
+    console.error("Error creating product:", error);
+    res.status(500).json({ error: "Error al crear producto" });
   }
-
-  const newProduct: Product = {
-    id: Date.now().toString(),
-    name,
-    description,
-    price: Number(price),
-    city,
-    type,
-    image: image || "https://via.placeholder.com/400x300",
-    features: features || [],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-
-  products.push(newProduct);
-  res.status(201).json(newProduct);
 };
 
-export const updateProduct: RequestHandler = (req, res) => {
-  const productIndex = products.findIndex((p) => p.id === req.params.id);
-  if (productIndex === -1) {
-    res.status(404).json({ error: "Producto no encontrado" });
-    return;
+export const updateProduct: RequestHandler = async (req, res) => {
+  try {
+    const { name, description, price, city, type, image, features } = req.body;
+
+    const { data, error } = await supabase
+      .from("products")
+      .update({
+        name,
+        description,
+        price: Number(price),
+        city,
+        type,
+        main_image_url: image || null,
+        features: features || [],
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", req.params.id)
+      .select()
+      .single();
+
+    if (error || !data) {
+      res.status(404).json({ error: "Producto no encontrado" });
+      return;
+    }
+
+    const updatedProduct: Product = {
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      price: Number(data.price),
+      city: data.city,
+      type: data.type,
+      image: data.main_image_url,
+      features: data.features || [],
+      createdAt: data.created_at,
+      updatedAt: data.updated_at,
+    };
+
+    res.json(updatedProduct);
+  } catch (error: any) {
+    console.error("Error updating product:", error);
+    res.status(500).json({ error: "Error al actualizar producto" });
   }
-
-  const updatedProduct: Product = {
-    ...products[productIndex],
-    ...req.body,
-    id: products[productIndex].id,
-    createdAt: products[productIndex].createdAt,
-    updatedAt: new Date().toISOString(),
-  };
-
-  products[productIndex] = updatedProduct;
-  res.json(updatedProduct);
 };
 
-export const deleteProduct: RequestHandler = (req, res) => {
-  const productIndex = products.findIndex((p) => p.id === req.params.id);
-  if (productIndex === -1) {
-    res.status(404).json({ error: "Producto no encontrado" });
-    return;
-  }
+export const deleteProduct: RequestHandler = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("products")
+      .delete()
+      .eq("id", req.params.id)
+      .select()
+      .single();
 
-  const deletedProduct = products[productIndex];
-  products.splice(productIndex, 1);
-  res.json(deletedProduct);
+    if (error || !data) {
+      res.status(404).json({ error: "Producto no encontrado" });
+      return;
+    }
+
+    const deletedProduct: Product = {
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      price: Number(data.price),
+      city: data.city,
+      type: data.type,
+      image: data.main_image_url,
+      features: data.features || [],
+      createdAt: data.created_at,
+      updatedAt: data.updated_at,
+    };
+
+    res.json(deletedProduct);
+  } catch (error: any) {
+    console.error("Error deleting product:", error);
+    res.status(500).json({ error: "Error al eliminar producto" });
+  }
 };
