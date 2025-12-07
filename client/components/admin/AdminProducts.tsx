@@ -36,6 +36,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
     features: "",
   });
   const [imagePreview, setImagePreview] = useState<string>("");
+  const [mediaList, setMediaList] = useState<MediaFile[]>([]);
 
   useEffect(() => {
     fetchProducts();
