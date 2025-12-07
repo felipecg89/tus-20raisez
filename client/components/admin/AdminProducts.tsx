@@ -335,13 +335,13 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
               />
 
               {imagePreview && (
-                <div className="relative w-1/2">
+                <div className="relative">
                   <img
                     src={imagePreview}
                     alt="Preview"
-                    className="w-full h-40 object-cover rounded border border-slate-500"
+                    className="w-full max-w-sm h-auto object-cover rounded border border-slate-500"
                   />
-                  <p className="text-xs text-slate-400 mt-1">Vista previa</p>
+                  <p className="text-xs text-slate-400 mt-2">Vista previa de la imagen</p>
                 </div>
               )}
 
