@@ -43,23 +43,20 @@ export const Hero = () => {
           </div>
 
           {/* Video Content */}
-          <div className="relative h-96 md:h-full flex items-center justify-center">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl"></div>
-            <div className="relative w-full h-full flex items-center justify-center">
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="w-full h-64 md:h-96 rounded-3xl shadow-2xl object-cover"
-              >
-                <source
-                  src="https://cdn.builder.io/o/assets%2Fc4331b9719fe4840b03d2b99c1afbc5e%2F511fe795642842bca842f3f15631911e?alt=media&token=f13cebd0-d14a-45a4-ba09-253770c118a6&apiKey=c4331b9719fe4840b03d2b99c1afbc5e"
-                  type="video/mp4"
-                />
-                Tu navegador no soporta videos HTML5
-              </video>
-            </div>
+          <div className="relative w-full h-96 md:h-full flex items-center justify-center overflow-hidden">
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full h-full rounded-3xl shadow-2xl object-cover"
+            >
+              <source
+                src="https://cdn.builder.io/o/assets%2Fc4331b9719fe4840b03d2b99c1afbc5e%2F511fe795642842bca842f3f15631911e?alt=media&token=f13cebd0-d14a-45a4-ba09-253770c118a6&apiKey=c4331b9719fe4840b03d2b99c1afbc5e"
+                type="video/mp4"
+              />
+              Tu navegador no soporta videos HTML5
+            </video>
           </div>
         </div>
       </div>
