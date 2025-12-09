@@ -43,14 +43,14 @@ export const Hero = () => {
           </div>
 
           {/* Video Content */}
-          <div className="md:col-span-2">
-            <div className="w-full aspect-video rounded-3xl overflow-hidden shadow-2xl">
+          <div className="md:col-span-2 flex items-center justify-center">
+            <div className="w-full max-w-2xl aspect-video rounded-3xl overflow-hidden shadow-2xl">
               <video
                 autoPlay
                 muted
                 loop
                 playsInline
-                className="w-full h-full object-contain bg-black"
+                className="w-full h-full object-cover"
               >
                 <source
                   src="https://cdn.builder.io/o/assets%2Fc4331b9719fe4840b03d2b99c1afbc5e%2F511fe795642842bca842f3f15631911e?alt=media&token=f13cebd0-d14a-45a4-ba09-253770c118a6&apiKey=c4331b9719fe4840b03d2b99c1afbc5e"
