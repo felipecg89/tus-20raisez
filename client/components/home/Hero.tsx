@@ -14,8 +14,8 @@ export const Hero = () => {
         <div className="absolute bottom-20 left-20 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="container mx-auto px-4 relative z-10 py-20 md:py-0">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 items-center min-h-screen">
+      <div className="container mx-auto px-4 relative z-10 py-12 md:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 items-center md:h-screen">
           {/* Text Content */}
           <div className="flex flex-col justify-center space-y-4 md:space-y-5 animate-fade-in-up md:col-span-1">
             <div>
