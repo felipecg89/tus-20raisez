@@ -43,7 +43,7 @@ export const Hero = () => {
           </div>
 
           {/* Video Content */}
-          <div className="md:col-span-2 flex items-center justify-center">
+          <div className="hidden md:flex md:col-span-2 items-center justify-center">
             <div className="w-full max-w-xl h-screen md:h-auto md:aspect-auto rounded-3xl overflow-hidden shadow-2xl bg-black flex items-center justify-center">
               <video
                 autoPlay
