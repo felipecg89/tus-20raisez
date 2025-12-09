@@ -267,8 +267,9 @@ export default function PropertyDetail() {
     window.open(`https://wa.me/1234567890?text=${message}`, "_blank");
   };
 
-  const images = media.filter((m) => m.type === "image");
-  const videos = media.filter((m) => m.type === "video");
+  const mediaArray = Array.isArray(media) ? media : [];
+  const images = mediaArray.filter((m) => m.type === "image");
+  const videos = mediaArray.filter((m) => m.type === "video");
   const mainImage = selectedImage || getPropertyImage() || images[0]?.url;
 
   const goToPreviousImage = () => {
