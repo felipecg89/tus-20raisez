@@ -72,7 +72,9 @@ export const Services = () => {
             return (
               <div
                 key={index}
-                className="group bg-white rounded-2xl border border-border shadow-lg hover:shadow-2xl transition-all duration-300 p-8 hover:border-primary"
+                className={`group bg-white rounded-2xl border border-border shadow-lg hover:shadow-2xl transition-all duration-300 p-8 hover:border-primary ${
+                  index >= 2 ? "hidden md:block" : ""
+                }`}
               >
                 <div className="mb-6 inline-block p-4 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
                   <Icon className="w-8 h-8 text-primary" />
