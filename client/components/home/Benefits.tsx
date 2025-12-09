@@ -18,7 +18,7 @@ export const Benefits = () => {
   ];
 
   return (
-    <section className="py-20 md:py-28 bg-gradient-to-br from-primary/5 to-secondary/5">
+    <section className="hidden md:block py-20 md:py-28 bg-gradient-to-br from-primary/5 to-secondary/5">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16 space-y-4">
