@@ -29,14 +29,14 @@ export const Hero = () => {
             <p className="text-lg md:text-xl text-foreground/70">
               {t.hero.subtitle}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row gap-4 pt-4 items-center sm:items-stretch">
               <button
                 onClick={() => navigate("/landing")}
-                className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors text-lg"
+                className="w-full sm:flex-1 bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors text-lg h-auto sm:h-14 flex items-center justify-center"
               >
                 {t.hero.cta1}
               </button>
-              <button className="border-2 border-primary text-primary px-8 py-4 rounded-lg font-semibold hover:bg-primary/5 transition-colors text-lg">
+              <button className="w-full sm:flex-1 border-2 border-primary text-primary px-8 py-4 rounded-lg font-semibold hover:bg-primary/5 transition-colors text-lg h-auto sm:h-14 flex items-center justify-center">
                 {t.hero.cta2}
               </button>
             </div>
