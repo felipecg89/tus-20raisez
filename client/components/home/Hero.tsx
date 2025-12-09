@@ -15,18 +15,18 @@ export const Hero = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10 py-20 md:py-0">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center min-h-screen">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 items-center min-h-screen">
           {/* Text Content */}
-          <div className="flex flex-col justify-center space-y-6 animate-fade-in-up">
+          <div className="flex flex-col justify-center space-y-4 md:space-y-5 animate-fade-in-up md:col-span-1">
             <div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
                 {t.hero.title1}{" "}
                 <span className="text-primary">{t.hero.title2}</span>{" "}
                 {t.hero.title3}{" "}
                 <span className="text-secondary">{t.hero.title4}</span>
               </h1>
             </div>
-            <p className="text-lg md:text-xl text-foreground/70">
+            <p className="text-base md:text-lg text-foreground/70">
               {t.hero.subtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4 items-center sm:items-stretch">
@@ -43,7 +43,7 @@ export const Hero = () => {
           </div>
 
           {/* Video Content */}
-          <div className="relative w-full h-96 md:h-full flex items-center justify-center overflow-hidden">
+          <div className="relative w-full h-96 md:h-full md:col-span-2 flex items-center justify-center overflow-hidden">
             <video
               autoPlay
               muted
