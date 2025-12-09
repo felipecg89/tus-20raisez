@@ -44,7 +44,7 @@ export const Hero = () => {
 
           {/* Video Content */}
           <div className="md:col-span-2 flex items-center justify-center">
-            <div className="w-full max-w-2xl aspect-video rounded-3xl overflow-hidden shadow-2xl">
+            <div className="w-full max-w-md h-screen md:h-auto md:aspect-[9/16] rounded-3xl overflow-hidden shadow-2xl">
               <video
                 autoPlay
                 muted
