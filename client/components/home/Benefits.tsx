@@ -46,7 +46,7 @@ export const Benefits = () => {
             ))}
           </div>
 
-          <div className="mt-12 bg-gradient-to-r from-primary to-secondary rounded-2xl p-8 md:p-12 text-white text-center">
+          <div className="mt-12 bg-gradient-turquoise-sky rounded-2xl p-8 md:p-12 text-white text-center">
             <h3 className="text-2xl md:text-3xl font-bold mb-4">
               {t.benefits.cta}
             </h3>
