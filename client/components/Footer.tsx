@@ -56,13 +56,38 @@ export const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-center gap-2">
                 <MessageCircle className="w-4 h-4 text-secondary" />
+                <span className="text-sm">WhatsApp</span>
+              </li>
+              <li className="flex items-start gap-2 ml-6">
+                <span className="text-xs">🇺🇸</span>
+                <div className="space-y-1">
+                  <a
+                    href="https://wa.me/18887209656"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm hover:text-primary transition-colors block"
+                  >
+                    +1 (888) 720-9656
+                  </a>
+                  <a
+                    href="https://wa.me/18003511039"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm hover:text-primary transition-colors block"
+                  >
+                    +1 (800) 351-1039
+                  </a>
+                </div>
+              </li>
+              <li className="flex items-center gap-2 ml-6">
+                <span className="text-xs">🇲🇽</span>
                 <a
-                  href="https://wa.me/1234567890"
+                  href="https://wa.me/524923860125"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors"
+                  className="text-sm hover:text-primary transition-colors"
                 >
-                  WhatsApp
+                  +52 (492) 386-0125
                 </a>
               </li>
               <li className="flex items-center gap-2">
