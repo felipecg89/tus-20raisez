@@ -119,7 +119,7 @@ export const PropertyCard = ({
         <div className="space-y-2">
           <button
             onClick={handleViewDetails}
-            className="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2"
+            className="w-full bg-gradient-turquoise-sky text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2"
           >
             <Eye className="w-4 h-4" />
             {language === "es" ? "Ver Detalles" : "View Details"}
