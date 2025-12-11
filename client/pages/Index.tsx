@@ -1,5 +1,6 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { PhoneBanner } from "@/components/home/PhoneBanner";
 import { Hero } from "@/components/home/Hero";
 import { Services } from "@/components/home/Services";
 import { Benefits } from "@/components/home/Benefits";
