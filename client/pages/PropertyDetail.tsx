@@ -441,7 +441,7 @@ export default function PropertyDetail() {
               {/* Contact Button */}
               <button
                 onClick={handleWhatsApp}
-                className="w-full bg-gradient-to-r from-primary to-secondary text-white py-4 rounded-lg font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 text-lg"
+                className="w-full bg-gradient-turquoise-sky text-white py-4 rounded-lg font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 text-lg"
               >
                 <MessageCircle className="w-5 h-5" />
                 {language === "es" ? "Contactar por WhatsApp" : "Contact on WhatsApp"}
