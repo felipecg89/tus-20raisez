@@ -254,11 +254,26 @@ export default function Casas() {
               <div
                 className={`${
                   showFilters ? "block" : "hidden"
-                } lg:block bg-white rounded-2xl p-6 border border-border h-fit sticky top-20`}
+                } lg:block bg-white rounded-2xl border border-border h-fit sticky top-20`}
               >
-                <h3 className="text-lg font-bold text-foreground mb-6">
-                  {language === "es" ? "Filtrar por" : "Filter by"}
-                </h3>
+                <div className="flex items-center justify-between p-6 border-b border-border">
+                  <h3 className="text-lg font-bold text-foreground">
+                    {language === "es" ? "Filtrar por" : "Filter by"}
+                  </h3>
+                  <button
+                    onClick={() => setIsFiltersExpanded(!isFiltersExpanded)}
+                    className="p-1 hover:bg-muted rounded-lg transition-colors"
+                    aria-label={isFiltersExpanded ? "Collapse filters" : "Expand filters"}
+                  >
+                    <ChevronDown
+                      className={`w-5 h-5 text-foreground transition-transform ${
+                        isFiltersExpanded ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                <div className={`${isFiltersExpanded ? "block" : "hidden"} p-6`}>
 
                 {/* Type Filter */}
                 <div className="mb-6">
@@ -386,6 +401,7 @@ export default function Casas() {
                 >
                   {language === "es" ? "Limpiar filtros" : "Clear filters"}
                 </button>
+                </div>
               </div>
             </div>
 
