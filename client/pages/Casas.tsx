@@ -241,19 +241,19 @@ export default function Casas() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* Sidebar Filters */}
-            <div className="lg:col-span-1">
+            <div className="relative lg:col-span-1">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="lg:hidden w-full flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-lg font-semibold mb-4"
+                className="lg:hidden fixed bottom-6 right-6 z-40 flex items-center justify-center gap-2 bg-primary text-white py-3 px-4 rounded-lg font-semibold shadow-lg hover:bg-primary/90 transition-all"
               >
                 <Sliders className="w-4 h-4" />
                 {language === "es" ? "Filtros" : "Filters"}
               </button>
 
               <div
-                className={`${
-                  showFilters ? "block" : "hidden"
-                } lg:block bg-white rounded-2xl border border-border h-fit sticky top-20`}
+                className={`fixed lg:static left-0 top-0 h-screen lg:h-auto w-80 lg:w-full bg-white lg:rounded-2xl border-r lg:border-r-0 lg:border border-border overflow-y-auto lg:overflow-visible z-50 lg:z-auto transition-transform duration-300 ease-in-out lg:transition-none ${
+                  showFilters ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+                } lg:sticky lg:top-20`}
               >
                 <div className="flex items-center justify-between p-6 border-b border-border">
                   <h3 className="text-lg font-bold text-foreground">
