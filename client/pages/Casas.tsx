@@ -137,7 +137,6 @@ export default function Casas() {
   const [filterState, setFilterState] = useState("all");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000]);
   const [showFilters, setShowFilters] = useState(false);
-  const [isFiltersExpanded, setIsFiltersExpanded] = useState(true);
   const [loadedProperties, setLoadedProperties] = useState<Property[]>(properties);
   const [supabaseProperties, setSupabaseProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
