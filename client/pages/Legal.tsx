@@ -393,6 +393,90 @@ export default function Legal() {
             "Change of business activity",
           ],
         },
+        {
+          id: "7",
+          title: "Retirements",
+          icon: "🎯",
+          description:
+            "Comprehensive guidance in retirement processes and related procedures",
+          details: [
+            "Early retirement application",
+            "Processing with IMSS and INFONAVIT",
+            "Documentation and accreditation",
+            "Benefits management",
+            "Retirement options advisory",
+          ],
+          timeframe: "Process of 2-3 months",
+          commonIssues: [
+            "Unclear requirements",
+            "Incomplete documents",
+            "Conflict resolution with institution",
+            "Amount calculation",
+          ],
+        },
+        {
+          id: "8",
+          title: "Pensions",
+          icon: "💳",
+          description:
+            "Management of pension rights and procedures for workers and dependents",
+          details: [
+            "Old age pensions",
+            "Disability pensions",
+            "Survivor pensions",
+            "Orphanhood and ascendants",
+            "Pension amount review",
+          ],
+          timeframe: "Depending on type, 30-60 days",
+          commonIssues: [
+            "Pension not updated",
+            "Calculation errors",
+            "Missing documentation",
+            "Heir rights",
+          ],
+        },
+        {
+          id: "9",
+          title: "Withdrawals",
+          icon: "📊",
+          description:
+            "Advice on withdrawals from retirement savings and pension plans",
+          details: [
+            "Withdrawal of retirement savings fund (SAR)",
+            "Early fund withdrawals",
+            "Processing with pension fund manager",
+            "Document management",
+            "Tax advice on withdrawals",
+          ],
+          timeframe: "Processing 10-20 days",
+          commonIssues: [
+            "Delays in crediting",
+            "Age requirements",
+            "Irregular affiliation",
+            "Multiple account accounts",
+          ],
+        },
+        {
+          id: "10",
+          title: "Severance and Indemnifications",
+          icon: "⚡",
+          description:
+            "Advice on calculation, management and collection of labor indemnifications",
+          details: [
+            "Indemnification for unjustified dismissal",
+            "Calculation of benefits",
+            "Negotiation with employer",
+            "Labor litigation if necessary",
+            "Collection of severance",
+          ],
+          timeframe: "Depending on case, 1-6 months",
+          commonIssues: [
+            "Incorrect benefit calculation",
+            "Employer refuses to pay",
+            "Missing employment documentation",
+            "Dismissal for retaliation",
+          ],
+        },
       ],
     },
   };
