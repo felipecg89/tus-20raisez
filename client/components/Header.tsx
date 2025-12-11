@@ -25,7 +25,6 @@ export const Header = () => {
               alt="Tus Raíces MX Logo"
               className="h-32 w-auto"
             />
-            <span className="hidden sm:inline text-foreground">Tus Raíces MX</span>
           </Link>
 
           {/* Desktop Navigation */}
