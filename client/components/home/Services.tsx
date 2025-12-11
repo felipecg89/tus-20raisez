@@ -93,7 +93,7 @@ export const Services = () => {
                 </ul>
                 <Link
                   to={service.link}
-                  className="block w-full bg-gradient-to-r from-primary to-secondary text-white py-2 rounded-lg font-semibold hover:shadow-lg transition-all text-center"
+                  className="block w-full bg-gradient-turquoise-sky text-white py-2 rounded-lg font-semibold hover:shadow-lg transition-all text-center"
                 >
                   {t.services.learnMore}
                 </Link>
