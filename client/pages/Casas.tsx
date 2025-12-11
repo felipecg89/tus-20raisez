@@ -392,13 +392,21 @@ export default function Casas() {
                     setFilterState("all");
                     setPriceRange([0, 500000]);
                   }}
-                  className="w-full border-2 border-primary text-primary py-2 rounded-lg font-semibold hover:bg-primary/5 transition-colors"
+                  className="w-full border-2 border-primary text-primary py-2 rounded-lg font-semibold hover:bg-primary/5 transition-colors mb-6"
                 >
                   {language === "es" ? "Limpiar filtros" : "Clear filters"}
                 </button>
                 </div>
               </div>
             </div>
+
+            {/* Overlay for mobile */}
+            {showFilters && (
+              <div
+                className="fixed inset-0 bg-black/50 lg:hidden z-40"
+                onClick={() => setShowFilters(false)}
+              />
+            )}
 
             {/* Properties Grid */}
             <div className="lg:col-span-3">
