@@ -315,7 +315,7 @@ export default function Landing() {
                       {/* Submit Button */}
                       <button
                         type="submit"
-                        className="w-full bg-gradient-to-r from-primary to-secondary text-white py-4 rounded-lg font-bold text-lg hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-6"
+                        className="w-full bg-gradient-turquoise-sky text-white py-4 rounded-lg font-bold text-lg hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-6"
                       >
                         <Zap className="w-5 h-5" />
                         {lang.formSubmit}
