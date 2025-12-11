@@ -23,7 +23,7 @@ export const Header = () => {
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2Fc4331b9719fe4840b03d2b99c1afbc5e%2F04bfe224a10d4c11bf6172ee1e881e7a?format=webp&width=800"
               alt="Tus Raíces MX Logo"
-              className="h-16 w-auto"
+              className="h-24 w-auto"
             />
             <span className="hidden sm:inline text-foreground">Tus Raíces MX</span>
           </Link>
