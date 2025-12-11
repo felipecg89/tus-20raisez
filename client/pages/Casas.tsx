@@ -255,24 +255,20 @@ export default function Casas() {
                   showFilters ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
                 } lg:sticky lg:top-20`}
               >
-                <div className="flex items-center justify-between p-6 border-b border-border">
+                <div className="flex items-center justify-between p-6 border-b border-border lg:sticky lg:top-0 lg:bg-white lg:z-10">
                   <h3 className="text-lg font-bold text-foreground">
                     {language === "es" ? "Filtrar por" : "Filter by"}
                   </h3>
                   <button
-                    onClick={() => setIsFiltersExpanded(!isFiltersExpanded)}
-                    className="p-1 hover:bg-muted rounded-lg transition-colors"
-                    aria-label={isFiltersExpanded ? "Collapse filters" : "Expand filters"}
+                    onClick={() => setShowFilters(false)}
+                    className="lg:hidden p-1 hover:bg-muted rounded-lg transition-colors"
+                    aria-label="Close filters"
                   >
-                    <ChevronDown
-                      className={`w-5 h-5 text-foreground transition-transform ${
-                        isFiltersExpanded ? "rotate-180" : ""
-                      }`}
-                    />
+                    <X className="w-5 h-5 text-foreground" />
                   </button>
                 </div>
 
-                <div className={`${isFiltersExpanded ? "block" : "hidden"} p-6`}>
+                <div className="p-6">
 
                 {/* Type Filter */}
                 <div className="mb-6">
