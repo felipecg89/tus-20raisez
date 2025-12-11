@@ -21,7 +21,7 @@ export const Footer = () => {
           <img
             src="https://cdn.builder.io/api/v1/image/assets%2Fc4331b9719fe4840b03d2b99c1afbc5e%2F04bfe224a10d4c11bf6172ee1e881e7a?format=webp&width=800"
             alt="Tus Raíces MX Logo"
-            className="h-20 w-auto"
+            className="h-32 w-auto"
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
