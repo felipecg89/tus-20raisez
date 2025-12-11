@@ -170,6 +170,94 @@ export default function Legal() {
             "Cambio de giro empresarial",
           ],
         },
+        {
+          id: "7",
+          title: "Jubilaciones",
+          icon: "🎯",
+          description:
+            "Asesoramiento integral en procesos de jubilación y trámites relacionados",
+          details: [
+            "Solicitud de jubilación anticipada",
+            "Tramitación ante IMSS e INFONAVIT",
+            "Documentación y acreditación",
+            "Gestión de beneficios",
+            "Asesoría de opciones de jubilación",
+          ],
+          timeframe:
+            language === "es" ? "Proceso de 2-3 meses" : "Process of 2-3 months",
+          commonIssues: [
+            "Requisitos no claros",
+            "Documentos incompletos",
+            "Resolución de conflictos con institución",
+            "Cálculo de montos",
+          ],
+        },
+        {
+          id: "8",
+          title: "Pensiones",
+          icon: "💳",
+          description:
+            "Gestión de derechos y trámites de pensiones para trabajadores y dependientes",
+          details: [
+            "Pensiones de vejez",
+            "Pensiones de invalidez",
+            "Pensiones de viudez",
+            "Orfandad y ascendientes",
+            "Revisión de montos de pensión",
+          ],
+          timeframe:
+            language === "es" ? "Según el tipo, 30-60 días" : "Depending on type, 30-60 days",
+          commonIssues: [
+            "Pensión no actualizada",
+            "Errores en cálculo",
+            "Falta de documentación",
+            "Derechos herederos",
+          ],
+        },
+        {
+          id: "9",
+          title: "Retiros",
+          icon: "📊",
+          description:
+            "Asesoramiento en retiros de fondos de ahorro y planes de pensión",
+          details: [
+            "Retiro de fondo de ahorro para el retiro (SAR)",
+            "Retiro anticipado de fondos",
+            "Tramitación con afore",
+            "Gestión de documentación",
+            "Asesoría fiscal en retiros",
+          ],
+          timeframe:
+            language === "es" ? "Procesamiento 10-20 días" : "Processing 10-20 days",
+          commonIssues: [
+            "Retrasos en acreditación",
+            "Requisitos de edad",
+            "Afiliación irregular",
+            "Dispersión de cuentas",
+          ],
+        },
+        {
+          id: "10",
+          title: "Indemnizaciones",
+          icon: "⚡",
+          description:
+            "Asesoramiento en cálculo, gestión y cobro de indemnizaciones laborales",
+          details: [
+            "Indemnización por despido injustificado",
+            "Cálculo de prestaciones",
+            "Negociación con empleador",
+            "Litigio laboral si es necesario",
+            "Cobro de liquidación",
+          ],
+          timeframe:
+            language === "es" ? "Según el caso, 1-6 meses" : "Depending on case, 1-6 months",
+          commonIssues: [
+            "Cálculo incorrecto de prestaciones",
+            "Empleador rehúsa pagar",
+            "Falta de documentación laboral",
+            "Despido por represalia",
+          ],
+        },
       ],
     },
     en: {
