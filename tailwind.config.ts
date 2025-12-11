@@ -120,6 +120,9 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in-up": "fadeInUp 0.6s ease-out",
       },
+      backgroundImage: {
+        "gradient-turquoise-sky": "linear-gradient(to right, hsl(180 70% 45%), hsl(196 84% 55%))",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
