@@ -18,12 +18,14 @@ export const Header = () => {
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center gap-2 font-bold text-2xl text-primary hover:text-primary/80 transition-colors"
+            className="flex items-center gap-2 font-bold text-2xl text-primary hover:opacity-80 transition-opacity"
           >
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold">
-              TR
-            </div>
-            <span className="hidden sm:inline">Tus Raíces MX</span>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets%2Fc4331b9719fe4840b03d2b99c1afbc5e%2F04bfe224a10d4c11bf6172ee1e881e7a?format=webp&width=800"
+              alt="Tus Raíces MX Logo"
+              className="h-10 w-auto"
+            />
+            <span className="hidden sm:inline text-foreground">Tus Raíces MX</span>
           </Link>
 
           {/* Desktop Navigation */}
