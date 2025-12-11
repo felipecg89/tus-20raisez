@@ -47,23 +47,13 @@ export const Hero = () => {
             </div>
           </div>
 
-          {/* Video Content */}
+          {/* Logo Content */}
           <div className="hidden md:flex md:col-span-2 items-center justify-center">
-            <div className="w-full max-w-xl h-screen md:h-auto md:aspect-auto rounded-3xl overflow-hidden shadow-2xl bg-black flex items-center justify-center">
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="w-full h-full object-contain"
-              >
-                <source
-                  src="https://cdn.builder.io/o/assets%2Fc4331b9719fe4840b03d2b99c1afbc5e%2F511fe795642842bca842f3f15631911e?alt=media&token=f13cebd0-d14a-45a4-ba09-253770c118a6&apiKey=c4331b9719fe4840b03d2b99c1afbc5e"
-                  type="video/mp4"
-                />
-                Tu navegador no soporta videos HTML5
-              </video>
-            </div>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets%2Fc4331b9719fe4840b03d2b99c1afbc5e%2F04bfe224a10d4c11bf6172ee1e881e7a?format=webp&width=800"
+              alt="Tus Raíces MX Logo"
+              className="w-full max-w-2xl h-auto"
+            />
           </div>
         </div>
       </div>
