@@ -72,17 +72,43 @@ export const ContactForm = () => {
                     </div>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground">
+                    <h3 className="font-semibold text-foreground mb-2">
                       {t.contactForm.whatsappLabel}
                     </h3>
-                    <a
-                      href="https://wa.me/1234567890"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:text-primary/80 transition-colors"
-                    >
-                      +1 (234) 567-8900
-                    </a>
+                    <div className="space-y-2">
+                      <div>
+                        <p className="text-xs text-foreground/60 mb-1">🇺🇸 USA</p>
+                        <div className="flex gap-2">
+                          <a
+                            href="https://wa.me/18887209656"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary hover:text-primary/80 transition-colors"
+                          >
+                            +1 (888) 720-9656
+                          </a>
+                          <a
+                            href="https://wa.me/18003511039"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary hover:text-primary/80 transition-colors"
+                          >
+                            +1 (800) 351-1039
+                          </a>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-xs text-foreground/60 mb-1">🇲🇽 México</p>
+                        <a
+                          href="https://wa.me/524923860125"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:text-primary/80 transition-colors"
+                        >
+                          +52 (492) 386-0125
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
