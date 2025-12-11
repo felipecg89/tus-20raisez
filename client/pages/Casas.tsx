@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { PropertyCard } from "@/components/properties/PropertyCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
-import { Sliders, ChevronDown } from "lucide-react";
+import { Sliders, X } from "lucide-react";
 import { Product } from "@shared/api";
 
 interface Property {
