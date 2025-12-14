@@ -123,10 +123,10 @@ export const ContactForm = () => {
                       {t.contactForm.emailLabel}
                     </h3>
                     <a
-                      href="mailto:info@tusraicesmx.com"
+                      href="mailto:asesores@tusraices.com.mx"
                       className="text-primary hover:text-primary/80 transition-colors"
                     >
-                      info@tusraicesmx.com
+                      asesores@tusraices.com.mx
                     </a>
                   </div>
                 </div>
