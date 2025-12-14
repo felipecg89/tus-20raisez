@@ -3,7 +3,7 @@ export const translations = {
     // Header
     header: {
       inicio: "Inicio",
-      casas: "Casas",
+      casas: "Casas/Terrenos",
       imssInfonavit: "IMSS/Infonavit",
       asesoriaLegal: "Asesoría Legal",
       contacto: "Contacto",
@@ -191,7 +191,7 @@ export const translations = {
     // Header
     header: {
       inicio: "Home",
-      casas: "Homes",
+      casas: "Homes/Land",
       imssInfonavit: "IMSS/Infonavit",
       asesoriaLegal: "Legal Advice",
       contacto: "Contact",
