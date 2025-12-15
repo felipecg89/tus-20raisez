@@ -160,6 +160,10 @@ export const createProduct: RequestHandler = async (req, res) => {
       locality,
       latitude,
       longitude,
+      bedrooms,
+      bathrooms,
+      area,
+      floors,
     } = req.body;
 
     if (!name || !description || price === undefined || !city || !type || !category) {
@@ -191,6 +195,10 @@ export const createProduct: RequestHandler = async (req, res) => {
           is_commercial: req.body.isCommercial || false,
           main_image_url: image || null,
           features: features || [],
+          bedrooms: bedrooms || 0,
+          bathrooms: bathrooms || 0,
+          area: area || 0,
+          floors: floors || 0,
         },
       ])
       .select()
