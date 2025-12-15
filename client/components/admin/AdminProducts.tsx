@@ -27,7 +27,6 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<string | null>(null);
-  const [showForm, setShowForm] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -221,27 +220,6 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
     }
   };
 
-  const handleCancel = () => {
-    setShowForm(false);
-    setEditing(null);
-    setFormData({
-      name: "",
-      description: "",
-      price: "",
-      city: "",
-      type: "casa",
-      category: "compra",
-      isCommercial: false,
-      image: "",
-      features: "",
-      bedrooms: "",
-      bathrooms: "",
-      area: "",
-      floors: "",
-    });
-    setImagePreview("");
-    setMediaList([]);
-  };
 
   const handleViewProduct = (product: Product) => {
     navigate(`/admin/productos/${product.id}`);
@@ -284,8 +262,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
           </div>
           <Button
             onClick={() => {
-              setShowForm(!showForm);
-              setEditing(null);
+              navigate("/admin/productos/new");
             }}
             className="bg-emerald-600 hover:bg-emerald-700"
           >
