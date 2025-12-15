@@ -414,7 +414,9 @@ Soluciones:
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-3xl font-bold text-white">{product.name}</h1>
+            <h1 className="text-3xl font-bold text-white">
+              {id === "new" ? "Crear Nuevo Producto" : product?.name}
+            </h1>
           </div>
         </div>
 
@@ -892,7 +894,7 @@ Soluciones:
                 className="bg-emerald-600 hover:bg-emerald-700"
               >
                 <Save className="h-4 w-4 mr-2" />
-                {saving ? "Guardando..." : "Guardar Cambios"}
+                {saving ? "Guardando..." : id === "new" ? "Crear Producto" : "Guardar Cambios"}
               </Button>
             </div>
           </div>
