@@ -300,11 +300,11 @@ export default function PropertyDetail() {
             <div className="lg:col-span-2 space-y-4">
               {/* Main Image */}
               {mainImage && (
-                <div className="relative w-full h-96 md:h-[500px] bg-gray-200 rounded-lg overflow-hidden">
+                <div className="relative w-full h-96 md:h-[500px] bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
                   <img
                     src={mainImage}
                     alt={property.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
 
                   {images.length > 1 && (
@@ -348,7 +348,7 @@ export default function PropertyDetail() {
                       <img
                         src={img.url}
                         alt="Thumbnail"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                       />
                     </button>
                   ))}

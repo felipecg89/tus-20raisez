@@ -54,12 +54,12 @@ export const PropertyCard = ({
   return (
     <div className="bg-white border border-border shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group md:rounded-2xl">
       {/* Image - Full Width on Mobile */}
-      <div className="relative h-56 md:h-64 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
+      <div className="relative h-56 md:h-64 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
         {image ? (
           <img
             src={image}
             alt={title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-5xl md:text-6xl group-hover:scale-105 transition-transform duration-300">
