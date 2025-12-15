@@ -300,8 +300,8 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
         </div>
       </div>
 
-      {/* Form */}
-      {showForm && (
+      {/* Form removed - use /admin/productos/new to create or /admin/productos/:id to edit */}
+      {false && (
         <Card className="bg-slate-700 border-slate-600">
           <CardHeader>
             <CardTitle className="text-white">
