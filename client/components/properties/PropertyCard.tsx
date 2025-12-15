@@ -2,6 +2,7 @@ import { MapPin, Home, Bath, Maximize2, MessageCircle, Eye } from "lucide-react"
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
+import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 interface PropertyCardProps {
   id: string;
@@ -31,13 +32,25 @@ export const PropertyCard = ({
   const navigate = useNavigate();
   const { language } = useLanguage();
   const t = translations[language];
+  const { exchangeRate } = useExchangeRate();
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat(language === "es" ? "es-MX" : "en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    }).format(price);
+    if (language === "es") {
+      // Show in MXN for Spanish
+      const priceInMXN = price * exchangeRate;
+      return new Intl.NumberFormat("es-MX", {
+        style: "currency",
+        currency: "MXN",
+        maximumFractionDigits: 0,
+      }).format(priceInMXN);
+    } else {
+      // Show in USD for English
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      }).format(price);
+    }
   };
 
   const handleViewDetails = () => {
