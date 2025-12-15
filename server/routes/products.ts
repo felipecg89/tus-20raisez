@@ -187,30 +187,35 @@ export const updateProduct: RequestHandler = async (req, res) => {
       longitude
     } = req.body;
 
+    // Build update object with only the fields we're sending
+    const updateData: any = {
+      name,
+      description,
+      price: Number(price),
+      city,
+      type,
+      category,
+      main_image_url: image || null,
+      features: features || [],
+      updated_at: new Date().toISOString(),
+    };
+
+    // Add optional fields if they exist
+    if (state !== undefined) updateData.state = state;
+    if (postalCode !== undefined) updateData.postal_code = postalCode;
+    if (neighborhood !== undefined) updateData.neighborhood = neighborhood;
+    if (address !== undefined) updateData.address = address;
+    if (streetType !== undefined) updateData.street_type = streetType;
+    if (streetName !== undefined) updateData.street_name = streetName;
+    if (exteriorNumber !== undefined) updateData.exterior_number = exteriorNumber;
+    if (interiorNumber !== undefined) updateData.interior_number = interiorNumber;
+    if (locality !== undefined) updateData.locality = locality;
+    if (latitude !== undefined && latitude !== null) updateData.latitude = Number(latitude);
+    if (longitude !== undefined && longitude !== null) updateData.longitude = Number(longitude);
+
     const { data, error } = await supabase
       .from("products")
-      .update({
-        name,
-        description,
-        price: Number(price),
-        city,
-        state,
-        postal_code: postalCode,
-        neighborhood,
-        address,
-        street_type: streetType,
-        street_name: streetName,
-        exterior_number: exteriorNumber,
-        interior_number: interiorNumber,
-        locality,
-        latitude: latitude ? Number(latitude) : null,
-        longitude: longitude ? Number(longitude) : null,
-        type,
-        category,
-        main_image_url: image || null,
-        features: features || [],
-        updated_at: new Date().toISOString(),
-      })
+      .update(updateData)
       .eq("id", req.params.id)
       .select()
       .single();
