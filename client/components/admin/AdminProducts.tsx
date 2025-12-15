@@ -504,11 +504,11 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
               onClick={() => handleViewProduct(product)}
             >
               {product.image && (
-                <div className="w-full aspect-video bg-slate-600 overflow-hidden">
+                <div className="w-full aspect-video bg-slate-600 overflow-hidden flex items-center justify-center">
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
                   />
                 </div>
               )}
