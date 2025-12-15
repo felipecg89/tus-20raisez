@@ -84,5 +84,12 @@ export function createServer() {
   app.delete("/api/products/media/:mediaId", deleteProductMedia);
   app.put("/api/products/media/reorder", reorderProductMedia);
 
+  // Users API
+  app.get("/api/users", getUsers);
+  app.get("/api/users/:id", getUserById);
+  app.post("/api/users", createUser);
+  app.put("/api/users/:id", updateUser);
+  app.delete("/api/users/:id", deleteUser);
+
   return app;
 }
