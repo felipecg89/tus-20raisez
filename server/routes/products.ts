@@ -220,7 +220,13 @@ export const updateProduct: RequestHandler = async (req, res) => {
       .select()
       .single();
 
-    if (error || !data) {
+    if (error) {
+      console.error("Supabase update error:", error);
+      res.status(500).json({ error: `Error al actualizar producto: ${error.message}` });
+      return;
+    }
+
+    if (!data) {
       res.status(404).json({ error: "Producto no encontrado" });
       return;
     }
@@ -253,7 +259,7 @@ export const updateProduct: RequestHandler = async (req, res) => {
     res.json(updatedProduct);
   } catch (error: any) {
     console.error("Error updating product:", error);
-    res.status(500).json({ error: "Error al actualizar producto" });
+    res.status(500).json({ error: `Error al actualizar producto: ${error.message}` });
   }
 };
 
