@@ -457,8 +457,6 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
               )}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Continue with image and other fields */}
-
                 <div className="col-span-1 md:col-span-1">
                   <label className="block text-sm font-medium text-slate-300 mb-2">
                     Imagen
