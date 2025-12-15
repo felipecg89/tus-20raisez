@@ -6,6 +6,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 import { Sliders, X } from "lucide-react";
 import { Product } from "@shared/api";
+import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 interface Property {
   id: string;
