@@ -170,6 +170,55 @@ export default function AdminProductDetail() {
     }
   };
 
+  const handleGeocodeAddress = async () => {
+    try {
+      // Build full address from components
+      const fullAddress = [
+        formData.streetType.charAt(0).toUpperCase() + formData.streetType.slice(1),
+        formData.streetName,
+        formData.exteriorNumber && `#${formData.exteriorNumber}`,
+        formData.neighborhood,
+        formData.locality,
+        formData.city,
+        formData.state
+      ].filter(Boolean).join(", ");
+
+      if (!formData.streetName || !formData.city) {
+        toast.error("Por favor completa el nombre de la vía y ciudad");
+        return;
+      }
+
+      toast.loading("Buscando coordenadas...");
+
+      // Use Nominatim (OpenStreetMap) for free geocoding - no API key required
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullAddress)}&limit=1`,
+        { headers: { "User-Agent": "PropertyApp" } }
+      );
+
+      if (!response.ok) throw new Error("Error geocoding");
+
+      const data = await response.json();
+
+      if (!data || data.length === 0) {
+        toast.error("No se encontraron coordenadas para esta dirección");
+        return;
+      }
+
+      const { lat, lon } = data[0];
+      setFormData({
+        ...formData,
+        latitude: parseFloat(lat).toFixed(4),
+        longitude: parseFloat(lon).toFixed(4)
+      });
+
+      toast.success(`Coordenadas encontradas: ${lat}, ${lon}`);
+    } catch (error) {
+      console.error("Geocoding error:", error);
+      toast.error("Error al obtener coordenadas. Intenta ingresarlas manualmente.");
+    }
+  };
+
   const handleDelete = async () => {
     if (!window.confirm("¿Estás seguro de que quieres eliminar este producto? Esta acción no se puede deshacer.")) {
       return;
@@ -450,6 +499,19 @@ export default function AdminProductDetail() {
                         placeholder="Ej: Depto 5, Casa B (opcional)"
                       />
                     </div>
+                  </div>
+
+                  {/* Save Address Button */}
+                  <div className="flex gap-2 mb-4">
+                    <Button
+                      onClick={handleGeocodeAddress}
+                      className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+                    >
+                      💾 Guardar Domicilio
+                    </Button>
+                    <p className="text-xs text-slate-400 flex items-center">
+                      Geocodifica automáticamente la dirección
+                    </p>
                   </div>
 
                   {/* Coordinates Section */}
