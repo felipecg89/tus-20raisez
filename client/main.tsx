@@ -40,8 +40,31 @@ const AppContent = () => {
         <Route path="/rentals" element={<Rentals />} />
         <Route path="/imss" element={<Imss />} />
         <Route path="/legal" element={<Legal />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/admin/productos/:id" element={<AdminProductDetail />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/productos/:id"
+          element={
+            <ProtectedRoute>
+              <AdminProductDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/agentes"
+          element={
+            <ProtectedRoute requiredRoles={["agente", "admin"]}>
+              <Agentes />
+            </ProtectedRoute>
+          }
+        />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
