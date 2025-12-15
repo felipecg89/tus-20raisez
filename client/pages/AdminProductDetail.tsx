@@ -125,8 +125,20 @@ export default function AdminProductDetail() {
 
     try {
       setSaving(true);
+      // Build full address from components
+      const fullAddress = [
+        formData.streetType.charAt(0).toUpperCase() + formData.streetType.slice(1),
+        formData.streetName,
+        formData.exteriorNumber && `#${formData.exteriorNumber}`,
+        formData.interiorNumber && `Int. ${formData.interiorNumber}`,
+        formData.locality,
+        formData.city,
+        formData.state
+      ].filter(Boolean).join(", ");
+
       const payload = {
         ...formData,
+        address: fullAddress,
         price: parseFloat(formData.price),
         latitude: formData.latitude ? parseFloat(formData.latitude) : undefined,
         longitude: formData.longitude ? parseFloat(formData.longitude) : undefined,
