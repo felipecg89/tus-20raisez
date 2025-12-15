@@ -31,6 +31,13 @@ import {
   reorderProductMedia,
   bulkAddProductMedia,
 } from "./routes/product-media";
+import {
+  getUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+} from "./routes/users";
 
 export function createServer() {
   const app = express();
