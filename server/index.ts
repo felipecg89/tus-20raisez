@@ -38,6 +38,7 @@ import {
   updateUser,
   deleteUser,
 } from "./routes/users";
+import { createDemoUsers } from "./routes/demo-users";
 
 export function createServer() {
   const app = express();
