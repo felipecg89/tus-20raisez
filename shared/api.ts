@@ -43,6 +43,10 @@ export interface Product {
   isCommercial?: boolean;
   image: string;
   features: string[];
+  bedrooms?: number;
+  bathrooms?: number;
+  area?: number;
+  floors?: number;
   createdAt: string;
   updatedAt: string;
 }
