@@ -392,11 +392,103 @@ export default function Casas() {
                   </div>
                 </div>
 
+                {/* Category Filter */}
+                <div className="mb-6">
+                  <h4 className="font-semibold text-foreground mb-3">
+                    {language === "es" ? "Categoría" : "Category"}
+                  </h4>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="category"
+                        checked={filterCategory === "all"}
+                        onChange={() => setFilterCategory("all")}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-foreground/70">
+                        {language === "es" ? "Todas" : "All"}
+                      </span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="category"
+                        checked={filterCategory === "compra"}
+                        onChange={() => setFilterCategory("compra")}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-foreground/70">
+                        {language === "es" ? "Compra" : "Purchase"}
+                      </span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="category"
+                        checked={filterCategory === "renta"}
+                        onChange={() => setFilterCategory("renta")}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-foreground/70">
+                        {language === "es" ? "Renta" : "Rental"}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Commercial Filter */}
+                <div className="mb-6">
+                  <h4 className="font-semibold text-foreground mb-3">
+                    {language === "es" ? "Tipo de Propiedad" : "Property Type"}
+                  </h4>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="commercial"
+                        checked={filterCommercial === "all"}
+                        onChange={() => setFilterCommercial("all")}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-foreground/70">
+                        {language === "es" ? "Todas" : "All"}
+                      </span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="commercial"
+                        checked={filterCommercial === "residential"}
+                        onChange={() => setFilterCommercial("residential")}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-foreground/70">
+                        {language === "es" ? "No Comercial" : "Residential"}
+                      </span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="commercial"
+                        checked={filterCommercial === "commercial"}
+                        onChange={() => setFilterCommercial("commercial")}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-foreground/70">
+                        {language === "es" ? "Comercial" : "Commercial"}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
                 {/* Reset Filters */}
                 <button
                   onClick={() => {
                     setFilterType("all");
                     setFilterState("all");
+                    setFilterCategory("all");
+                    setFilterCommercial("all");
                     setPriceRange([0, 500000]);
                   }}
                   className="w-full border-2 border-primary text-primary py-2 rounded-lg font-semibold hover:bg-primary/5 transition-colors mb-6"
