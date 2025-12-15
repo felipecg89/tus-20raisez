@@ -116,6 +116,8 @@ export default function AdminProductDetail() {
       const payload = {
         ...formData,
         price: parseFloat(formData.price),
+        latitude: formData.latitude ? parseFloat(formData.latitude) : undefined,
+        longitude: formData.longitude ? parseFloat(formData.longitude) : undefined,
         features: formData.features
           .split(",")
           .map((f) => f.trim())
