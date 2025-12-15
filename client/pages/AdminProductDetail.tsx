@@ -46,7 +46,7 @@ export default function AdminProductDetail() {
     latitude: "",
     longitude: "",
     type: "casa" as "casa" | "terreno",
-    category: "venta_casa" as ProductCategory,
+    category: "compra" as ProductCategory,
     image: "",
     features: "",
     bedrooms: "",
