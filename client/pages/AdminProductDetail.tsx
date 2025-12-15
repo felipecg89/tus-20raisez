@@ -35,6 +35,7 @@ export default function AdminProductDetail() {
     city: "",
     state: "",
     postalCode: "",
+    neighborhood: "",
     address: "",
     streetType: "calle" as "calle" | "privada" | "avenida" | "carretera" | "otro",
     streetName: "",
@@ -69,6 +70,7 @@ export default function AdminProductDetail() {
         city: data.city,
         state: data.state || "",
         postalCode: data.postalCode || "",
+        neighborhood: data.neighborhood || "",
         address: data.address || "",
         streetType: data.streetType || "calle",
         streetName: data.streetName || "",
@@ -339,7 +341,7 @@ export default function AdminProductDetail() {
                 <div className="border-t border-slate-600 pt-4">
                   <h3 className="text-lg font-semibold text-white mb-4">Ubicación Detallada</h3>
 
-                  <div className="grid grid-cols-3 gap-4 mb-4">
+                  <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-300 mb-2">
                         Estado
@@ -360,6 +362,20 @@ export default function AdminProductDetail() {
                         onChange={(e) => setFormData({ ...formData, locality: e.target.value })}
                         className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
                         placeholder="Ej: Centro, Privada San Patricio"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
+                        Colonia / Barrio
+                      </label>
+                      <Input
+                        value={formData.neighborhood}
+                        onChange={(e) => setFormData({ ...formData, neighborhood: e.target.value })}
+                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                        placeholder="Ej: Santa María, Centro Histórico"
                       />
                     </div>
                     <div>
