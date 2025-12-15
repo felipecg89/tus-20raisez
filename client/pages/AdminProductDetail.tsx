@@ -188,15 +188,18 @@ export default function AdminProductDetail() {
         isCommercial: formData.isCommercial,
       };
 
-      const response = await fetch(`/api/products/${id}`, {
-        method: "PUT",
+      const method = id === "new" ? "POST" : "PUT";
+      const url = id === "new" ? "/api/products" : `/api/products/${id}`;
+
+      const response = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) throw new Error("Error updating product");
+      if (!response.ok) throw new Error(id === "new" ? "Error creating product" : "Error updating product");
 
-      toast.success("Producto actualizado correctamente");
+      toast.success(id === "new" ? "Producto creado correctamente" : "Producto actualizado correctamente");
       navigate("/admin", { state: { tab: "productos" } });
     } catch (error) {
       console.error("Error:", error);
