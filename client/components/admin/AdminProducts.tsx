@@ -43,6 +43,10 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
     category: "venta_casa" as ProductCategory,
     image: "",
     features: "",
+    bedrooms: "",
+    bathrooms: "",
+    area: "",
+    floors: "",
   });
   const [imagePreview, setImagePreview] = useState<string>("");
   const [mediaList, setMediaList] = useState<MediaFile[]>([]);
@@ -99,6 +103,9 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
         ...formData,
         price: parseFloat(formData.price),
         category: formData.category,
+        bedrooms: formData.type === "casa" && formData.bedrooms ? parseInt(formData.bedrooms) : 0,
+        bathrooms: formData.type === "casa" && formData.bathrooms ? parseInt(formData.bathrooms) : 0,
+        area: formData.type === "casa" && formData.area ? parseInt(formData.area) : 0,
         features: formData.features
           .split(",")
           .map((f) => f.trim())
