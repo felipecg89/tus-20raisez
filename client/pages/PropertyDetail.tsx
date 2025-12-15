@@ -523,6 +523,27 @@ export default function PropertyDetail() {
                 </div>
               </div>
 
+              {/* Map */}
+              <PropertyMap
+                address={
+                  "address" in property
+                    ? property.address
+                    : undefined
+                }
+                latitude={
+                  "latitude" in property
+                    ? property.latitude
+                    : undefined
+                }
+                longitude={
+                  "longitude" in property
+                    ? property.longitude
+                    : undefined
+                }
+                title={getPropertyName()}
+                city={getPropertyCity()}
+              />
+
               {/* Features */}
               {getPropertyFeatures().length > 0 && (
                 <div>
