@@ -414,6 +414,28 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
                     ))}
                   </SelectContent>
                 </Select>
+
+                <Select
+                  value={formData.isCommercial ? "commercial" : "residential"}
+                  onValueChange={(value) =>
+                    setFormData({
+                      ...formData,
+                      isCommercial: value === "commercial",
+                    })
+                  }
+                >
+                  <SelectTrigger className="bg-slate-600 border-slate-500 text-white">
+                    <SelectValue placeholder="Tipo de Propiedad" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-600 border-slate-500">
+                    <SelectItem value="residential" className="text-white">
+                      No Comercial
+                    </SelectItem>
+                    <SelectItem value="commercial" className="text-white">
+                      Comercial
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Fields for Casa only */}
