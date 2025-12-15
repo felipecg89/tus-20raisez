@@ -136,6 +136,8 @@ export default function Casas() {
     "all",
   );
   const [filterState, setFilterState] = useState("all");
+  const [filterCategory, setFilterCategory] = useState<"all" | "compra" | "renta">("all");
+  const [filterCommercial, setFilterCommercial] = useState<"all" | "commercial" | "residential">("all");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000]);
   const [showFilters, setShowFilters] = useState(false);
   const [loadedProperties, setLoadedProperties] = useState<Property[]>(properties);
@@ -210,7 +212,10 @@ export default function Casas() {
     const stateMatch = filterState === "all" || property.state === filterState;
     const priceMatch =
       property.price >= priceRange[0] && property.price <= priceRange[1];
-    return typeMatch && stateMatch && priceMatch;
+    const categoryMatch = filterCategory === "all" || (property as any).category === filterCategory;
+    const commercialMatch = filterCommercial === "all" ||
+      (filterCommercial === "commercial" ? (property as any).isCommercial : !(property as any).isCommercial);
+    return typeMatch && stateMatch && priceMatch && categoryMatch && commercialMatch;
   });
 
   const formatPrice = (price: number) => {
