@@ -345,6 +345,10 @@ export const updateProduct: RequestHandler = async (req, res) => {
       isCommercial: data.is_commercial || false,
       image: data.main_image_url,
       features: data.features || [],
+      bedrooms: data.bedrooms || 0,
+      bathrooms: data.bathrooms || 0,
+      area: data.area || 0,
+      floors: data.floors || 0,
       createdAt: data.created_at,
       updatedAt: data.updated_at,
     };
