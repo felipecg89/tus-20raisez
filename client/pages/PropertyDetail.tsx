@@ -357,65 +357,85 @@ export default function PropertyDetail() {
             {language === "es" ? "Volver a Casas" : "Back to Properties"}
           </button>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Gallery Section */}
-            <div className="lg:col-span-2 space-y-4">
-              {/* Main Image */}
-              {mainImage && (
-                <div className="relative w-full h-96 md:h-[500px] bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
-                  <img
-                    src={mainImage}
-                    alt={property.name}
-                    className="w-full h-full object-contain"
-                  />
+            <div className="lg:col-span-2">
+              <div className="space-y-3">
+                {/* Main Image */}
+                {mainImage && (
+                  <div className="relative w-full h-96 md:h-[500px] bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
+                    <img
+                      src={mainImage}
+                      alt={property.name}
+                      className="w-full h-full object-contain"
+                    />
 
-                  {images.length > 1 && (
-                    <>
-                      <button
-                        onClick={goToPreviousImage}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
-                      >
-                        <ChevronLeft className="w-6 h-6" />
-                      </button>
-                      <button
-                        onClick={goToNextImage}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
-                      >
-                        <ChevronRight className="w-6 h-6" />
-                      </button>
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-1 rounded-full text-sm">
-                        {currentImageIndex + 1} / {images.length}
-                      </div>
-                    </>
-                  )}
-                </div>
-              )}
+                    {images.length > 1 && (
+                      <>
+                        <button
+                          onClick={goToPreviousImage}
+                          className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+                        >
+                          <ChevronLeft className="w-6 h-6" />
+                        </button>
+                        <button
+                          onClick={goToNextImage}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+                        >
+                          <ChevronRight className="w-6 h-6" />
+                        </button>
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-1 rounded-full text-sm">
+                          {currentImageIndex + 1} / {images.length}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
 
-              {/* Thumbnails */}
-              {images.length > 1 && (
-                <div className="flex gap-2 overflow-x-auto pb-2">
-                  {images.map((img, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => {
-                        setSelectedImage(img.url);
-                        setCurrentImageIndex(idx);
-                      }}
-                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                        selectedImage === img.url || currentImageIndex === idx
-                          ? "border-primary"
-                          : "border-gray-300 hover:border-primary"
-                      }`}
-                    >
-                      <img
-                        src={img.url}
-                        alt="Thumbnail"
-                        className="w-full h-full object-contain"
-                      />
-                    </button>
-                  ))}
+                {/* Info Bar Below Image */}
+                <div className="bg-white border border-gray-200 rounded-lg p-4 flex justify-between items-center">
+                  <div>
+                    <h3 className="text-lg md:text-xl font-bold text-foreground">
+                      {getPropertyName()}
+                    </h3>
+                    <div className="flex items-center gap-2 text-foreground/70 mt-1">
+                      <MapPin className="w-4 h-4 text-primary" />
+                      <span className="text-sm">{getPropertyCity()}</span>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-2xl font-bold text-primary">
+                      {formatPrice(property.price)}
+                    </p>
+                  </div>
                 </div>
-              )}
+
+                {/* Thumbnails */}
+                {images.length > 1 && (
+                  <div className="flex gap-2 overflow-x-auto pb-2">
+                    {images.map((img, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          setSelectedImage(img.url);
+                          setCurrentImageIndex(idx);
+                        }}
+                        className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                          selectedImage === img.url || currentImageIndex === idx
+                            ? "border-primary"
+                            : "border-gray-300 hover:border-primary"
+                        }`}
+                      >
+                        <img
+                          src={img.url}
+                          alt="Thumbnail"
+                          className="w-full h-full object-contain"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               {/* Videos Section */}
               {videos.length > 0 && (
@@ -442,17 +462,7 @@ export default function PropertyDetail() {
             </div>
 
             {/* Property Info Section */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Title and Price */}
-              <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-                  {getPropertyName()}
-                </h1>
-                <p className="text-2xl font-bold text-primary">
-                  {formatPrice(property.price)}
-                </p>
-              </div>
-
+            <div className="lg:col-span-1 space-y-6">
               {/* Location */}
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
@@ -580,8 +590,8 @@ export default function PropertyDetail() {
               </button>
             </div>
 
-            {/* Map Section - Right Side */}
-            <div className="lg:col-span-1">
+            {/* Map Section - Right Side - Smaller */}
+            <div className="lg:col-span-1 h-64 md:h-80">
               <PropertyMap
                 address={
                   "address" in property
