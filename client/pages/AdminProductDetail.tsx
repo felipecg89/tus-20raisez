@@ -503,6 +503,94 @@ Soluciones:
                   </div>
                 </div>
 
+                {/* Casa-specific fields */}
+                {formData.type === "casa" && (
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
+                        Recámaras
+                      </label>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={formData.bedrooms}
+                        onChange={(e) => setFormData({ ...formData, bedrooms: e.target.value })}
+                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                        placeholder="Ej: 3"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
+                        Baños
+                      </label>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={formData.bathrooms}
+                        onChange={(e) => setFormData({ ...formData, bathrooms: e.target.value })}
+                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                        placeholder="Ej: 2"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
+                        Metros Cuadrados
+                      </label>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={formData.area}
+                        onChange={(e) => setFormData({ ...formData, area: e.target.value })}
+                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                        placeholder="Ej: 250"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
+                        Número de Pisos
+                      </label>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={formData.floors}
+                        onChange={(e) => setFormData({ ...formData, floors: e.target.value })}
+                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                        placeholder="Ej: 2"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Property Type (Commercial/Residential) */}
+                <div className="grid grid-cols-1 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                      Tipo de Propiedad
+                    </label>
+                    <Select
+                      value={formData.isCommercial ? "commercial" : "residential"}
+                      onValueChange={(value) =>
+                        setFormData({
+                          ...formData,
+                          isCommercial: value === "commercial",
+                        })
+                      }
+                    >
+                      <SelectTrigger className="bg-slate-600 border-slate-500 text-white">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-slate-600 border-slate-500">
+                        <SelectItem value="residential" className="text-white">
+                          No Comercial
+                        </SelectItem>
+                        <SelectItem value="commercial" className="text-white">
+                          Comercial
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
                 {/* Location Section */}
                 <div className="border-t border-slate-600 pt-4">
                   <h3 className="text-lg font-semibold text-white mb-4">Ubicación Detallada</h3>
