@@ -15,6 +15,7 @@ import {
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 import { useExchangeRate } from "@/hooks/useExchangeRate";
+import { PropertyCard } from "@/components/properties/PropertyCard";
 
 interface PropertyMedia {
   type: "image" | "video";
@@ -268,6 +269,29 @@ export default function PropertyDetail() {
   const getPropertyFeatures = () => {
     if ("features" in property) return property.features;
     return [];
+  };
+
+  const getRelatedProperties = () => {
+    if (!property) return [];
+
+    const currentState = "state" in property ? property.state : property.location;
+    const currentType = property.type;
+    const currentId = property.id;
+
+    // Filter properties by type and state, excluding current property
+    const related = localProperties.filter((p) =>
+      p.id !== currentId && p.type === currentType && p.state === currentState
+    );
+
+    // If not enough results, also include properties of same type from other states
+    if (related.length < 4) {
+      const sameType = localProperties.filter((p) =>
+        p.id !== currentId && p.type === currentType && !related.some(r => r.id === p.id)
+      );
+      related.push(...sameType);
+    }
+
+    return related.slice(0, 4);
   };
 
   const handleWhatsApp = () => {
