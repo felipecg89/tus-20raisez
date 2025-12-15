@@ -311,6 +311,47 @@ export default function AdminProductDetail() {
 
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-2">
+                    Dirección Completa
+                  </label>
+                  <Input
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                    placeholder="Ej: Calle Principal 123, Centro, Ciudad, Estado"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                      Latitud
+                    </label>
+                    <Input
+                      type="number"
+                      step="0.0001"
+                      value={formData.latitude}
+                      onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
+                      className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                      placeholder="Ej: 19.4326"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                      Longitud
+                    </label>
+                    <Input
+                      type="number"
+                      step="0.0001"
+                      value={formData.longitude}
+                      onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
+                      className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                      placeholder="Ej: -99.1332"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">
                     Características (separadas por coma)
                   </label>
                   <Textarea
