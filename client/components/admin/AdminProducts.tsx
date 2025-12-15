@@ -452,7 +452,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
                   <img
                     src={imagePreview}
                     alt="Preview"
-                    className="w-full max-w-sm h-auto object-cover rounded border border-slate-500"
+                    className="w-full max-w-sm h-auto object-contain rounded border border-slate-500"
                   />
                   <p className="text-xs text-slate-400 mt-2">Vista previa de la imagen</p>
                 </div>
