@@ -19,6 +19,7 @@ import { AuthAwareNavbar } from "@/components/AuthAwareNavbar";
 import AdminProducts from "@/components/admin/AdminProducts";
 import AdminMessages from "@/components/admin/AdminMessages";
 import AdminContent from "@/components/admin/AdminContent";
+import AdminUsers from "@/components/admin/AdminUsers";
 
 export default function Admin() {
   const [stats, setStats] = useState<AdminStats | null>(null);
