@@ -118,6 +118,7 @@ const rentalProperties: RentalProperty[] = [
 export default function Rentals() {
   const { language } = useLanguage();
   const t = translations[language];
+  const { exchangeRate } = useExchangeRate();
   const [filterType, setFilterType] = useState<"all" | string>("all");
   const [filterState, setFilterState] = useState("all");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
