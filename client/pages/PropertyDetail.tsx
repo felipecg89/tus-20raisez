@@ -418,6 +418,76 @@ export default function PropertyDetail() {
                 </p>
               </div>
 
+              {/* Specifications */}
+              <div>
+                <h3 className="font-semibold text-foreground mb-3">
+                  {language === "es" ? "Especificaciones" : "Specifications"}
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Area */}
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <p className="text-xs text-foreground/60 mb-1">
+                      {language === "es" ? "Área" : "Area"}
+                    </p>
+                    <p className="font-semibold text-foreground">
+                      {property.area} m²
+                    </p>
+                  </div>
+
+                  {/* Property Type */}
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <p className="text-xs text-foreground/60 mb-1">
+                      {language === "es" ? "Tipo" : "Type"}
+                    </p>
+                    <p className="font-semibold text-foreground">
+                      {property.type === "casa"
+                        ? language === "es"
+                          ? "Casa"
+                          : "House"
+                        : language === "es"
+                          ? "Terreno"
+                          : "Land"}
+                    </p>
+                  </div>
+
+                  {/* Bedrooms */}
+                  {property.bedrooms > 0 && (
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <p className="text-xs text-foreground/60 mb-1">
+                        {language === "es" ? "Recámaras" : "Bedrooms"}
+                      </p>
+                      <p className="font-semibold text-foreground flex items-center gap-2">
+                        <Home className="w-4 h-4 text-primary" />
+                        {property.bedrooms}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Bathrooms */}
+                  {property.bathrooms > 0 && (
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <p className="text-xs text-foreground/60 mb-1">
+                        {language === "es" ? "Baños" : "Bathrooms"}
+                      </p>
+                      <p className="font-semibold text-foreground flex items-center gap-2">
+                        <Bath className="w-4 h-4 text-primary" />
+                        {property.bathrooms}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* State */}
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <p className="text-xs text-foreground/60 mb-1">
+                      {language === "es" ? "Estado" : "State"}
+                    </p>
+                    <p className="font-semibold text-foreground">
+                      {property.state}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               {/* Features */}
               {getPropertyFeatures().length > 0 && (
                 <div>
