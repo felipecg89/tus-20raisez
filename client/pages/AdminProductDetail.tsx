@@ -333,44 +333,130 @@ export default function AdminProductDetail() {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    Dirección Completa
-                  </label>
-                  <Input
-                    value={formData.address}
-                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
-                    placeholder="Ej: Calle Principal 123, Centro, Ciudad, Estado"
-                  />
-                </div>
+                {/* Location Section */}
+                <div className="border-t border-slate-600 pt-4">
+                  <h3 className="text-lg font-semibold text-white mb-4">Ubicación Detallada</h3>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">
-                      Latitud
-                    </label>
-                    <Input
-                      type="number"
-                      step="0.0001"
-                      value={formData.latitude}
-                      onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
-                      className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
-                      placeholder="Ej: 19.4326"
-                    />
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
+                        Estado
+                      </label>
+                      <Input
+                        value={formData.state}
+                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                        placeholder="Ej: Zacatecas"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
+                        Localidad
+                      </label>
+                      <Input
+                        value={formData.locality}
+                        onChange={(e) => setFormData({ ...formData, locality: e.target.value })}
+                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                        placeholder="Ej: Centro, Privada San Patricio"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">
-                      Longitud
-                    </label>
-                    <Input
-                      type="number"
-                      step="0.0001"
-                      value={formData.longitude}
-                      onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
-                      className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
-                      placeholder="Ej: -99.1332"
-                    />
+
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
+                        Tipo de Vía
+                      </label>
+                      <Select
+                        value={formData.streetType}
+                        onValueChange={(value) =>
+                          setFormData({ ...formData, streetType: value as "calle" | "privada" | "avenida" | "carretera" | "otro" })
+                        }
+                      >
+                        <SelectTrigger className="bg-slate-600 border-slate-500 text-white">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-slate-600 border-slate-500">
+                          <SelectItem value="calle" className="text-white">Calle</SelectItem>
+                          <SelectItem value="privada" className="text-white">Privada</SelectItem>
+                          <SelectItem value="avenida" className="text-white">Avenida</SelectItem>
+                          <SelectItem value="carretera" className="text-white">Carretera</SelectItem>
+                          <SelectItem value="otro" className="text-white">Otro</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
+                        Nombre de la Vía
+                      </label>
+                      <Input
+                        value={formData.streetName}
+                        onChange={(e) => setFormData({ ...formData, streetName: e.target.value })}
+                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                        placeholder="Ej: Hidalgo, Miguel de Cervantes"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
+                        Número Exterior
+                      </label>
+                      <Input
+                        value={formData.exteriorNumber}
+                        onChange={(e) => setFormData({ ...formData, exteriorNumber: e.target.value })}
+                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                        placeholder="Ej: 123, 456A"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
+                        Número Interior
+                      </label>
+                      <Input
+                        value={formData.interiorNumber}
+                        onChange={(e) => setFormData({ ...formData, interiorNumber: e.target.value })}
+                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                        placeholder="Ej: Depto 5, Casa B (opcional)"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Coordinates Section */}
+                  <div className="border-t border-slate-600 pt-4">
+                    <h4 className="text-sm font-semibold text-slate-300 mb-3">Coordenadas GPS</h4>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-300 mb-2">
+                          Latitud
+                        </label>
+                        <Input
+                          type="number"
+                          step="0.0001"
+                          value={formData.latitude}
+                          onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
+                          className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                          placeholder="Ej: 19.4326"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-300 mb-2">
+                          Longitud
+                        </label>
+                        <Input
+                          type="number"
+                          step="0.0001"
+                          value={formData.longitude}
+                          onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
+                          className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                          placeholder="Ej: -99.1332"
+                        />
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-2">
+                      💡 Obtén las coordenadas en: https://maps.google.com (click derecho en el mapa)
+                    </p>
                   </div>
                 </div>
 
