@@ -92,5 +92,8 @@ export function createServer() {
   app.put("/api/users/:id", updateUser);
   app.delete("/api/users/:id", deleteUser);
 
+  // Demo Users API (development only)
+  app.post("/api/admin/create-demo-users", createDemoUsers);
+
   return app;
 }
