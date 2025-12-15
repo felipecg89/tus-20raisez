@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { Product } from "@shared/api";
 import {
   MapPin,
@@ -213,7 +212,6 @@ export default function PropertyDetail() {
             </p>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -229,7 +227,6 @@ export default function PropertyDetail() {
             </p>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -533,8 +530,6 @@ export default function PropertyDetail() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
