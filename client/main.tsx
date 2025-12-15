@@ -7,6 +7,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { initializeHubSpot } from "@/lib/hubspotService";
 import Index from "./pages/Index";
 import Casas from "./pages/Casas";
@@ -17,6 +19,8 @@ import Legal from "./pages/Legal";
 import Landing from "./pages/Landing";
 import Admin from "./pages/Admin";
 import AdminProductDetail from "./pages/AdminProductDetail";
+import Login from "./pages/Login";
+import Agentes from "./pages/Agentes";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
