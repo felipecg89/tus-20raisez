@@ -168,14 +168,6 @@ export default function Rentals() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* Sidebar Filters */}
             <div className="lg:col-span-1">
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className="lg:hidden flex items-center gap-2 text-primary font-semibold mb-4"
-              >
-                <Sliders className="w-5 h-5" />
-                {language === "es" ? "Filtros" : "Filters"}
-              </button>
-
               <div
                 className={`${
                   showFilters ? "block" : "hidden"
