@@ -12,22 +12,32 @@ export const useExchangeRate = () => {
         setLoading(true);
         // Using exchangerate.host - completely free, no API key required
         const response = await fetch(
-          "https://api.exchangerate.host/latest?base=USD&symbols=MXN"
+          "https://api.exchangerate.host/latest?base=USD&symbols=MXN",
+          { cache: "no-store" }
         );
 
         if (!response.ok) {
-          throw new Error("Failed to fetch exchange rate");
+          throw new Error(`HTTP ${response.status}: Failed to fetch exchange rate`);
         }
 
         const data = await response.json();
+        console.log("Exchange rate API response:", data);
 
-        if (data.rates && data.rates.MXN) {
-          setExchangeRate(Math.round(data.rates.MXN * 100) / 100);
-          setLastUpdated(new Date().toLocaleDateString());
-          setError(null);
-        } else {
-          throw new Error("Invalid response format");
+        // Check if success flag is true (exchangerate.host includes this)
+        if (data.success === false) {
+          throw new Error("API returned success: false");
         }
+
+        // Try to get the MXN rate from the response
+        const mxnRate = data.rates?.MXN || data.MXN;
+
+        if (!mxnRate || typeof mxnRate !== 'number') {
+          throw new Error(`Invalid MXN rate in response: ${mxnRate}`);
+        }
+
+        setExchangeRate(Math.round(mxnRate * 100) / 100);
+        setLastUpdated(new Date().toLocaleDateString());
+        setError(null);
       } catch (err) {
         console.error("Exchange rate fetch error:", err);
         setError(err instanceof Error ? err.message : "Unknown error");
