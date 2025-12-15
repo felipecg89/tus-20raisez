@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
+import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 interface PropertyMedia {
   type: "image" | "video";
@@ -155,6 +156,7 @@ export default function PropertyDetail() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isLocalProperty, setIsLocalProperty] = useState(false);
+  const { exchangeRate } = useExchangeRate();
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -233,11 +235,22 @@ export default function PropertyDetail() {
   }
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat(language === "es" ? "es-MX" : "en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    }).format(price);
+    if (language === "es") {
+      // Show in MXN for Spanish
+      const priceInMXN = price * exchangeRate;
+      return new Intl.NumberFormat("es-MX", {
+        style: "currency",
+        currency: "MXN",
+        maximumFractionDigits: 0,
+      }).format(priceInMXN);
+    } else {
+      // Show in USD for English
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      }).format(price);
+    }
   };
 
   const getPropertyName = () => {
