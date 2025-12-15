@@ -102,42 +102,34 @@ export const PropertyCard = ({
           {description}
         </p>
 
-        {/* Features - Hidden on Mobile */}
-        {(bedrooms > 0 || bathrooms > 0 || area > 0) && (
-          <div className="hidden md:grid grid-cols-3 gap-3 py-3 md:py-4 border-y border-border mb-4">
-            {bedrooms > 0 && (
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-1 text-primary mb-1">
-                  <Home className="w-4 h-4" />
-                  <span className="font-bold text-sm">{bedrooms}</span>
-                </div>
-                <span className="text-xs text-foreground/60">
-                  {language === "es" ? "Recámaras" : "Beds"}
-                </span>
-              </div>
-            )}
-            {bathrooms > 0 && (
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-1 text-primary mb-1">
-                  <Bath className="w-4 h-4" />
-                  <span className="font-bold text-sm">{bathrooms}</span>
-                </div>
-                <span className="text-xs text-foreground/60">
-                  {language === "es" ? "Baños" : "Baths"}
-                </span>
-              </div>
-            )}
-            {area > 0 && (
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-1 text-primary mb-1">
-                  <Maximize2 className="w-4 h-4" />
-                  <span className="font-bold text-sm">{area}</span>
-                </div>
-                <span className="text-xs text-foreground/60">m²</span>
-              </div>
-            )}
+        {/* Features - Always Show */}
+        <div className="hidden md:grid grid-cols-3 gap-3 py-3 md:py-4 border-y border-border mb-4">
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-1 text-primary mb-1">
+              <Home className="w-4 h-4" />
+              <span className="font-bold text-sm">{bedrooms}</span>
+            </div>
+            <span className="text-xs text-foreground/60">
+              {language === "es" ? "Recámaras" : "Beds"}
+            </span>
           </div>
-        )}
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-1 text-primary mb-1">
+              <Bath className="w-4 h-4" />
+              <span className="font-bold text-sm">{bathrooms}</span>
+            </div>
+            <span className="text-xs text-foreground/60">
+              {language === "es" ? "Baños" : "Baths"}
+            </span>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-1 text-primary mb-1">
+              <Maximize2 className="w-4 h-4" />
+              <span className="font-bold text-sm">{area}</span>
+            </div>
+            <span className="text-xs text-foreground/60">m²</span>
+          </div>
+        </div>
 
         {/* Action Buttons - Only Ver on Mobile */}
         <div className="flex flex-col md:grid md:grid-cols-2 gap-2">
