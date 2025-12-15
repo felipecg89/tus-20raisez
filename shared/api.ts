@@ -31,6 +31,9 @@ export interface Product {
   description: string;
   price: number;
   city: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
   type: "casa" | "terreno";
   category: ProductCategory;
   image: string;
