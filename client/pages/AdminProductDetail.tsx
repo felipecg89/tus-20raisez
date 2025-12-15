@@ -64,9 +64,16 @@ export default function AdminProductDetail() {
   const fetchProduct = async () => {
     try {
       setLoading(true);
+
+      // If creating new product, skip fetching
+      if (id === "new") {
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch(`/api/products/${id}`);
       if (!response.ok) throw new Error("Producto no encontrado");
-      
+
       const data: Product = await response.json();
       setProduct(data);
       setFormData({
