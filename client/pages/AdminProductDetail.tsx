@@ -520,63 +520,61 @@ Soluciones:
                   </div>
                 </div>
 
-                {/* Casa-specific fields */}
-                {formData.type === "casa" && (
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-2">
-                        Recámaras
-                      </label>
-                      <Input
-                        type="number"
-                        min="0"
-                        value={formData.bedrooms}
-                        onChange={(e) => setFormData({ ...formData, bedrooms: e.target.value })}
-                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
-                        placeholder="Ej: 3"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-2">
-                        Baños
-                      </label>
-                      <Input
-                        type="number"
-                        min="0"
-                        value={formData.bathrooms}
-                        onChange={(e) => setFormData({ ...formData, bathrooms: e.target.value })}
-                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
-                        placeholder="Ej: 2"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-2">
-                        Metros Cuadrados
-                      </label>
-                      <Input
-                        type="number"
-                        min="0"
-                        value={formData.area}
-                        onChange={(e) => setFormData({ ...formData, area: e.target.value })}
-                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
-                        placeholder="Ej: 250"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-2">
-                        Número de Pisos
-                      </label>
-                      <Input
-                        type="number"
-                        min="0"
-                        value={formData.floors}
-                        onChange={(e) => setFormData({ ...formData, floors: e.target.value })}
-                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
-                        placeholder="Ej: 2"
-                      />
-                    </div>
+                {/* Specification fields - always visible */}
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                      Recámaras
+                    </label>
+                    <Input
+                      type="number"
+                      min="0"
+                      value={formData.bedrooms}
+                      onChange={(e) => setFormData({ ...formData, bedrooms: e.target.value })}
+                      className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                      placeholder="Ej: 3"
+                    />
                   </div>
-                )}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                      Baños
+                    </label>
+                    <Input
+                      type="number"
+                      min="0"
+                      value={formData.bathrooms}
+                      onChange={(e) => setFormData({ ...formData, bathrooms: e.target.value })}
+                      className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                      placeholder="Ej: 2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                      Metros Cuadrados
+                    </label>
+                    <Input
+                      type="number"
+                      min="0"
+                      value={formData.area}
+                      onChange={(e) => setFormData({ ...formData, area: e.target.value })}
+                      className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                      placeholder="Ej: 250"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                      Número de Pisos
+                    </label>
+                    <Input
+                      type="number"
+                      min="0"
+                      value={formData.floors}
+                      onChange={(e) => setFormData({ ...formData, floors: e.target.value })}
+                      className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                      placeholder="Ej: 2"
+                    />
+                  </div>
+                </div>
 
                 {/* Property Type (Commercial/Residential) */}
                 <div className="grid grid-cols-1 gap-4 mb-4">
