@@ -4,12 +4,14 @@ import { Menu, X, Globe, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
+import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [langDropdown, setLangDropdown] = useState(false);
   const { language, setLanguage } = useLanguage();
   const t = translations[language];
+  const { exchangeRate, loading } = useExchangeRate();
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-border shadow-sm">
@@ -29,6 +31,14 @@ export const Header = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
+            {/* Exchange Rate Display */}
+            <div className="flex items-center gap-2 px-3 py-1 bg-primary/5 rounded-lg border border-primary/20">
+              <span className="text-xs text-foreground/60">USD/MXN</span>
+              <span className="font-semibold text-primary">
+                {loading ? "..." : `$${exchangeRate.toFixed(2)}`}
+              </span>
+            </div>
+
             <Link
               to="/"
               className="text-foreground hover:text-primary transition-colors font-medium"
