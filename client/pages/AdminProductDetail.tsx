@@ -27,6 +27,7 @@ export default function AdminProductDetail() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [mediaList, setMediaList] = useState<MediaFile[]>([]);
+  const [geocodeLog, setGeocodeLog] = useState<{ type: "error" | "success"; message: string; details?: string } | null>(null);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -172,6 +173,8 @@ export default function AdminProductDetail() {
 
   const handleGeocodeAddress = async () => {
     try {
+      setGeocodeLog(null);
+
       // Build full address from components
       const fullAddress = [
         formData.streetType.charAt(0).toUpperCase() + formData.streetType.slice(1),
@@ -184,6 +187,11 @@ export default function AdminProductDetail() {
       ].filter(Boolean).join(", ");
 
       if (!formData.streetName || !formData.city) {
+        setGeocodeLog({
+          type: "error",
+          message: "Campos requeridos incompletos",
+          details: "Por favor completa: Nombre de la Calle y Ciudad"
+        });
         toast.error("Por favor completa el nombre de la calle y ciudad");
         return;
       }
@@ -196,16 +204,47 @@ export default function AdminProductDetail() {
         { headers: { "User-Agent": "PropertyApp" } }
       );
 
-      if (!response.ok) throw new Error("Error geocoding");
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: Error en la búsqueda`);
+      }
 
       const data = await response.json();
 
       if (!data || data.length === 0) {
+        const errorDetails = `
+📍 Dirección buscada: ${fullAddress}
+
+Posibles causas:
+• La dirección no existe exactamente como fue ingresada
+• Falta información importante (estado, código postal)
+• La calle/número podría tener otro nombre
+• Hay espacios o caracteres especiales
+
+Sugerencias:
+• Verifica la ortografía de la calle
+• Intenta sin el número exterior
+• Agrega más detalles (colonia, código postal)
+• Busca en Google Maps y copia las coordenadas manualmente
+        `.trim();
+
+        setGeocodeLog({
+          type: "error",
+          message: "Ubicación no encontrada",
+          details: errorDetails
+        });
+
         toast.error("No se encontraron coordenadas para esta dirección");
         return;
       }
 
-      const { lat, lon } = data[0];
+      const { lat, lon, display_name } = data[0];
+
+      setGeocodeLog({
+        type: "success",
+        message: "Ubicación encontrada exitosamente",
+        details: `📍 ${display_name}\n📌 Coordenadas: ${lat}, ${lon}`
+      });
+
       setFormData({
         ...formData,
         latitude: parseFloat(lat).toFixed(4),
@@ -214,6 +253,14 @@ export default function AdminProductDetail() {
 
       toast.success(`Coordenadas encontradas: ${lat}, ${lon}`);
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+
+      setGeocodeLog({
+        type: "error",
+        message: "Error en la geocodificación",
+        details: `Error: ${errorMessage}\n\nIntenta ingresar las coordenadas manualmente desde: https://maps.google.com`
+      });
+
       console.error("Geocoding error:", error);
       toast.error("Error al obtener coordenadas. Intenta ingresarlas manualmente.");
     }
