@@ -361,62 +361,47 @@ export default function PropertyDetail() {
             {/* Gallery Section */}
             <div className="lg:col-span-2">
               <div className="space-y-3">
-                {/* Main Image with Small Map */}
+                {/* Main Image */}
                 {mainImage && (
-                  <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
-                    {/* Image - takes 3 columns */}
-                    <div className="lg:col-span-3">
-                      <div className="relative w-full h-96 md:h-[500px] bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
-                        <img
-                          src={mainImage}
-                          alt={property.name}
-                          className="w-full h-full object-contain"
-                        />
+                  <div className="relative w-full h-96 md:h-[500px] bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center group">
+                    <img
+                      src={mainImage}
+                      alt={property.name}
+                      className="w-full h-full object-contain"
+                    />
 
-                        {images.length > 1 && (
-                          <>
-                            <button
-                              onClick={goToPreviousImage}
-                              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
-                            >
-                              <ChevronLeft className="w-6 h-6" />
-                            </button>
-                            <button
-                              onClick={goToNextImage}
-                              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
-                            >
-                              <ChevronRight className="w-6 h-6" />
-                            </button>
-                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-1 rounded-full text-sm">
-                              {currentImageIndex + 1} / {images.length}
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    </div>
+                    {images.length > 1 && (
+                      <>
+                        <button
+                          onClick={goToPreviousImage}
+                          className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+                        >
+                          <ChevronLeft className="w-6 h-6" />
+                        </button>
+                        <button
+                          onClick={goToNextImage}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+                        >
+                          <ChevronRight className="w-6 h-6" />
+                        </button>
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-1 rounded-full text-sm">
+                          {currentImageIndex + 1} / {images.length}
+                        </div>
+                      </>
+                    )}
 
-                    {/* Small Map - takes 1 column */}
-                    <div className="lg:col-span-1 h-96 md:h-[500px]">
-                      <PropertyMap
-                        address={
-                          "address" in property
-                            ? property.address
-                            : undefined
-                        }
-                        latitude={
-                          "latitude" in property
-                            ? property.latitude
-                            : undefined
-                        }
-                        longitude={
-                          "longitude" in property
-                            ? property.longitude
-                            : undefined
-                        }
-                        title={getPropertyName()}
-                        city={getPropertyCity()}
-                      />
-                    </div>
+                    {/* Google Maps Button - Bottom Right */}
+                    {("latitude" in property && property.latitude && "longitude" in property && property.longitude) && (
+                      <a
+                        href={`https://www.google.com/maps/?q=${property.latitude},${property.longitude}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="absolute bottom-4 right-4 bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg font-semibold transition-colors shadow-lg flex items-center gap-2"
+                      >
+                        <MapPin className="w-4 h-4 text-red-500" />
+                        {language === "es" ? "Ver en Google Maps" : "View on Google Maps"}
+                      </a>
+                    )}
                   </div>
                 )}
 
