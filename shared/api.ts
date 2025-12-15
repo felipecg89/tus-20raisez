@@ -31,7 +31,13 @@ export interface Product {
   description: string;
   price: number;
   city: string;
+  state?: string;
   address?: string;
+  streetType?: "calle" | "privada" | "avenida" | "carretera" | "otro";
+  streetName?: string;
+  exteriorNumber?: string;
+  interiorNumber?: string;
+  locality?: string;
   latitude?: number;
   longitude?: number;
   type: "casa" | "terreno";
