@@ -367,20 +367,20 @@ export default function AdminProductDetail() {
                       Categoría
                     </label>
                     <Select
-                      value={formData.category}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, category: value as ProductCategory })
-                      }
+                      value={formData.category.split("_")[0]}
+                      onValueChange={(value) => {
+                        const category = value === "venta"
+                          ? (formData.type === "casa" ? "venta_casa" : "venta_terreno")
+                          : (formData.type === "casa" ? "renta_casa" : "renta_terreno");
+                        setFormData({ ...formData, category: category as ProductCategory });
+                      }}
                     >
                       <SelectTrigger className="bg-slate-600 border-slate-500 text-white">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-slate-600 border-slate-500">
-                        {PRODUCT_CATEGORIES.map((cat) => (
-                          <SelectItem key={cat.value} value={cat.value} className="text-white">
-                            {cat.labelEs}
-                          </SelectItem>
-                        ))}
+                        <SelectItem value="venta" className="text-white">Venta</SelectItem>
+                        <SelectItem value="renta" className="text-white">Renta</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
