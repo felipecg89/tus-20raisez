@@ -21,6 +21,7 @@ import Admin from "./pages/Admin";
 import AdminProductDetail from "./pages/AdminProductDetail";
 import Login from "./pages/Login";
 import Agentes from "./pages/Agentes";
+import DevSetup from "./pages/DevSetup";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
