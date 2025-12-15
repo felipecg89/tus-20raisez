@@ -132,6 +132,7 @@ const properties: Property[] = [
 export default function Casas() {
   const { language } = useLanguage();
   const t = translations[language];
+  const { exchangeRate } = useExchangeRate();
   const [filterType, setFilterType] = useState<"all" | "casa" | "terreno">(
     "all",
   );
@@ -214,11 +215,20 @@ export default function Casas() {
   });
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat(language === "es" ? "es-MX" : "en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    }).format(price);
+    if (language === "es") {
+      const priceInMXN = price * exchangeRate;
+      return new Intl.NumberFormat("es-MX", {
+        style: "currency",
+        currency: "MXN",
+        maximumFractionDigits: 0,
+      }).format(priceInMXN);
+    } else {
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      }).format(price);
+    }
   };
 
   return (
