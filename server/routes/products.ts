@@ -261,6 +261,10 @@ export const updateProduct: RequestHandler = async (req, res) => {
       locality,
       latitude,
       longitude,
+      bedrooms,
+      bathrooms,
+      area,
+      floors,
     } = req.body;
 
     const { data, error } = await supabase
@@ -286,6 +290,10 @@ export const updateProduct: RequestHandler = async (req, res) => {
         is_commercial: req.body.isCommercial || false,
         main_image_url: image || null,
         features: features || [],
+        bedrooms: bedrooms || 0,
+        bathrooms: bathrooms || 0,
+        area: area || 0,
+        floors: floors || 0,
         updated_at: new Date().toISOString(),
       })
       .eq("id", req.params.id)
