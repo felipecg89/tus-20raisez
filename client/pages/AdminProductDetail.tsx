@@ -184,7 +184,7 @@ export default function AdminProductDetail() {
       ].filter(Boolean).join(", ");
 
       if (!formData.streetName || !formData.city) {
-        toast.error("Por favor completa el nombre de la vía y ciudad");
+        toast.error("Por favor completa el nombre de la calle y ciudad");
         return;
       }
 
@@ -465,7 +465,7 @@ export default function AdminProductDetail() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-300 mb-2">
-                        Nombre de la Vía
+                        Nombre de la Calle
                       </label>
                       <Input
                         value={formData.streetName}
