@@ -2,19 +2,20 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   LineChart,
   Line
 } from "recharts";
 import { AdminStats } from "@shared/api";
 import { Package, Mail, FileText, TrendingUp } from "lucide-react";
+import { AuthAwareNavbar } from "@/components/AuthAwareNavbar";
 import AdminProducts from "@/components/admin/AdminProducts";
 import AdminMessages from "@/components/admin/AdminMessages";
 import AdminContent from "@/components/admin/AdminContent";
