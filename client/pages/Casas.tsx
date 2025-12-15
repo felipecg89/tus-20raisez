@@ -242,14 +242,6 @@ export default function Casas() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* Sidebar Filters */}
             <div className="relative lg:col-span-1">
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className="lg:hidden fixed bottom-6 right-6 z-40 flex items-center justify-center gap-2 bg-primary text-white py-3 px-4 rounded-lg font-semibold shadow-lg hover:bg-primary/90 transition-all"
-              >
-                <Sliders className="w-4 h-4" />
-                {language === "es" ? "Filtros" : "Filters"}
-              </button>
-
               <div
                 className={`fixed lg:static left-0 top-0 h-screen lg:h-auto w-80 lg:w-full bg-white lg:rounded-2xl border-r lg:border-r-0 lg:border border-border overflow-y-auto lg:overflow-visible z-50 lg:z-auto transition-transform duration-300 ease-in-out lg:transition-none ${
                   showFilters ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
