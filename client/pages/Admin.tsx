@@ -192,7 +192,7 @@ export default function Admin() {
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="products" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 bg-slate-700">
+                <TabsList className="grid w-full grid-cols-4 bg-slate-700">
                   <TabsTrigger value="products" className="data-[state=active]:bg-emerald-600">
                     Productos
                   </TabsTrigger>
@@ -201,6 +201,9 @@ export default function Admin() {
                   </TabsTrigger>
                   <TabsTrigger value="content" className="data-[state=active]:bg-violet-600">
                     Contenido
+                  </TabsTrigger>
+                  <TabsTrigger value="users" className="data-[state=active]:bg-orange-600">
+                    Usuarios
                   </TabsTrigger>
                 </TabsList>
 
@@ -214,6 +217,10 @@ export default function Admin() {
 
                 <TabsContent value="content" className="mt-4">
                   <AdminContent />
+                </TabsContent>
+
+                <TabsContent value="users" className="mt-4">
+                  <AdminUsers />
                 </TabsContent>
               </Tabs>
             </CardContent>
