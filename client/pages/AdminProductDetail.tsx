@@ -89,6 +89,11 @@ export default function AdminProductDetail() {
         category: data.category,
         image: data.image,
         features: data.features.join(", "),
+        bedrooms: (data as any).bedrooms?.toString() || "",
+        bathrooms: (data as any).bathrooms?.toString() || "",
+        area: (data as any).area?.toString() || "",
+        floors: (data as any).floors?.toString() || "",
+        isCommercial: (data as any).isCommercial || false,
       });
       setImagePreview(data.image);
     } catch (error) {
