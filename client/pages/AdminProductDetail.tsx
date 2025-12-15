@@ -465,17 +465,6 @@ Sugerencias:
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-300 mb-2">
-                        Colonia / Barrio
-                      </label>
-                      <Input
-                        value={formData.neighborhood}
-                        onChange={(e) => setFormData({ ...formData, neighborhood: e.target.value })}
-                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
-                        placeholder="Ej: Santa María, Centro Histórico"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-2">
                         Código Postal
                       </label>
                       <Input
@@ -483,6 +472,17 @@ Sugerencias:
                         onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
                         className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
                         placeholder="Ej: 98000"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
+                        Colonia / Barrio
+                      </label>
+                      <Input
+                        value={formData.neighborhood}
+                        onChange={(e) => setFormData({ ...formData, neighborhood: e.target.value })}
+                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                        placeholder="Ej: Santa María, Centro Histórico"
                       />
                     </div>
                   </div>
