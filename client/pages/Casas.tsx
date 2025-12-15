@@ -402,6 +402,15 @@ export default function Casas() {
 
             {/* Properties Grid */}
             <div className="lg:col-span-3">
+              {/* Filters Button - Mobile Only */}
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="lg:hidden w-full mb-4 flex items-center justify-center gap-2 bg-primary text-white py-3 px-4 rounded-lg font-semibold shadow-lg hover:bg-primary/90 transition-all"
+              >
+                <Sliders className="w-4 h-4" />
+                {language === "es" ? "Filtros" : "Filters"}
+              </button>
+
               <div className="mb-6 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-foreground">
                   {language === "es"
