@@ -32,6 +32,7 @@ export interface Product {
   price: number;
   city: string;
   state?: string;
+  postalCode?: string;
   address?: string;
   streetType?: "calle" | "privada" | "avenida" | "carretera" | "otro";
   streetName?: string;
