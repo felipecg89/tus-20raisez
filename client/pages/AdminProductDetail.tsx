@@ -49,6 +49,11 @@ export default function AdminProductDetail() {
     category: "venta_casa" as ProductCategory,
     image: "",
     features: "",
+    bedrooms: "",
+    bathrooms: "",
+    area: "",
+    floors: "",
+    isCommercial: false,
   });
   const [imagePreview, setImagePreview] = useState("");
 
