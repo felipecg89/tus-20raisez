@@ -339,7 +339,7 @@ export default function AdminProductDetail() {
                 <div className="border-t border-slate-600 pt-4">
                   <h3 className="text-lg font-semibold text-white mb-4">Ubicación Detallada</h3>
 
-                  <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="grid grid-cols-3 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-300 mb-2">
                         Estado
@@ -360,6 +360,17 @@ export default function AdminProductDetail() {
                         onChange={(e) => setFormData({ ...formData, locality: e.target.value })}
                         className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
                         placeholder="Ej: Centro, Privada San Patricio"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
+                        Código Postal
+                      </label>
+                      <Input
+                        value={formData.postalCode}
+                        onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
+                        className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                        placeholder="Ej: 98000"
                       />
                     </div>
                   </div>
