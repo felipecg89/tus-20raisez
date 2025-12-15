@@ -567,7 +567,7 @@ export default function PropertyDetail() {
                   : "Similar properties to the one you viewed"}
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 {getRelatedProperties().map((prop) => (
                   <PropertyCard
                     key={prop.id}
