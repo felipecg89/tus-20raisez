@@ -71,6 +71,10 @@ export const getProducts: RequestHandler = async (req, res) => {
       isCommercial: p.is_commercial || false,
       image: p.main_image_url,
       features: p.features || [],
+      bedrooms: p.bedrooms || 0,
+      bathrooms: p.bathrooms || 0,
+      area: p.area || 0,
+      floors: p.floors || 0,
       createdAt: p.created_at,
       updatedAt: p.updated_at,
     }));
