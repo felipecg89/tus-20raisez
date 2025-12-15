@@ -131,6 +131,7 @@ if (import.meta.hot) {
       "./pages/AdminProductDetail",
       "./pages/Login",
       "./pages/Agentes",
+      "./pages/DevSetup",
     ],
     () => {
       renderApp();
