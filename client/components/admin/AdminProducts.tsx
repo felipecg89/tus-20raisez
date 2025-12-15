@@ -232,6 +232,10 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
       category: "venta_casa",
       image: "",
       features: "",
+      bedrooms: "",
+      bathrooms: "",
+      area: "",
+      floors: "",
     });
     setImagePreview("");
     setMediaList([]);
