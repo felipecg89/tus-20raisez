@@ -561,6 +561,39 @@ Sugerencias:
                     </p>
                   </div>
 
+                  {/* Geocode Log Box */}
+                  {geocodeLog && (
+                    <Alert className={`mb-4 border-2 ${
+                      geocodeLog.type === "success"
+                        ? "bg-emerald-900/30 border-emerald-600"
+                        : "bg-red-900/30 border-red-600"
+                    }`}>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <span className={geocodeLog.type === "success" ? "text-emerald-400 text-lg" : "text-red-400 text-lg"}>
+                            {geocodeLog.type === "success" ? "✅" : "❌"}
+                          </span>
+                          <AlertDescription className={geocodeLog.type === "success" ? "text-emerald-300 font-semibold" : "text-red-300 font-semibold"}>
+                            {geocodeLog.message}
+                          </AlertDescription>
+                        </div>
+                        {geocodeLog.details && (
+                          <div className={`text-xs whitespace-pre-wrap p-2 rounded bg-black/40 border-l-2 ${
+                            geocodeLog.type === "success" ? "border-emerald-500 text-emerald-200" : "border-red-500 text-red-200"
+                          }`}>
+                            {geocodeLog.details}
+                          </div>
+                        )}
+                        <button
+                          onClick={() => setGeocodeLog(null)}
+                          className="text-xs text-slate-400 hover:text-slate-300 mt-2"
+                        >
+                          Cerrar
+                        </button>
+                      </div>
+                    </Alert>
+                  )}
+
                   {/* Coordinates Section */}
                   <div className="border-t border-slate-600 pt-4">
                     <h4 className="text-sm font-semibold text-slate-300 mb-3">Coordenadas GPS</h4>
