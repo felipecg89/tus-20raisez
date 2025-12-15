@@ -15,7 +15,7 @@ export const Footer = () => {
   const t = translations[language];
 
   return (
-    <footer className="bg-foreground text-white">
+    <footer className="bg-foreground text-white hidden md:block">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Column 1: Información */}
