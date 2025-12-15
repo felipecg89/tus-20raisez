@@ -357,7 +357,7 @@ export default function PropertyDetail() {
             {language === "es" ? "Volver a Casas" : "Back to Properties"}
           </button>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* Gallery Section */}
             <div className="lg:col-span-2 space-y-4">
               {/* Main Image */}
@@ -442,7 +442,7 @@ export default function PropertyDetail() {
             </div>
 
             {/* Property Info Section */}
-            <div className="space-y-6">
+            <div className="lg:col-span-2 space-y-6">
               {/* Title and Price */}
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
@@ -550,27 +550,6 @@ export default function PropertyDetail() {
                 </div>
               </div>
 
-              {/* Map */}
-              <PropertyMap
-                address={
-                  "address" in property
-                    ? property.address
-                    : undefined
-                }
-                latitude={
-                  "latitude" in property
-                    ? property.latitude
-                    : undefined
-                }
-                longitude={
-                  "longitude" in property
-                    ? property.longitude
-                    : undefined
-                }
-                title={getPropertyName()}
-                city={getPropertyCity()}
-              />
-
               {/* Features */}
               {getPropertyFeatures().length > 0 && (
                 <div>
@@ -599,6 +578,29 @@ export default function PropertyDetail() {
                 <MessageCircle className="w-5 h-5" />
                 {language === "es" ? "Contactar por WhatsApp" : "Contact on WhatsApp"}
               </button>
+            </div>
+
+            {/* Map Section - Right Side */}
+            <div className="lg:col-span-1">
+              <PropertyMap
+                address={
+                  "address" in property
+                    ? property.address
+                    : undefined
+                }
+                latitude={
+                  "latitude" in property
+                    ? property.latitude
+                    : undefined
+                }
+                longitude={
+                  "longitude" in property
+                    ? property.longitude
+                    : undefined
+                }
+                title={getPropertyName()}
+                city={getPropertyCity()}
+              />
             </div>
           </div>
         </div>
