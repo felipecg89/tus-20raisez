@@ -142,11 +142,24 @@ export default function AdminProductDetail() {
       ].filter(Boolean).join(", ");
 
       const payload = {
-        ...formData,
-        address: fullAddress,
+        name: formData.name,
+        description: formData.description,
         price: parseFloat(formData.price),
+        city: formData.city,
+        state: formData.state,
+        postalCode: formData.postalCode,
+        neighborhood: formData.neighborhood,
+        address: fullAddress,
+        streetType: formData.streetType,
+        streetName: formData.streetName,
+        exteriorNumber: formData.exteriorNumber,
+        interiorNumber: formData.interiorNumber,
+        locality: formData.locality,
         latitude: formData.latitude ? parseFloat(formData.latitude) : undefined,
         longitude: formData.longitude ? parseFloat(formData.longitude) : undefined,
+        type: formData.type,
+        category: formData.category,
+        image: formData.image,
         features: formData.features
           .split(",")
           .map((f) => f.trim())
