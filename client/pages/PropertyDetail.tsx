@@ -16,7 +16,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 import { useExchangeRate } from "@/hooks/useExchangeRate";
 import { PropertyCard } from "@/components/properties/PropertyCard";
-import { PropertyMap } from "@/components/PropertyMap";
 
 interface PropertyMedia {
   type: "image" | "video";
