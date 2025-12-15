@@ -501,19 +501,16 @@ Soluciones:
                       Categoría
                     </label>
                     <Select
-                      value={formData.category.split("_")[0]}
+                      value={formData.category}
                       onValueChange={(value) => {
-                        const category = value === "venta"
-                          ? (formData.type === "casa" ? "venta_casa" : "venta_terreno")
-                          : (formData.type === "casa" ? "renta_casa" : "renta_terreno");
-                        setFormData({ ...formData, category: category as ProductCategory });
+                        setFormData({ ...formData, category: value as ProductCategory });
                       }}
                     >
                       <SelectTrigger className="bg-slate-600 border-slate-500 text-white">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-slate-600 border-slate-500">
-                        <SelectItem value="venta" className="text-white">Venta</SelectItem>
+                        <SelectItem value="compra" className="text-white">Compra</SelectItem>
                         <SelectItem value="renta" className="text-white">Renta</SelectItem>
                       </SelectContent>
                     </Select>
