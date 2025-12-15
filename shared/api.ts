@@ -13,16 +13,12 @@ export interface DemoResponse {
 
 // Admin Panel Types
 export type ProductCategory =
-  | "venta_casa"
-  | "venta_terreno"
-  | "renta_casa"
-  | "renta_terreno";
+  | "compra"
+  | "renta";
 
 export const PRODUCT_CATEGORIES: { value: ProductCategory; label: string; labelEs: string }[] = [
-  { value: "venta_casa", label: "House Sale", labelEs: "Venta de Casa" },
-  { value: "venta_terreno", label: "Land Sale", labelEs: "Venta de Terreno" },
-  { value: "renta_casa", label: "House Rental", labelEs: "Renta de Casa" },
-  { value: "renta_terreno", label: "Land Rental", labelEs: "Renta de Terreno" },
+  { value: "compra", label: "Purchase", labelEs: "Compra" },
+  { value: "renta", label: "Rental", labelEs: "Renta" },
 ];
 
 export interface Product {
