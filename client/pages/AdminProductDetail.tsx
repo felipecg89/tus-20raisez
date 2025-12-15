@@ -76,6 +76,15 @@ export default function AdminProductDetail() {
 
       const data: Product = await response.json();
       setProduct(data);
+
+      // Convert legacy category format to new format
+      let category = data.category as ProductCategory;
+      if ((category as any).includes("venta")) {
+        category = "compra";
+      } else if ((category as any).includes("renta")) {
+        category = "renta";
+      }
+
       setFormData({
         name: data.name,
         description: data.description,
@@ -93,7 +102,7 @@ export default function AdminProductDetail() {
         latitude: data.latitude?.toString() || "",
         longitude: data.longitude?.toString() || "",
         type: data.type,
-        category: data.category,
+        category: category,
         image: data.image,
         features: data.features.join(", "),
         bedrooms: (data as any).bedrooms?.toString() || "",
