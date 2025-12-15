@@ -174,6 +174,11 @@ export default function AdminProductDetail() {
           .split(",")
           .map((f) => f.trim())
           .filter((f) => f),
+        bedrooms: formData.type === "casa" && formData.bedrooms ? parseInt(formData.bedrooms) : 0,
+        bathrooms: formData.type === "casa" && formData.bathrooms ? parseInt(formData.bathrooms) : 0,
+        area: formData.type === "casa" && formData.area ? parseInt(formData.area) : 0,
+        floors: formData.type === "casa" && formData.floors ? parseInt(formData.floors) : 0,
+        isCommercial: formData.isCommercial,
       };
 
       const response = await fetch(`/api/products/${id}`, {
