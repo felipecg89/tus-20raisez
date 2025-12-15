@@ -168,7 +168,7 @@ export default function Casas() {
             area: 0,
             description: product.description,
             type: product.type,
-            state: product.city,
+            state: product.state || product.city,
             image: product.image,
           }));
 
@@ -185,7 +185,7 @@ export default function Casas() {
             area: 0,
             description: product.description,
             type: product.type,
-            state: product.city,
+            state: product.state || product.city,
             image: product.image,
           }));
 
