@@ -42,6 +42,7 @@ const AppContent = () => {
         <Route path="/imss" element={<Imss />} />
         <Route path="/legal" element={<Legal />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/dev/setup" element={<DevSetup />} />
         <Route
           path="/admin"
           element={
