@@ -127,6 +127,8 @@ if (import.meta.hot) {
       "./pages/Landing",
       "./pages/Admin",
       "./pages/AdminProductDetail",
+      "./pages/Login",
+      "./pages/Agentes",
     ],
     () => {
       renderApp();
