@@ -29,6 +29,9 @@ interface LocalProperty {
   title: string;
   price: number;
   location: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
   bedrooms: number;
   bathrooms: number;
   area: number;
