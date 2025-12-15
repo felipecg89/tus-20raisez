@@ -175,74 +175,121 @@ export default function AdminProductDetail() {
     try {
       setGeocodeLog(null);
 
-      // Build full address from components
-      const fullAddress = [
-        formData.streetType.charAt(0).toUpperCase() + formData.streetType.slice(1),
-        formData.streetName,
-        formData.exteriorNumber && `#${formData.exteriorNumber}`,
-        formData.neighborhood,
-        formData.locality,
-        formData.city,
-        formData.state
-      ].filter(Boolean).join(", ");
-
-      if (!formData.streetName || !formData.city) {
+      if (!formData.streetName || !formData.city || !formData.state) {
         setGeocodeLog({
           type: "error",
           message: "Campos requeridos incompletos",
-          details: "Por favor completa: Nombre de la Calle y Ciudad"
+          details: "Por favor completa: Nombre de la Calle, Ciudad y Estado"
         });
-        toast.error("Por favor completa el nombre de la calle y ciudad");
+        toast.error("Por favor completa: Calle, Ciudad y Estado");
         return;
       }
 
       toast.loading("Buscando coordenadas...");
 
-      // Use Nominatim (OpenStreetMap) for free geocoding - no API key required
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullAddress)}&limit=1`,
-        { headers: { "User-Agent": "PropertyApp" } }
-      );
+      // Try multiple address formats (fallback strategy)
+      const addressVariations = [
+        // Full address with all details
+        [
+          formData.streetType.charAt(0).toUpperCase() + formData.streetType.slice(1),
+          formData.streetName,
+          formData.exteriorNumber,
+          formData.neighborhood,
+          formData.locality,
+          formData.city,
+          formData.state
+        ].filter(Boolean).join(", "),
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: Error en la búsqueda`);
+        // Simplified: Calle + Número + Localidad + Ciudad + Estado
+        [
+          formData.streetName,
+          formData.exteriorNumber,
+          formData.locality,
+          formData.city,
+          formData.state
+        ].filter(Boolean).join(", "),
+
+        // Even simpler: Calle + Ciudad + Estado
+        [
+          formData.streetName,
+          formData.city,
+          formData.state
+        ].filter(Boolean).join(", "),
+
+        // Localidad + Ciudad + Estado (for neighborhoods)
+        [
+          formData.locality || formData.neighborhood,
+          formData.city,
+          formData.state
+        ].filter(Boolean).join(", ")
+      ];
+
+      let result = null;
+      let lastError = null;
+      let attemptedAddresses = [];
+
+      // Try each variation
+      for (const address of addressVariations) {
+        attemptedAddresses.push(address);
+
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`,
+            { headers: { "User-Agent": "PropertyApp" } }
+          );
+
+          if (!response.ok) continue;
+
+          const data = await response.json();
+          if (data && data.length > 0) {
+            result = data[0];
+            break;
+          }
+        } catch (e) {
+          lastError = e;
+          continue;
+        }
+
+        // Small delay between attempts
+        await new Promise(resolve => setTimeout(resolve, 500));
       }
 
-      const data = await response.json();
-
-      if (!data || data.length === 0) {
+      if (!result) {
         const errorDetails = `
-📍 Dirección buscada: ${fullAddress}
+🔍 Intentos de búsqueda:
+${attemptedAddresses.map((addr, i) => `${i + 1}. ${addr}`).join('\n')}
+
+❌ Ninguna coincidencia fue encontrada
 
 Posibles causas:
-• La dirección no existe exactamente como fue ingresada
-• Falta información importante (estado, código postal)
-• La calle/número podría tener otro nombre
-• Hay espacios o caracteres especiales
+• La dirección es muy específica o local
+• Hay errores de ortografía
+• El nombre de la calle está registrado diferente
+• Es una dirección nueva o no catalogada
 
-Sugerencias:
-• Verifica la ortografía de la calle
-• Intenta sin el número exterior
-• Agrega más detalles (colonia, código postal)
-• Busca en Google Maps y copia las coordenadas manualmente
+Soluciones:
+1️⃣ Busca en Google Maps: https://maps.google.com
+2️⃣ Click derecho en la ubicación
+3️⃣ Copia las coordenadas (lat, lon)
+4️⃣ Pégalas manualmente en Latitud y Longitud
         `.trim();
 
         setGeocodeLog({
           type: "error",
-          message: "Ubicación no encontrada",
+          message: "Ubicación no encontrada en ningún intento",
           details: errorDetails
         });
 
-        toast.error("No se encontraron coordenadas para esta dirección");
+        toast.error("No se encontraron coordenadas. Usa Google Maps para obtenerlas manualmente.");
         return;
       }
 
-      const { lat, lon, display_name } = data[0];
+      const { lat, lon, display_name } = result;
 
       setGeocodeLog({
         type: "success",
-        message: "Ubicación encontrada exitosamente",
-        details: `📍 ${display_name}\n📌 Coordenadas: ${lat}, ${lon}`
+        message: "✅ Ubicación encontrada exitosamente",
+        details: `📍 ${display_name}\n📌 Latitud: ${lat}\n📌 Longitud: ${lon}`
       });
 
       setFormData({
@@ -257,12 +304,12 @@ Sugerencias:
 
       setGeocodeLog({
         type: "error",
-        message: "Error en la geocodificación",
-        details: `Error: ${errorMessage}\n\nIntenta ingresar las coordenadas manualmente desde: https://maps.google.com`
+        message: "Error al procesar la geocodificación",
+        details: `⚠️ ${errorMessage}\n\nSolución: Obtén las coordenadas manualmente en:\nhttps://maps.google.com`
       });
 
       console.error("Geocoding error:", error);
-      toast.error("Error al obtener coordenadas. Intenta ingresarlas manualmente.");
+      toast.error("Error técnico. Ingresa las coordenadas manualmente.");
     }
   };
 
