@@ -326,7 +326,7 @@ export default function AdminProductDetail() {
                     <img
                       src={imagePreview}
                       alt="Preview"
-                      className="w-full h-48 object-cover rounded-lg border border-slate-500"
+                      className="w-full h-48 object-contain rounded-lg border border-slate-500"
                     />
                   </div>
                 )}

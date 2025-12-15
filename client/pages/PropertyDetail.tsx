@@ -370,7 +370,7 @@ export default function PropertyDetail() {
                         <video
                           src={video.url}
                           controls
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain"
                         />
                       </div>
                     ))}
