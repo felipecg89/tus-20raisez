@@ -5,6 +5,7 @@ import { PropertyCard } from "@/components/properties/PropertyCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 import { Sliders } from "lucide-react";
+import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 interface RentalProperty {
   id: string;
@@ -133,11 +134,20 @@ export default function Rentals() {
   });
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat(language === "es" ? "es-MX" : "en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    }).format(price);
+    if (language === "es") {
+      const priceInMXN = price * exchangeRate;
+      return new Intl.NumberFormat("es-MX", {
+        style: "currency",
+        currency: "MXN",
+        maximumFractionDigits: 0,
+      }).format(priceInMXN);
+    } else {
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      }).format(price);
+    }
   };
 
   return (
