@@ -553,6 +553,40 @@ export default function PropertyDetail() {
             </div>
           </div>
         </div>
+
+        {/* Related Products Section */}
+        {getRelatedProperties().length > 0 && (
+          <section className="py-12 md:py-20 bg-gray-50">
+            <div className="container mx-auto px-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+                {language === "es" ? "También te puede interesar" : "You might also like"}
+              </h2>
+              <p className="text-foreground/60 mb-8">
+                {language === "es"
+                  ? "Propiedades similares a la que consultaste"
+                  : "Similar properties to the one you viewed"}
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {getRelatedProperties().map((prop) => (
+                  <PropertyCard
+                    key={prop.id}
+                    id={prop.id}
+                    title={prop.title}
+                    price={prop.price}
+                    location={prop.location}
+                    bedrooms={prop.bedrooms}
+                    bathrooms={prop.bathrooms}
+                    area={prop.area}
+                    description={prop.description}
+                    image={prop.image || ""}
+                    type={prop.type}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );
