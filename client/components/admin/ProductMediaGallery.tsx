@@ -228,12 +228,12 @@ export default function ProductMediaGallery({
                       <img
                         src={media.url}
                         alt="Media"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                       />
                     ) : (
                       <video
                         src={media.url}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                         controls
                       />
                     )}
