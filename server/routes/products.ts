@@ -165,7 +165,27 @@ export const createProduct: RequestHandler = async (req, res) => {
 
 export const updateProduct: RequestHandler = async (req, res) => {
   try {
-    const { name, description, price, city, type, category, image, features } = req.body;
+    const {
+      name,
+      description,
+      price,
+      city,
+      type,
+      category,
+      image,
+      features,
+      state,
+      postalCode,
+      neighborhood,
+      address,
+      streetType,
+      streetName,
+      exteriorNumber,
+      interiorNumber,
+      locality,
+      latitude,
+      longitude
+    } = req.body;
 
     const { data, error } = await supabase
       .from("products")
@@ -174,6 +194,17 @@ export const updateProduct: RequestHandler = async (req, res) => {
         description,
         price: Number(price),
         city,
+        state,
+        postal_code: postalCode,
+        neighborhood,
+        address,
+        street_type: streetType,
+        street_name: streetName,
+        exterior_number: exteriorNumber,
+        interior_number: interiorNumber,
+        locality,
+        latitude: latitude ? Number(latitude) : null,
+        longitude: longitude ? Number(longitude) : null,
         type,
         category,
         main_image_url: image || null,
@@ -195,6 +226,17 @@ export const updateProduct: RequestHandler = async (req, res) => {
       description: data.description,
       price: Number(data.price),
       city: data.city,
+      state: data.state,
+      postalCode: data.postal_code,
+      neighborhood: data.neighborhood,
+      address: data.address,
+      streetType: data.street_type,
+      streetName: data.street_name,
+      exteriorNumber: data.exterior_number,
+      interiorNumber: data.interior_number,
+      locality: data.locality,
+      latitude: data.latitude,
+      longitude: data.longitude,
       type: data.type,
       category: data.category,
       image: data.main_image_url,
