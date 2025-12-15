@@ -40,6 +40,7 @@ export interface Product {
   longitude?: number;
   type: "casa" | "terreno";
   category: ProductCategory;
+  isCommercial?: boolean;
   image: string;
   features: string[];
   createdAt: string;
