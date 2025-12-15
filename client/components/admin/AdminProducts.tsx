@@ -415,51 +415,49 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
                 </Select>
               </div>
 
-              {/* Fields for Casa only */}
-              {formData.type === "casa" && (
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <Input
-                    placeholder="Recámaras"
-                    type="number"
-                    min="0"
-                    value={formData.bedrooms}
-                    onChange={(e) =>
-                      setFormData({ ...formData, bedrooms: e.target.value })
-                    }
-                    className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
-                  />
-                  <Input
-                    placeholder="Baños"
-                    type="number"
-                    min="0"
-                    value={formData.bathrooms}
-                    onChange={(e) =>
-                      setFormData({ ...formData, bathrooms: e.target.value })
-                    }
-                    className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
-                  />
-                  <Input
-                    placeholder="Metros cuadrados"
-                    type="number"
-                    min="0"
-                    value={formData.area}
-                    onChange={(e) =>
-                      setFormData({ ...formData, area: e.target.value })
-                    }
-                    className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
-                  />
-                  <Input
-                    placeholder="Número de pisos"
-                    type="number"
-                    min="0"
-                    value={formData.floors}
-                    onChange={(e) =>
-                      setFormData({ ...formData, floors: e.target.value })
-                    }
-                    className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
-                  />
-                </div>
-              )}
+              {/* Specification fields - always visible */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Input
+                  placeholder="Recámaras"
+                  type="number"
+                  min="0"
+                  value={formData.bedrooms}
+                  onChange={(e) =>
+                    setFormData({ ...formData, bedrooms: e.target.value })
+                  }
+                  className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                />
+                <Input
+                  placeholder="Baños"
+                  type="number"
+                  min="0"
+                  value={formData.bathrooms}
+                  onChange={(e) =>
+                    setFormData({ ...formData, bathrooms: e.target.value })
+                  }
+                  className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                />
+                <Input
+                  placeholder="Metros cuadrados"
+                  type="number"
+                  min="0"
+                  value={formData.area}
+                  onChange={(e) =>
+                    setFormData({ ...formData, area: e.target.value })
+                  }
+                  className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                />
+                <Input
+                  placeholder="Número de pisos"
+                  type="number"
+                  min="0"
+                  value={formData.floors}
+                  onChange={(e) =>
+                    setFormData({ ...formData, floors: e.target.value })
+                  }
+                  className="bg-slate-600 border-slate-500 text-white placeholder-slate-400"
+                />
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="col-span-1 md:col-span-1">
