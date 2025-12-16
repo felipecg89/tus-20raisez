@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { supabaseAdmin } from "@/server/lib/supabase";
+import { supabaseAdmin } from "../lib/supabase";
 
 /**
  * GET /api/users - Obtener lista de usuarios (solo admin)
