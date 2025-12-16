@@ -15,17 +15,17 @@ export const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-border shadow-sm">
-      <nav className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+      <nav className="container mx-auto px-4 py-3">
+        <div className="flex items-center justify-between gap-4">
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center gap-2 font-bold text-2xl text-primary hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2 font-bold text-2xl text-primary hover:opacity-80 transition-opacity flex-shrink-0"
           >
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2Fc4331b9719fe4840b03d2b99c1afbc5e%2F04bfe224a10d4c11bf6172ee1e881e7a?format=webp&width=800"
               alt="Tus Raíces MX Logo"
-              className="h-32 w-auto"
+              className="h-14 w-auto"
             />
           </Link>
 
