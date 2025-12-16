@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { supabaseAdmin } from "@/server/lib/supabase";
+import { supabaseAdmin } from "../lib/supabase";
 
 const DEMO_USERS = [
   {
