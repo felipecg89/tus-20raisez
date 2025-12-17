@@ -83,6 +83,11 @@ export default function Login() {
                 className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-500"
                 required
               />
+              {isSignUp && (
+                <p className={`text-xs mt-1 ${password.length >= 6 ? "text-emerald-500" : "text-slate-400"}`}>
+                  Mínimo 6 caracteres {password.length >= 6 ? "✓" : ""}
+                </p>
+              )}
             </div>
 
             <Button
