@@ -7,4 +7,9 @@ if (!SUPABASE_SERVICE_KEY) {
   throw new Error("SUPABASE_SERVICE_KEY is not defined");
 }
 
-export const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+export const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+  },
+});
