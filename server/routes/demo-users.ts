@@ -4,19 +4,19 @@ import { supabaseAdmin } from "../lib/supabase";
 const DEMO_USERS = [
   {
     email: "admin@test.com",
-    password: "1234",
+    password: "Admin123456",
     role: "admin" as const,
     description: "Usuario administrador de prueba",
   },
   {
     email: "agent@test.com",
-    password: "Agent123!@#",
+    password: "Agent123456",
     role: "agente" as const,
     description: "Usuario agente de prueba",
   },
   {
     email: "client@test.com",
-    password: "Client123!@#",
+    password: "Client123456",
     role: "cliente" as const,
     description: "Usuario cliente de prueba",
   },
