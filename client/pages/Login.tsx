@@ -92,8 +92,8 @@ export default function Login() {
 
             <Button
               type="submit"
-              disabled={loading}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+              disabled={loading || (isSignUp && password.length < 6)}
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Cargando..." : isSignUp ? "Crear Cuenta" : "Iniciar Sesión"}
             </Button>
