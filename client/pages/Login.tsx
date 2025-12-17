@@ -75,15 +75,30 @@ export default function Login() {
 
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">Contraseña</label>
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                disabled={loading}
-                className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-500"
-                required
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  disabled={loading}
+                  className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-500 pr-10"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  disabled={loading}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 disabled:opacity-50"
+                  aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
               {isSignUp && (
                 <p className={`text-xs mt-1 ${password.length >= 6 ? "text-emerald-500" : "text-slate-400"}`}>
                   Mínimo 6 caracteres {password.length >= 6 ? "✓" : ""}
