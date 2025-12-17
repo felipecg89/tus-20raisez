@@ -4,7 +4,7 @@ import { supabaseAdmin } from "../lib/supabase";
 const DEMO_USERS = [
   {
     email: "admin@test.com",
-    password: "Admin123!@#",
+    password: "1234",
     role: "admin" as const,
     description: "Usuario administrador de prueba",
   },
