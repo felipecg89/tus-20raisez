@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import { login, signup, getSession } from "./routes/auth";
 import {
   getProducts,
   getProduct,
@@ -55,6 +56,11 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Auth API
+  app.post("/api/auth/login", login);
+  app.post("/api/auth/signup", signup);
+  app.get("/api/auth/session", getSession);
 
   // Products API
   app.get("/api/products", getProducts);

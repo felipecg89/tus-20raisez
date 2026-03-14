@@ -1,6 +1,4 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { supabase } from "@/lib/supabase";
-import { User, Session } from "@supabase/supabase-js";
 
 export type UserRole = "cliente" | "agente" | "admin";
 
@@ -8,12 +6,17 @@ export interface AuthUser {
   id: string;
   email: string;
   role: UserRole;
-  createdAt: string;
+}
+
+interface AuthSession {
+  access_token: string;
+  refresh_token?: string;
+  expires_at?: number;
 }
 
 interface AuthContextType {
   user: AuthUser | null;
-  session: Session | null;
+  session: AuthSession | null;
   loading: boolean;
   signUp: (email: string, password: string, role?: UserRole) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
@@ -26,21 +29,24 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<AuthSession | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        // Get current session
-        const {
-          data: { session: currentSession },
-        } = await supabase.auth.getSession();
-        setSession(currentSession);
-
-        // If there's a session, fetch user profile with role
-        if (currentSession?.user) {
-          await fetchUserProfile(currentSession.user.id);
+        // Restore session from localStorage
+        const savedSession = localStorage.getItem("auth_session");
+        if (savedSession) {
+          try {
+            const parsedSession = JSON.parse(savedSession);
+            setSession(parsedSession);
+            // Validate session with backend
+            await validateSession(parsedSession.access_token);
+          } catch (error) {
+            console.error("Failed to restore session:", error);
+            localStorage.removeItem("auth_session");
+          }
         }
       } catch (error) {
         console.error("Error initializing auth:", error);
@@ -50,72 +56,49 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     initializeAuth();
-
-    // Listen for auth state changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setSession(session);
-      if (session?.user) {
-        await fetchUserProfile(session.user.id);
-      } else {
-        setUser(null);
-      }
-    });
-
-    return () => subscription?.unsubscribe();
   }, []);
 
-  const fetchUserProfile = async (userId: string) => {
+  const validateSession = async (accessToken: string) => {
     try {
-      const { data, error } = await supabase
-        .from("user_profiles")
-        .select("*")
-        .eq("id", userId)
-        .single();
+      const response = await fetch("/api/auth/session", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-      if (error) {
-        console.error("Error fetching user profile:", error);
-        return;
+      if (!response.ok) {
+        throw new Error("Invalid session");
       }
 
-      if (data) {
-        setUser({
-          id: data.id,
-          email: data.email,
-          role: data.role as UserRole,
-          createdAt: data.created_at,
-        });
-      }
+      const data = await response.json();
+      setUser(data.user);
     } catch (error) {
-      console.error("Error in fetchUserProfile:", error);
+      console.error("Session validation error:", error);
+      setUser(null);
+      setSession(null);
+      localStorage.removeItem("auth_session");
     }
   };
 
   const signUp = async (email: string, password: string, role: UserRole = "cliente") => {
     try {
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email,
-        password,
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password, role }),
       });
 
-      if (authError) throw authError;
-      if (!authData.user) throw new Error("Failed to create user");
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to create account");
+      }
 
-      // Create user profile with role
-      const { error: profileError } = await supabase.from("user_profiles").insert([
-        {
-          id: authData.user.id,
-          email,
-          role,
-          created_at: new Date().toISOString(),
-        },
-      ]);
-
-      if (profileError) throw profileError;
-
-      // Fetch the created profile
-      await fetchUserProfile(authData.user.id);
+      const data = await response.json();
+      setUser(data.user);
+      setSession(data.session);
+      localStorage.setItem("auth_session", JSON.stringify(data.session));
     } catch (error) {
       console.error("Sign up error:", error);
       throw error;
@@ -124,12 +107,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
       });
 
-      if (error) throw error;
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Invalid credentials");
+      }
+
+      const data = await response.json();
+      setUser(data.user);
+      setSession(data.session);
+      localStorage.setItem("auth_session", JSON.stringify(data.session));
     } catch (error) {
       console.error("Sign in error:", error);
       throw error;
@@ -138,10 +132,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const signOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
       setUser(null);
       setSession(null);
+      localStorage.removeItem("auth_session");
     } catch (error) {
       console.error("Sign out error:", error);
       throw error;
