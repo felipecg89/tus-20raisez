@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { supabaseAdmin } from "../lib/supabase";
+import { supabaseAdmin, supabase } from "../lib/supabase";
 
 export const login: RequestHandler = async (req, res) => {
   try {
@@ -11,7 +11,8 @@ export const login: RequestHandler = async (req, res) => {
       });
     }
 
-    const { data, error } = await supabaseAdmin.auth.admin.signInWithPassword({
+    // Use regular client for authentication
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -78,11 +79,10 @@ export const signup: RequestHandler = async (req, res) => {
       });
     }
 
-    // Create user in auth
-    const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
+    // Create user in auth using regular client
+    const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
-      email_confirm: true,
     });
 
     if (authError) {
@@ -97,7 +97,7 @@ export const signup: RequestHandler = async (req, res) => {
       });
     }
 
-    // Create user profile
+    // Create user profile using admin client
     const { error: profileError } = await supabaseAdmin
       .from("user_profiles")
       .insert({
@@ -117,7 +117,7 @@ export const signup: RequestHandler = async (req, res) => {
 
     // Sign in the new user
     const { data: sessionData, error: sessionError } =
-      await supabaseAdmin.auth.admin.signInWithPassword({
+      await supabase.auth.signInWithPassword({
         email,
         password,
       });
