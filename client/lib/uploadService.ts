@@ -1,7 +1,5 @@
-import { supabase } from "./supabase";
-
-async function compressImage(file: File): Promise<Blob> {
-  return new Promise((resolve) => {
+async function compressImage(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = (event) => {
@@ -25,48 +23,59 @@ async function compressImage(file: File): Promise<Blob> {
         ctx?.drawImage(img, 0, 0, width, height);
 
         canvas.toBlob((blob) => {
-          resolve(blob || file);
+          if (blob) {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onload = (e) => {
+              resolve(e.target?.result as string);
+            };
+            reader.onerror = () => reject(new Error("Failed to compress image"));
+          } else {
+            reject(new Error("Failed to compress image"));
+          }
         }, "image/jpeg", 0.8);
       };
+      img.onerror = () => reject(new Error("Failed to load image"));
     };
+    reader.onerror = () => reject(new Error("Failed to read file"));
   });
 }
 
-function compressVideo(file: File): Promise<Blob> {
-  return Promise.resolve(file);
+function compressVideo(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      resolve(e.target?.result as string);
+    };
+    reader.onerror = () => reject(new Error("Failed to read video"));
+  });
 }
 
 export async function uploadProductImage(file: File): Promise<string> {
   try {
     // Compress image before upload
-    const compressedBlob = await compressImage(file);
-    const compressedFile = new File([compressedBlob], file.name, {
-      type: "image/jpeg",
+    const imageData = await compressImage(file);
+
+    // Upload via backend API
+    const response = await fetch("/api/upload/image", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        imageData,
+        fileName: file.name,
+      }),
     });
 
-    // Create unique filename
-    const timestamp = Date.now();
-    const filename = `${timestamp}-${Date.now().toString(36)}.jpg`;
-    const path = `products/${filename}`;
-
-    // Upload to Supabase Storage
-    const { data, error } = await supabase.storage
-      .from("product-images")
-      .upload(path, compressedFile, {
-        cacheControl: "3600",
-        upsert: false,
-      });
-
-    if (error) {
-      throw new Error(`Upload failed: ${error.message}`);
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Upload failed");
     }
 
-    // Get public URL with transformation parameters for optimization
-    const {
-      data: { publicUrl },
-    } = supabase.storage.from("product-images").getPublicUrl(path);
-
-    return publicUrl;
+    const result = await response.json();
+    return result.url;
   } catch (error) {
     console.error("Error uploading image:", error);
     throw error;
@@ -84,43 +93,39 @@ export async function uploadProductMedia(
   mediaType: "image" | "video"
 ): Promise<MediaFile> {
   try {
-    let uploadedFile = file;
+    let mediaData: string;
 
-    // Compress if it's an image
     if (mediaType === "image" && file.type.startsWith("image/")) {
-      const compressedBlob = await compressImage(file);
-      uploadedFile = new File([compressedBlob], file.name, {
-        type: "image/jpeg",
-      });
+      mediaData = await compressImage(file);
+    } else if (mediaType === "video") {
+      mediaData = await compressVideo(file);
+    } else {
+      mediaData = await compressImage(file);
     }
 
-    // Create unique filename
-    const timestamp = Date.now();
-    const extension = mediaType === "video" ? "mp4" : "jpg";
-    const filename = `${timestamp}-${Date.now().toString(36)}.${extension}`;
-    const path = `product-media/${filename}`;
+    // Upload via backend API
+    const response = await fetch("/api/upload/image", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        imageData: mediaData,
+        fileName: file.name,
+      }),
+    });
 
-    // Upload to Supabase Storage
-    const { data, error } = await supabase.storage
-      .from("product-images")
-      .upload(path, uploadedFile, {
-        cacheControl: "3600",
-        upsert: false,
-      });
-
-    if (error) {
-      throw new Error(`Upload failed: ${error.message}`);
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Upload failed");
     }
 
-    // Get public URL
-    const {
-      data: { publicUrl },
-    } = supabase.storage.from("product-images").getPublicUrl(path);
+    const result = await response.json();
 
     return {
       type: mediaType,
-      url: publicUrl,
-      path: path,
+      url: result.url,
+      path: result.path,
     };
   } catch (error) {
     console.error("Error uploading media:", error);
@@ -130,12 +135,17 @@ export async function uploadProductMedia(
 
 export async function deleteProductMedia(path: string): Promise<void> {
   try {
-    const { error } = await supabase.storage
-      .from("product-images")
-      .remove([path]);
+    const response = await fetch("/api/upload/image", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ path }),
+    });
 
-    if (error) {
-      throw new Error(`Delete failed: ${error.message}`);
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Delete failed");
     }
   } catch (error) {
     console.error("Error deleting media:", error);
@@ -145,12 +155,17 @@ export async function deleteProductMedia(path: string): Promise<void> {
 
 export async function deleteProductImage(path: string): Promise<void> {
   try {
-    const { error } = await supabase.storage
-      .from("product-images")
-      .remove([path]);
+    const response = await fetch("/api/upload/image", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ path }),
+    });
 
-    if (error) {
-      throw new Error(`Delete failed: ${error.message}`);
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Delete failed");
     }
   } catch (error) {
     console.error("Error deleting image:", error);

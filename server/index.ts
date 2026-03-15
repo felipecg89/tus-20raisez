@@ -40,6 +40,7 @@ import {
   deleteUser,
 } from "./routes/users";
 import { createDemoUsers } from "./routes/demo-users";
+import { uploadImage, deleteImage } from "./routes/upload";
 
 export function createServer() {
   const app = express();
@@ -61,6 +62,10 @@ export function createServer() {
   app.post("/api/auth/login", login);
   app.post("/api/auth/signup", signup);
   app.get("/api/auth/session", getSession);
+
+  // Upload API
+  app.post("/api/upload/image", uploadImage);
+  app.delete("/api/upload/image", deleteImage);
 
   // Products API
   app.get("/api/products", getProducts);
