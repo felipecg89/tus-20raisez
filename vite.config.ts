@@ -9,7 +9,13 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     fs: {
-      allow: ["./client", "./shared"],
+      // SOLUCIÓN: Agregamos la raíz '.' y el path absoluto para permitir index.html
+      allow: [
+        ".",
+        path.resolve(__dirname),
+        "./client", 
+        "./shared"
+      ],
       deny: ["*.{crt,pem}", "**/.git/**", "server/**"],
     },
   },
