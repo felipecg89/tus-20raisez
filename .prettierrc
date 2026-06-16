@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 {
   "tabWidth": 2,
   "useTabs": false,
   "trailingComma": "all"
 }
+=======
+{
+  "tabWidth": 2,
+  "useTabs": false,
+  "trailingComma": "all"
+}
+>>>>>>> 5d4ecee69de27c68db3eabc663ba48a32a5c7829
