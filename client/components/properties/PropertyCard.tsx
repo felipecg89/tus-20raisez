@@ -13,7 +13,7 @@ interface PropertyCardProps {
   bathrooms: number;
   area: number;
   description: string;
-  image: string;
+  image?: string;
   type: string;
 }
 

@@ -33,6 +33,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
+  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -142,8 +143,13 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
         city: "",
         type: "casa",
         category: "compra",
+        isCommercial: false,
         image: "",
         features: "",
+        bedrooms: "",
+        bathrooms: "",
+        area: "",
+        floors: "",
       });
       setShowForm(false);
       fetchProducts();
@@ -162,12 +168,38 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
       city: product.city,
       type: product.type,
       category: product.category,
+      isCommercial: (product as any).isCommercial || false,
       image: product.image,
       features: product.features.join(", "),
+      bedrooms: (product as any).bedrooms ? (product as any).bedrooms.toString() : "",
+      bathrooms: (product as any).bathrooms ? (product as any).bathrooms.toString() : "",
+      area: (product as any).area ? (product as any).area.toString() : "",
+      floors: (product as any).floors ? (product as any).floors.toString() : "",
     });
     setImagePreview(product.image);
     setEditing(product.id);
     setShowForm(true);
+  };
+
+  const handleCancel = () => {
+    setFormData({
+      name: "",
+      description: "",
+      price: "",
+      city: "",
+      type: "casa",
+      category: "compra",
+      isCommercial: false,
+      image: "",
+      features: "",
+      bedrooms: "",
+      bathrooms: "",
+      area: "",
+      floors: "",
+    });
+    setEditing(null);
+    setImagePreview("");
+    setShowForm(false);
   };
 
   const handleDelete = async (id: string) => {

@@ -301,7 +301,7 @@ export default function PropertyDetail() {
   const getRelatedProperties = () => {
     if (!property) return [];
 
-    const currentState = "state" in property ? property.state : property.location;
+    const currentState = "state" in property ? property.state : ("location" in property ? (property as any).location : property.city);
     const currentType = property.type;
     const currentId = property.id;
 
@@ -365,7 +365,7 @@ export default function PropertyDetail() {
                   <div className="relative w-full h-96 md:h-[500px] bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center group">
                     <img
                       src={mainImage}
-                      alt={property.name}
+                      alt={getPropertyName()}
                       className="w-full h-full object-contain"
                     />
 

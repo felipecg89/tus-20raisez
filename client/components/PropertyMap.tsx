@@ -2,6 +2,12 @@ import { useEffect, useRef } from "react";
 import { MapPin } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+declare global {
+  interface Window {
+    L?: any;
+  }
+}
+
 interface PropertyMapProps {
   address?: string;
   latitude?: number;
