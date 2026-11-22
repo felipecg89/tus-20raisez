@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { WhatsAppWidget } from "@/components/WhatsAppWidget";
 import { initializeHubSpot } from "@/lib/hubspotService";
 import Index from "./pages/Index";
 import Casas from "./pages/Casas";
@@ -82,6 +83,7 @@ const AppRoutes = () => (
           <Toaster />
           <Sonner />
           <AppContent />
+          <WhatsAppWidget />
         </TooltipProvider>
       </QueryClientProvider>
     </LanguageProvider>

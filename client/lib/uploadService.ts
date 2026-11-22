@@ -10,10 +10,10 @@ async function compressImage(file: File): Promise<string> {
         let width = img.width;
         let height = img.height;
 
-        // Resize if larger than 1200px width
-        if (width > 1200) {
-          height = (height * 1200) / width;
-          width = 1200;
+        // Resize if larger than 2048px width (high-resolution full display)
+        if (width > 2048) {
+          height = (height * 2048) / width;
+          width = 2048;
         }
 
         canvas.width = width;
@@ -33,7 +33,7 @@ async function compressImage(file: File): Promise<string> {
           } else {
             reject(new Error("Failed to compress image"));
           }
-        }, "image/jpeg", 0.8);
+        }, "image/jpeg", 0.9);
       };
       img.onerror = () => reject(new Error("Failed to load image"));
     };

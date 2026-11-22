@@ -13,7 +13,21 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["'Plus Jakarta Sans'", "sans-serif"],
+        heading: ["Outfit", "sans-serif"],
+      },
       colors: {
+        brand: {
+          blue: "#1B4965",
+          blueHover: "#13374E",
+          red: "#C8102E",
+          bg: "#F7F8FA",
+          card: "#FFFFFF",
+          border: "#DFE5EA",
+          text: "#101B24",
+          muted: "#465664",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

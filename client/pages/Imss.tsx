@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
+import { getWhatsAppUrl } from "@/lib/contact";
 import {
   CheckCircle,
   FileText,
@@ -609,7 +610,11 @@ export default function Imss() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="https://wa.me/1234567890"
+                href={getWhatsAppUrl(
+                  language === "es"
+                    ? "Hola, vivo en EE.UU. y me gustaría recibir asesoría personalizada sobre pensionarme con IMSS Modalidad 40 o crédito Infonavit Sin Fronteras."
+                    : "Hello, I live in the US and would like advice on IMSS Modalidad 40 pension and Infonavit Sin Fronteras credit."
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white text-primary px-8 py-3 rounded-lg font-bold hover:bg-white/90 transition-colors"

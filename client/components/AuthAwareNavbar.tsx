@@ -23,8 +23,12 @@ export const AuthAwareNavbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="text-xl font-bold text-white">
-            Propiedades Pro
+          <Link to="/" className="flex items-center gap-2">
+            <img
+              src="/logo.png"
+              alt="Tus Raíces MX"
+              className="h-10 w-auto object-contain bg-white rounded-lg px-2 py-0.5"
+            />
           </Link>
 
           {/* Desktop Menu */}

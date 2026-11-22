@@ -1,5 +1,6 @@
 import { Star, Phone, MessageCircle, Mail } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CONTACT_CONFIG, getWhatsAppUrl } from "@/lib/contact";
 
 export const LawyerProfile = () => {
   const { language } = useLanguage();
@@ -132,7 +133,11 @@ export const LawyerProfile = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <a
-                href="https://wa.me/1234567890"
+                href={getWhatsAppUrl(
+                  language === "es"
+                    ? "Hola Lic. Sergio García, me gustaría agendar una consulta de asesoría legal."
+                    : "Hello Lic. Sergio García, I would like to schedule a legal consultation."
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
@@ -141,11 +146,11 @@ export const LawyerProfile = () => {
                 {language === "es" ? "WhatsApp" : "WhatsApp"}
               </a>
               <a
-                href="tel:+1234567890"
+                href={`tel:${CONTACT_CONFIG.phoneUSARaw}`}
                 className="flex items-center justify-center gap-2 border-2 border-primary text-primary px-6 py-3 rounded-lg font-semibold hover:bg-primary/5 transition-colors"
               >
                 <Phone className="w-4 h-4" />
-                {language === "es" ? "Llamar" : "Call"}
+                {language === "es" ? "Llamar Gratis" : "Call Toll-Free"}
               </a>
             </div>
           </div>

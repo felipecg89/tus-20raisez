@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
+import { getWhatsAppUrl } from "@/lib/contact";
 import {
   CheckCircle,
   ArrowRight,
@@ -357,7 +358,11 @@ export default function Landing() {
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <a
-                    href="https://wa.me/1234567890"
+                    href={getWhatsAppUrl(
+                      language === "es"
+                        ? "Hola, acabo de registrar mis datos en su sitio web y me gustaría chatear con un asesor."
+                        : "Hello, I just submitted my information on your website and would like to chat with an advisor."
+                    )}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary/90 transition-colors"

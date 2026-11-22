@@ -16,6 +16,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 import { useExchangeRate } from "@/hooks/useExchangeRate";
 import { PropertyCard } from "@/components/properties/PropertyCard";
+import { getWhatsAppUrl } from "@/lib/contact";
 
 interface PropertyMedia {
   type: "image" | "video";
@@ -322,10 +323,11 @@ export default function PropertyDetail() {
   };
 
   const handleWhatsApp = () => {
-    const message = encodeURIComponent(
-      `Hola, me interesa la propiedad: ${getPropertyName()} en ${getPropertyCity()}`
-    );
-    window.open(`https://wa.me/1234567890?text=${message}`, "_blank");
+    const text =
+      language === "es"
+        ? `Hola, vivo en EE.UU. y me interesa la propiedad "${getPropertyName()}" en ${getPropertyCity()} (ID: ${id}). ¿Podrían darme más información sobre los trámites de compra y escrituración desde Estados Unidos?`
+        : `Hello, I live in the US and I'm interested in "${getPropertyName()}" in ${getPropertyCity()} (ID: ${id}). Could you provide more details about purchasing and legal procedures from the US?`;
+    window.open(getWhatsAppUrl(text), "_blank");
   };
 
   const mediaArray = Array.isArray(media) ? media : [];

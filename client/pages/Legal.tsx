@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { LawyerProfile } from "@/components/LawyerProfile";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
+import { getWhatsAppUrl } from "@/lib/contact";
 import {
   CheckCircle,
   FileText,
@@ -781,7 +782,11 @@ export default function Legal() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="https://wa.me/1234567890"
+                href={getWhatsAppUrl(
+                  language === "es"
+                    ? "Hola Lic. Sergio García, vivo en EE.UU. y me gustaría agendar una asesoría legal sobre trámites y escrituración en México."
+                    : "Hello Lic. Sergio García, I live in the US and would like to schedule legal advice regarding legal procedures in Mexico."
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white text-primary px-8 py-3 rounded-lg font-bold hover:bg-white/90 transition-colors"

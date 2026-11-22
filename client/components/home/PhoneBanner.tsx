@@ -2,9 +2,8 @@ import { Phone } from "lucide-react";
 
 export const PhoneBanner = () => {
   const phones = [
-    { number: "+18887209656", flag: "🇺🇸", country: "USA", display: "+1 (888) 720-9656" },
-    { number: "+18003511039", flag: "🇲🇽", country: "México", display: "+1 (800) 351-1039" },
-    { number: "+524923860125", flag: "🇲🇽", country: "México", display: "+52 (492) 386-0125" },
+    { number: "+18884312431", flag: "🇺🇸", country: "USA", display: "+1 (888) 431-2431 (Gratuito + SMS)" },
+    { number: "+528004610316", flag: "🇲🇽", country: "México", display: "+52 (800) 461-0316 (Lada Gratuita)" },
   ];
 
   return (

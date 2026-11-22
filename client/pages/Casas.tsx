@@ -31,64 +31,41 @@ const properties: Property[] = [
     bathrooms: 2,
     area: 250,
     description:
-      "Hermosa casa colonial con patio interior, acabados de lujo y vista a la ciudad.",
+      "Hermosa casa colonial con patio interior, acabados de cedro, cantera y vista a la ciudad histórica.",
     type: "casa",
     state: "Guanajuato",
+    image: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1000&q=80",
   },
   {
     id: "2",
-    title: "Departamento Playa Jalisco",
+    title: "Departamento Vista al Mar Jalisco",
     price: 250000,
     location: "Puerto Vallarta, JAL",
     bedrooms: 2,
     bathrooms: 2,
     area: 150,
     description:
-      "Moderno departamento con vista al mar, acceso a playa privada y amenidades.",
+      "Moderno departamento con vista a la bahía, acceso a playa privada y amenidades de lujo.",
     type: "casa",
     state: "Jalisco",
+    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=80",
   },
   {
     id: "3",
-    title: "Terreno Desarrollo Nuevo",
-    price: 120000,
+    title: "Residencia Contemporánea Monterrey",
+    price: 320000,
     location: "Monterrey, NL",
-    bedrooms: 0,
-    bathrooms: 0,
-    area: 1200,
+    bedrooms: 4,
+    bathrooms: 4,
+    area: 380,
     description:
-      "Terreno en desarrollo inmobiliario con servicios incluidos e infraestructura lista.",
-    type: "terreno",
+      "Espectacular casa contemporánea en fraccionamiento privado con vigilancia y amplio jardín.",
+    type: "casa",
     state: "Nuevo León",
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80",
   },
   {
     id: "4",
-    title: "Casa Campestre Michoacán",
-    price: 200000,
-    location: "Morelia, MICH",
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 320,
-    description:
-      "Casa campestre con grandes extensiones, alberca y jardín amplío.",
-    type: "casa",
-    state: "Michoacán",
-  },
-  {
-    id: "5",
-    title: "Penthouse Centro CDMX",
-    price: 450000,
-    location: "CDMX",
-    bedrooms: 3,
-    bathrooms: 3,
-    area: 280,
-    description:
-      "Elegante penthouse en zona exclusiva con terraza panorámica y seguridad 24/7.",
-    type: "casa",
-    state: "Ciudad de México",
-  },
-  {
-    id: "6",
     title: "Lote Residencial Querétaro",
     price: 95000,
     location: "Querétaro, QRO",
@@ -96,35 +73,66 @@ const properties: Property[] = [
     bathrooms: 0,
     area: 800,
     description:
-      "Lote residencial en fraccionamiento consolidado, todos los servicios disponibles.",
+      "Lote residencial en fraccionamiento consolidado, todos los servicios subterráneos disponibles.",
     type: "terreno",
     state: "Querétaro",
+    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80",
+  },
+  {
+    id: "5",
+    title: "Casa Campestre Morelia",
+    price: 200000,
+    location: "Morelia, MICH",
+    bedrooms: 4,
+    bathrooms: 3,
+    area: 320,
+    description:
+      "Casa campestre con grandes extensiones de jardín, alberca privada y chimenea rústica.",
+    type: "casa",
+    state: "Michoacán",
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80",
+  },
+  {
+    id: "6",
+    title: "Penthouse de Lujo CDMX",
+    price: 450000,
+    location: "CDMX",
+    bedrooms: 3,
+    bathrooms: 3,
+    area: 280,
+    description:
+      "Elegante penthouse en zona exclusiva con terraza panorámica, roof garden y seguridad 24/7.",
+    type: "casa",
+    state: "Ciudad de México",
+    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1000&q=80",
   },
   {
     id: "7",
-    title: "Casita Cozy Oaxaca",
-    price: 85000,
-    location: "Oaxaca, OAX",
-    bedrooms: 2,
-    bathrooms: 1,
-    area: 100,
+    title: "Casa Yucateca con Alberca Mérida",
+    price: 165000,
+    location: "Mérida, YUC",
+    bedrooms: 3,
+    bathrooms: 2,
+    area: 210,
     description:
-      "Acogedora casa en el centro histórico, perfecta para inversor.",
+      "Acogedora casa tradicional en el centro de Mérida con alberca chukum y patio colonial.",
     type: "casa",
-    state: "Oaxaca",
+    state: "Yucatán",
+    image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=80",
   },
   {
     id: "8",
-    title: "Quinta Turística Veracruz",
-    price: 320000,
-    location: "Veracruz, VER",
-    bedrooms: 5,
-    bathrooms: 4,
-    area: 450,
+    title: "Quinta Colonial Zacatecas",
+    price: 215000,
+    location: "Zacatecas, ZAC",
+    bedrooms: 4,
+    bathrooms: 3,
+    area: 310,
     description:
-      "Propiedad con potencial turístico, entre naturaleza y comodidades.",
+      "Propiedad colonial con acabados en cantera rosa, portón de hierro y amplia cochera.",
     type: "casa",
-    state: "Veracruz",
+    state: "Zacatecas",
+    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80",
   },
 ];
 
@@ -140,7 +148,6 @@ export default function Casas() {
   const [filterCommercial, setFilterCommercial] = useState<"all" | "commercial" | "residential">("all");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000]);
   const [showFilters, setShowFilters] = useState(false);
-  const [loadedProperties, setLoadedProperties] = useState<Property[]>(properties);
   const [supabaseProperties, setSupabaseProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -157,44 +164,54 @@ export default function Casas() {
         }
 
         const response = await fetch(`/api/products?${params}`);
+        if (!response.ok) {
+          // If server error, fallback safely without throwing uncaught errors
+          setSupabaseProperties([]);
+          return;
+        }
+
         const result = await response.json();
 
-        if (result.data) {
+        if (result && Array.isArray(result.data)) {
           const convertedProperties: Property[] = result.data.map((product: Product) => ({
-            id: product.id,
+            id: String(product.id),
             title: product.name,
             price: product.price,
-            location: product.city,
-            bedrooms: 0,
-            bathrooms: 0,
-            area: 0,
+            location: product.city ? `${product.city}, ${product.state || ""}` : product.state || "México",
+            bedrooms: product.bedrooms || 0,
+            bathrooms: product.bathrooms || 0,
+            area: product.area || 0,
             description: product.description,
-            type: product.type,
-            state: product.state || product.city,
+            type: product.type as "casa" | "terreno",
+            state: product.state || product.city || "",
             image: product.image,
           }));
 
           setSupabaseProperties(convertedProperties);
-          setTotalPages(result.pagination.totalPages);
-        } else {
+          if (result.pagination?.totalPages) {
+            setTotalPages(result.pagination.totalPages);
+          }
+        } else if (Array.isArray(result)) {
           const convertedProperties: Property[] = result.map((product: Product) => ({
-            id: product.id,
+            id: String(product.id),
             title: product.name,
             price: product.price,
-            location: product.city,
-            bedrooms: 0,
-            bathrooms: 0,
-            area: 0,
+            location: product.city ? `${product.city}, ${product.state || ""}` : product.state || "México",
+            bedrooms: product.bedrooms || 0,
+            bathrooms: product.bathrooms || 0,
+            area: product.area || 0,
             description: product.description,
-            type: product.type,
-            state: product.state || product.city,
+            type: product.type as "casa" | "terreno",
+            state: product.state || product.city || "",
             image: product.image,
           }));
 
           setSupabaseProperties(convertedProperties);
+        } else {
+          setSupabaseProperties([]);
         }
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.warn("Unable to fetch live products, using verified catalog:", error);
         setSupabaseProperties([]);
       } finally {
         setLoading(false);
@@ -204,7 +221,7 @@ export default function Casas() {
     fetchProducts();
   }, [currentPage, filterType]);
 
-  const allProperties = [...supabaseProperties, ...properties];
+  const allProperties = supabaseProperties.length > 0 ? supabaseProperties : properties;
   const states = ["all", ...new Set(allProperties.map((p) => p.state))];
 
   const filteredProperties = allProperties.filter((property) => {
