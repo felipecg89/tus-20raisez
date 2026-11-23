@@ -1,99 +1,205 @@
 import { RequestHandler } from "express";
 import { ContentBlock } from "@shared/api";
+import { supabase, supabaseAdmin } from "../lib/supabase";
 
-// In-memory storage for content (in production, use a database)
-let contentBlocks: ContentBlock[] = [
+let inMemoryContentBlocks: ContentBlock[] = [
   {
     id: "hero-title",
     section: "hero",
     key: "title",
-    value: "Conecta tus sueños de Estados Unidos con tu hogar en México",
+    value: "Invierte. Protege. Regresa. Tu patrimonio en México seguro desde EE. UU.",
     updatedAt: new Date().toISOString(),
   },
   {
     id: "hero-subtitle",
     section: "hero",
     key: "subtitle",
-    value: "Casas, trámites y asesoría legal para paisanos",
+    value: "Venta y renta de casas, comercios, salones de fiestas, trámites de IMSS y asesoría legal con fe notarial.",
     updatedAt: new Date().toISOString(),
   },
   {
     id: "hero-cta",
     section: "hero",
     key: "ctaText",
-    value: "Quiero empezar",
+    value: "Consultar Propiedades y Trámites",
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "legal-banner",
+    section: "legal",
+    key: "bannerNotice",
+    value: "Actualización 2026: Nuevos convenios consulares para poderes notariales y pensiones IMSS en EE. UU.",
     updatedAt: new Date().toISOString(),
   },
 ];
 
-export const getContent: RequestHandler = (req, res) => {
+export const getContent: RequestHandler = async (req, res) => {
   const { section } = req.query;
-  const filtered = section
-    ? contentBlocks.filter((c) => c.section === section)
-    : contentBlocks;
-  res.json(filtered);
-};
 
-export const getContentBlock: RequestHandler = (req, res) => {
-  const block = contentBlocks.find((c) => c.id === req.params.id);
-  if (!block) {
-    res.status(404).json({ error: "Bloque de contenido no encontrado" });
-    return;
+  try {
+    let query = supabase.from("site_content").select("*");
+    if (section) {
+      query = query.eq("section", section);
+    }
+    const { data, error } = await query;
+
+    if (!error && Array.isArray(data) && data.length > 0) {
+      const mapped = data.map((d: any) => ({
+        id: d.id,
+        section: d.section,
+        key: d.key,
+        value: typeof d.value === "string" ? d.value : d.value,
+        updatedAt: d.updated_at,
+      }));
+      return res.json(mapped);
+    }
+  } catch (e) {
+    console.warn("Supabase site_content fallback:", e);
   }
-  res.json(block);
+
+  const filtered = section
+    ? inMemoryContentBlocks.filter((c) => c.section === section)
+    : inMemoryContentBlocks;
+  return res.json(filtered);
 };
 
-export const updateContent: RequestHandler = (req, res) => {
-  const { value } = req.body;
+export const getContentBlock: RequestHandler = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { data, error } = await supabase
+      .from("site_content")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (!error && data) {
+      return res.json({
+        id: data.id,
+        section: data.section,
+        key: data.key,
+        value: data.value,
+        updatedAt: data.updated_at,
+      });
+    }
+  } catch (e) {}
+
+  const block = inMemoryContentBlocks.find((c) => c.id === id);
+  if (!block) {
+    return res.status(404).json({ error: "Bloque de contenido no encontrado" });
+  }
+  return res.json(block);
+};
+
+export const updateContent: RequestHandler = async (req, res) => {
+  const { id } = req.params;
+  const { value, section, key } = req.body;
 
   if (value === undefined) {
-    res.status(400).json({ error: "El valor es requerido" });
-    return;
+    return res.status(400).json({ error: "El valor es requerido" });
   }
 
-  const blockIndex = contentBlocks.findIndex((c) => c.id === req.params.id);
+  try {
+    const { data, error } = await supabaseAdmin
+      .from("site_content")
+      .upsert({
+        id,
+        section: section || "general",
+        key: key || id,
+        value,
+        updated_at: new Date().toISOString(),
+      })
+      .select()
+      .single();
+
+    if (!error && data) {
+      return res.json({
+        id: data.id,
+        section: data.section,
+        key: data.key,
+        value: data.value,
+        updatedAt: data.updated_at,
+      });
+    }
+  } catch (e) {
+    console.error("Error upserting site_content in Supabase:", e);
+  }
+
+  const blockIndex = inMemoryContentBlocks.findIndex((c) => c.id === id);
   if (blockIndex === -1) {
-    res.status(404).json({ error: "Bloque de contenido no encontrado" });
-    return;
+    const newBlock: ContentBlock = {
+      id,
+      section: section || "general",
+      key: key || id,
+      value,
+      updatedAt: new Date().toISOString(),
+    };
+    inMemoryContentBlocks.push(newBlock);
+    return res.json(newBlock);
   }
 
-  contentBlocks[blockIndex] = {
-    ...contentBlocks[blockIndex],
+  inMemoryContentBlocks[blockIndex] = {
+    ...inMemoryContentBlocks[blockIndex],
     value,
     updatedAt: new Date().toISOString(),
   };
-
-  res.json(contentBlocks[blockIndex]);
+  return res.json(inMemoryContentBlocks[blockIndex]);
 };
 
-export const createContent: RequestHandler = (req, res) => {
+export const createContent: RequestHandler = async (req, res) => {
   const { section, key, value } = req.body;
 
   if (!section || !key || value === undefined) {
-    res.status(400).json({ error: "Campos requeridos faltantes" });
-    return;
+    return res.status(400).json({ error: "section, key y value son requeridos" });
+  }
+
+  const id = `${section}-${key}`;
+
+  try {
+    const { data, error } = await supabaseAdmin
+      .from("site_content")
+      .upsert({
+        id,
+        section,
+        key,
+        value,
+        updated_at: new Date().toISOString(),
+      })
+      .select()
+      .single();
+
+    if (!error && data) {
+      return res.status(201).json({
+        id: data.id,
+        section: data.section,
+        key: data.key,
+        value: data.value,
+        updatedAt: data.updated_at,
+      });
+    }
+  } catch (e) {
+    console.error("Error creating content in Supabase:", e);
   }
 
   const newBlock: ContentBlock = {
-    id: `${section}-${key}-${Date.now()}`,
+    id,
     section,
     key,
     value,
     updatedAt: new Date().toISOString(),
   };
 
-  contentBlocks.push(newBlock);
-  res.status(201).json(newBlock);
+  inMemoryContentBlocks.push(newBlock);
+  return res.status(201).json(newBlock);
 };
 
-export const deleteContent: RequestHandler = (req, res) => {
-  const blockIndex = contentBlocks.findIndex((c) => c.id === req.params.id);
-  if (blockIndex === -1) {
-    res.status(404).json({ error: "Bloque de contenido no encontrado" });
-    return;
-  }
+export const deleteContent: RequestHandler = async (req, res) => {
+  const { id } = req.params;
 
-  const deletedBlock = contentBlocks[blockIndex];
-  contentBlocks.splice(blockIndex, 1);
-  res.json(deletedBlock);
+  try {
+    await supabaseAdmin.from("site_content").delete().eq("id", id);
+  } catch (e) {}
+
+  inMemoryContentBlocks = inMemoryContentBlocks.filter((c) => c.id !== id);
+  return res.json({ success: true, id });
 };

@@ -1,9 +1,9 @@
-import { MapPin, Home, Bath, Maximize2, MessageCircle, Eye } from "lucide-react";
+import { MapPin, Home, Bath, Maximize2, MessageCircle, Eye, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 import { useExchangeRate } from "@/hooks/useExchangeRate";
-import { getWhatsAppUrl } from "@/lib/contact";
+import { getWhatsAppUrl, buildWhatsAppContextMessage } from "@/config/contact";
 
 interface PropertyCardProps {
   id: string;
@@ -16,6 +16,8 @@ interface PropertyCardProps {
   description: string;
   image?: string;
   type: string;
+  capacity?: number;
+  rentalPeriod?: string;
 }
 
 export const PropertyCard = ({
@@ -29,6 +31,8 @@ export const PropertyCard = ({
   description,
   image,
   type,
+  capacity,
+  rentalPeriod,
 }: PropertyCardProps) => {
   const navigate = useNavigate();
   const { language } = useLanguage();
@@ -74,15 +78,28 @@ export const PropertyCard = ({
           src={
             image ||
             (type === "terreno"
-              ? "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80"
-              : "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1000&q=80")
+              ? "/images/terreno-residencial-mexico.jpg"
+              : "/images/casa-mexico-fachada.jpg")
           }
           alt={title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
         />
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex gap-1.5 flex-wrap">
+          {type === "salon_fiestas" && (
+            <span className="bg-emerald-600 text-white text-xs font-bold px-2.5 py-1 rounded-md shadow">
+              Salón de Fiestas
+            </span>
+          )}
+          {type === "comercio" && (
+            <span className="bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-md shadow">
+              Comercial
+            </span>
+          )}
+        </div>
         <div className="absolute top-3 right-3 md:top-4 md:right-4 bg-[#1B4965] text-white px-2.5 py-1 md:px-3.5 md:py-1.5 rounded-lg font-bold text-xs sm:text-sm md:text-base shadow-md">
-          {formatPrice(price)}
+          {formatPrice(price)} {rentalPeriod === "evento" ? "/ Evento" : ""}
         </div>
       </div>
 
@@ -106,24 +123,38 @@ export const PropertyCard = ({
 
         {/* Features - Always Show */}
         <div className="hidden md:grid grid-cols-3 gap-3 py-3 md:py-4 border-y border-slate-100 mb-4">
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-1 text-[#1B4965] mb-1">
-              <Home className="w-4 h-4" />
-              <span className="font-bold text-sm">{bedrooms}</span>
+          {type === "salon_fiestas" || (type === "comercio" && capacity) ? (
+            <div className="text-center col-span-2">
+              <div className="flex items-center justify-center gap-1 text-[#1B4965] mb-1">
+                <Users className="w-4 h-4" />
+                <span className="font-bold text-sm">{capacity || "80-300"} pers.</span>
+              </div>
+              <span className="text-xs text-foreground/60">
+                {language === "es" ? "Aforo / Capacidad" : "Capacity"}
+              </span>
             </div>
-            <span className="text-xs text-foreground/60">
-              {language === "es" ? "Recámaras" : "Beds"}
-            </span>
-          </div>
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-1 text-[#1B4965] mb-1">
-              <Bath className="w-4 h-4" />
-              <span className="font-bold text-sm">{bathrooms}</span>
-            </div>
-            <span className="text-xs text-foreground/60">
-              {language === "es" ? "Baños" : "Baths"}
-            </span>
-          </div>
+          ) : (
+            <>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-[#1B4965] mb-1">
+                  <Home className="w-4 h-4" />
+                  <span className="font-bold text-sm">{bedrooms}</span>
+                </div>
+                <span className="text-xs text-foreground/60">
+                  {language === "es" ? "Recámaras" : "Beds"}
+                </span>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 text-[#1B4965] mb-1">
+                  <Bath className="w-4 h-4" />
+                  <span className="font-bold text-sm">{bathrooms}</span>
+                </div>
+                <span className="text-xs text-foreground/60">
+                  {language === "es" ? "Baños" : "Baths"}
+                </span>
+              </div>
+            </>
+          )}
           <div className="text-center">
             <div className="flex items-center justify-center gap-1 text-[#1B4965] mb-1">
               <Maximize2 className="w-4 h-4" />
@@ -142,13 +173,22 @@ export const PropertyCard = ({
             <Eye className="w-4 h-4" />
             {language === "es" ? "Ver propiedad" : "View property"}
           </button>
-          <button
-            onClick={handleWhatsApp}
-            className="hidden md:flex border border-[#1B4965] text-[#1B4965] py-2 md:py-2 rounded-lg font-semibold hover:bg-[#1B4965]/5 transition-all items-center justify-center gap-2 text-sm"
+          <a
+            href={getWhatsAppUrl(
+              buildWhatsAppContextMessage({
+                title,
+                city: location,
+                price: formatPrice(price),
+              })
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:flex border border-emerald-600 text-emerald-700 hover:bg-emerald-50 py-2 md:py-2 rounded-lg font-semibold transition-all items-center justify-center gap-2 text-sm"
+            title="Consultar por WhatsApp Business"
           >
-            <MessageCircle className="w-4 h-4" />
-            {language === "es" ? "Consultar" : "Inquire"}
-          </button>
+            <MessageCircle className="w-4 h-4 text-emerald-600" />
+            {language === "es" ? "WhatsApp" : "WhatsApp"}
+          </a>
         </div>
       </div>
     </div>

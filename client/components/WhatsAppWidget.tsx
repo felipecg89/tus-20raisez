@@ -1,11 +1,18 @@
 import { useState } from "react";
-import { MessageCircle, X, Send, ExternalLink, Phone, CheckCheck } from "lucide-react";
+import { MessageCircle, X, Send, Phone, CheckCheck, ArrowRight, PhoneCall } from "lucide-react";
 import {
-  CONTACT_CONFIG,
+  CALL_US_DISPLAY,
+  CALL_US_TEL,
+  CALL_US_LABEL_ES,
+  CALL_US_LABEL_EN,
+  CALL_MX_DISPLAY,
+  CALL_MX_SHORT,
+  CALL_MX_TEL,
+  CALL_MX_LABEL_ES,
+  WHATSAPP_DISPLAY,
   getWhatsAppUrl,
-  getWhatsAppWebUrl,
-  isMobileBrowser,
-} from "@/lib/contact";
+  getCallUrl,
+} from "@/config/contact";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export const WhatsAppWidget = () => {
@@ -16,105 +23,97 @@ export const WhatsAppWidget = () => {
 
   const defaultMessage =
     language === "es"
-      ? "¡Hola! Vivo en EE.UU. y me gustaría recibir asesoría sobre comprar casa, crédito Infonavit o trámites en México."
-      : "Hello! I live in the US and would like advice on buying property, Infonavit credit, or legal procedures in Mexico.";
+      ? "Hola Tus Raíces MX, vi su página web y quiero asesoría gratuita sobre propiedades y trámites en México."
+      : "Hello Tus Raíces MX, I saw your website and would like free advice on properties and legal procedures in Mexico.";
 
   const quickOptions =
     language === "es"
       ? [
           {
-            label: "🏡 Comprar casa o terreno",
-            text: "Hola, me interesa comprar una propiedad en México desde Estados Unidos. ¿Cuáles son las opciones de financiamiento y requisitos?",
+            label: "🏡 Casas y Terrenos",
+            text: "Hola Tus Raíces MX, vi Casas y Terrenos en su página web y quiero asesoría gratuita sobre compra y financiamiento.",
           },
           {
-            label: "📑 Trámites y escrituración",
-            text: "Hola, necesito asesoría legal para realizar escrituras y poderes notariales en México sin tener que viajar.",
+            label: "🎉 Salones de Fiestas y Comercios",
+            text: "Hola Tus Raíces MX, vi Salones de Fiestas y Locales Comerciales en su página web y quiero asesoría gratuita.",
+          },
+          {
+            label: "📑 Trámites y Escrituración",
+            text: "Hola Tus Raíces MX, vi Asesoría Legal y Escrituras en su página web y quiero asesoría sobre poderes notariales sin viajar.",
           },
           {
             label: "💼 Pensión IMSS / Modalidad 40",
-            text: "Hola, vivo en EE.UU. y quiero cotizar o reactivar mis semanas del IMSS con Modalidad 40 para pensionarme en México.",
-          },
-          {
-            label: "💬 Hablar con un asesor",
-            text: defaultMessage,
+            text: "Hola Tus Raíces MX, vi Pensión IMSS / Infonavit en su página web y quiero asesoría gratuita sobre mis semanas cotizadas.",
           },
         ]
       : [
           {
-            label: "🏡 Buy home or land",
-            text: "Hello, I am interested in buying property in Mexico from the US. What are the requirements and financing options?",
+            label: "🏡 Homes & Land in Mexico",
+            text: "Hello Tus Raíces MX, I saw your Mexico Properties on your website and would like free advice on purchasing and financing.",
           },
           {
-            label: "📑 Legal & notary deeds",
-            text: "Hello, I need legal guidance for property deeds and notary powers of attorney in Mexico without traveling.",
+            label: "🎉 Event Halls & Commercial",
+            text: "Hello Tus Raíces MX, I saw your Event Halls and Commercial rentals on your website and would like free advice.",
           },
           {
-            label: "💼 IMSS Pension / Mod 40",
-            text: "Hello, I live in the US and would like information about recovering my IMSS pension rights with Modalidad 40.",
+            label: "📑 Legal, Notary & Title Deeds",
+            text: "Hello Tus Raíces MX, I saw your Legal Advisory on your website and would like advice on cross-border notary powers.",
           },
           {
-            label: "💬 Chat with advisor",
-            text: defaultMessage,
+            label: "💼 IMSS Pension / Cross-Border Credit",
+            text: "Hello Tus Raíces MX, I saw your IMSS & Infonavit services and would like free advice on recovering my pension weeks.",
           },
         ];
 
-  const handleSend = (forceWeb: boolean = false) => {
-    const textToSend = customText.trim() || defaultMessage;
-    const url = forceWeb
-      ? getWhatsAppWebUrl(textToSend)
-      : isMobileBrowser()
-      ? getWhatsAppUrl(textToSend)
-      : getWhatsAppWebUrl(textToSend);
-
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
+  const currentText = customText.trim() || defaultMessage;
+  const currentWhatsAppLink = getWhatsAppUrl(currentText);
 
   return (
     <div className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 flex flex-col items-end gap-2.5 print:hidden">
-      {/* WhatsApp Web Interactive Card / Modal */}
+      {/* Interactive Card / Modal */}
       {isOpen && (
-        <div className="w-[calc(100vw-2rem)] sm:w-[380px] max-w-[380px] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
-          {/* Header styled like WhatsApp Business */}
+        <div className="w-[calc(100vw-2rem)] sm:w-[390px] max-w-[390px] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
+          {/* Header */}
           <div className="bg-[#075E54] text-white p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative">
                 <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center p-1 shadow-inner overflow-hidden border border-emerald-300">
-                  <img src="/logo.png" alt="Tus Raíces" className="w-full h-full object-contain" />
+                  <img src="/logo.png" alt="Tus Raíces MX" className="w-full h-full object-contain" />
                 </div>
                 <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-[#075E54] rounded-full"></span>
               </div>
               <div>
                 <h4 className="font-bold text-sm sm:text-base leading-tight">
-                  Tus Raíces Asesores
+                  Tus Raíces MX • Asesores
                 </h4>
                 <p className="text-xs text-emerald-100 flex items-center gap-1">
                   <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse"></span>
                   {language === "es"
-                    ? "En línea • Responde en minutos"
-                    : "Online • Replies in minutes"}
+                    ? "En línea • Atención directa celular"
+                    : "Online • Direct cell phone support"}
                 </p>
               </div>
             </div>
             <button
               onClick={() => setIsOpen(false)}
               className="text-white/80 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors"
-              aria-label="Cerrar ventana de WhatsApp"
+              aria-label="Cerrar ventana"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Chat Content Body */}
-          <div className="p-4 bg-[#f0f2f5] space-y-3 max-h-[360px] overflow-y-auto">
+          {/* Body */}
+          <div className="p-4 bg-[#f0f2f5] space-y-3 max-h-[380px] overflow-y-auto">
             {/* Incoming message bubble */}
-            <div className="bg-white rounded-2xl rounded-tl-none p-3 shadow-sm border border-slate-100 max-w-[88%] text-xs sm:text-sm text-slate-800 space-y-1">
-              <p className="font-semibold text-emerald-800 text-[11px] uppercase tracking-wider">
-                {language === "es" ? "Atención Especial Paisanos 🇺🇸🇲🇽" : "US Hispanic Support 🇺🇸🇲🇽"}
+            <div className="bg-white rounded-2xl rounded-tl-none p-3 shadow-sm border border-slate-100 max-w-[92%] text-xs sm:text-sm text-slate-800 space-y-1">
+              <p className="font-bold text-emerald-800 text-[11px] uppercase tracking-wider">
+                {language === "es" ? "Atención Binacional 🇺🇸🇲🇽" : "Bi-national Support 🇺🇸🇲🇽"}
               </p>
               <p>
                 {language === "es"
-                  ? "¡Hola! 👋 Bienvenido a Tus Raíces. Te asesoramos directamente desde EE.UU. para compras, créditos y trámites en México."
-                  : "Hello! 👋 Welcome to Tus Raíces. We guide you directly from the US for home purchases and legal paperwork in Mexico."}
+                  ? "¡Hola! 👋 Bienvenido a Tus Raíces MX. Te atendemos directo en celular para responder todas tus dudas sobre inmuebles, trámites y salones en México."
+                  : "Hello! 👋 Welcome to Tus Raíces MX. We help US clients with verified real estate, legal power of attorney, and Mexican pension rights."}
               </p>
               <p className="text-slate-500 text-[10px] text-right flex items-center justify-end gap-1">
                 <span>{language === "es" ? "Ahora" : "Just now"}</span>
@@ -122,30 +121,75 @@ export const WhatsAppWidget = () => {
               </p>
             </div>
 
-            {/* Quick intent buttons */}
-            <div className="space-y-1.5 pt-1">
-              <p className="text-[11px] font-semibold text-slate-600 px-1">
-                {language === "es" ? "Selecciona tu consulta rápida:" : "Select quick topic:"}
-              </p>
-              <div className="grid grid-cols-1 gap-1.5">
-                {quickOptions.map((opt, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => {
-                      setCustomText(opt.text);
-                    }}
-                    className={`text-left text-xs p-2 rounded-xl transition-all border ${
-                      customText === opt.text
-                        ? "bg-emerald-50 border-emerald-500 text-emerald-900 font-medium"
-                        : "bg-white hover:bg-slate-50 border-slate-200 text-slate-700"
-                    }`}
+            {/* SECCIÓN EN INGLÉS: Si el cliente está en inglés, prioriza llamada Zadarma y Call Back */}
+            {language === "en" ? (
+              <div className="space-y-2 pt-1 bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                <p className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                  <PhoneCall className="w-3.5 h-3.5 text-emerald-600" />
+                  Preferred US Channels (No App Required):
+                </p>
+
+                {/* Zadarma Toll-Free Call */}
+                <a
+                  href={getCallUrl("us")}
+                  className="w-full bg-[#1B4965] hover:bg-[#13374E] text-white py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-between shadow-sm transition-all"
+                >
+                  <span className="flex items-center gap-2">
+                    <Phone className="w-3.5 h-3.5" />
+                    Call Toll-Free: {CALL_US_DISPLAY}
+                  </span>
+                  <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded text-white font-mono">
+                    Free Call
+                  </span>
+                </a>
+
+                {/* Free Call Back Form */}
+                <a
+                  href="#contacto"
+                  onClick={() => setIsOpen(false)}
+                  className="w-full bg-slate-100 hover:bg-slate-200 text-[#1B4965] py-2 px-3 rounded-xl font-semibold text-xs flex items-center justify-between transition-all"
+                >
+                  <span>Request a Free Call Back</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+
+                <div className="pt-2 border-t border-slate-100">
+                  <p className="text-[11px] text-slate-500 mb-1.5">Have WhatsApp installed? Chat below:</p>
+                  <a
+                    href={currentWhatsAppLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-[#25D366] hover:bg-[#20ba59] text-white py-2 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all"
                   >
-                    {opt.label}
-                  </button>
-                ))}
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    Chat via WhatsApp Business
+                  </a>
+                </div>
               </div>
-            </div>
+            ) : (
+              /* SECCIÓN EN ESPAÑOL: Opciones rápidas para WhatsApp */
+              <div className="space-y-1.5 pt-1">
+                <p className="text-[11px] font-semibold text-slate-600 px-1">
+                  Elige el tema que te interesa:
+                </p>
+                <div className="grid grid-cols-1 gap-1.5">
+                  {quickOptions.map((opt, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setCustomText(opt.text)}
+                      className={`text-left text-xs p-2 rounded-xl transition-all border ${
+                        customText === opt.text
+                          ? "bg-emerald-50 border-emerald-500 text-emerald-900 font-medium"
+                          : "bg-white hover:bg-slate-50 border-slate-200 text-slate-700"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Input & Sending Actions */}
@@ -155,12 +199,6 @@ export const WhatsAppWidget = () => {
                 type="text"
                 value={customText}
                 onChange={(e) => setCustomText(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleSend(false);
-                  }
-                }}
                 placeholder={
                   language === "es"
                     ? "Escribe tu mensaje aquí..."
@@ -168,34 +206,44 @@ export const WhatsAppWidget = () => {
                 }
                 className="flex-1 bg-slate-100 border border-slate-200 rounded-full px-4 py-2 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all"
               />
-              <button
-                type="button"
-                onClick={() => handleSend(false)}
+              <a
+                href={currentWhatsAppLink}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center shadow hover:scale-105 active:scale-95 transition-all flex-shrink-0"
-                aria-label="Enviar por WhatsApp"
+                aria-label="Abrir WhatsApp Business"
+                title="Abrir WhatsApp Business"
               >
                 <Send className="w-4 h-4 ml-0.5" />
-              </button>
+              </a>
             </div>
 
-            {/* Direct Web vs App Buttons */}
-            <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-[11px] text-slate-600 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={() => handleSend(true)}
-                className="text-emerald-700 hover:text-emerald-800 font-semibold flex items-center gap-1 hover:underline"
-              >
-                <ExternalLink className="w-3 h-3" />
-                {language === "es" ? "Abrir en WhatsApp Web" : "Open in WhatsApp Web"}
-              </button>
-
-              <a
-                href={`tel:${CONTACT_CONFIG.phoneUSARaw}`}
-                className="text-slate-600 hover:text-primary font-medium flex items-center gap-1 hover:underline"
-              >
-                <Phone className="w-3 h-3" />
-                {language === "es" ? "Llamar 1-888-431-2431" : "Call 1-888-431-2431"}
-              </a>
+            {/* Direct Zadarma Phone Call Bar */}
+            <div className="pt-2 border-t border-slate-100 flex flex-col gap-1 text-[11px]">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-slate-700">
+                  {language === "es" ? "📞 ¿Prefieres llamar gratis?" : "📞 Prefer to call toll-free?"}
+                </span>
+                <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">
+                  Zadarma sin costo
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <a
+                  href={getCallUrl("us")}
+                  className="bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[#1B4965] p-1.5 rounded-lg font-bold flex items-center justify-center gap-1 transition-colors text-center"
+                >
+                  <Phone className="w-3 h-3 text-emerald-600" />
+                  <span>🇺🇸 {CALL_US_DISPLAY}</span>
+                </a>
+                <a
+                  href={getCallUrl("mx")}
+                  className="bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[#1B4965] p-1.5 rounded-lg font-bold flex items-center justify-center gap-1 transition-colors text-center"
+                >
+                  <Phone className="w-3 h-3 text-emerald-600" />
+                  <span>🇲🇽 {CALL_MX_SHORT}</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -210,13 +258,13 @@ export const WhatsAppWidget = () => {
           >
             {language === "es" ? (
               <>
-                <span className="font-bold text-emerald-700">🇺🇸 ¿Dudas desde EE.UU.?</span>{" "}
-                Abre WhatsApp Web o Móvil
+                <span className="font-bold text-emerald-700">🇺🇸 ¿Dudas desde EE. UU.?</span>{" "}
+                Escríbenos a WhatsApp o llámanos gratis
               </>
             ) : (
               <>
                 <span className="font-bold text-emerald-700">🇺🇸 Questions from the US?</span>{" "}
-                Open WhatsApp Web or Mobile
+                Call Toll-Free or chat with us
               </>
             )}
           </button>
@@ -242,22 +290,14 @@ export const WhatsAppWidget = () => {
           isOpen ? "bg-[#075E54] hover:bg-[#054c44]" : "bg-[#25D366] hover:bg-[#20ba59]"
         } text-white rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-emerald-300`}
       >
-        {/* Pulsing ring animation when closed */}
         {!isOpen && (
           <span className="absolute -inset-1 rounded-full bg-[#25D366] opacity-30 group-hover:opacity-60 animate-ping"></span>
         )}
 
         {isOpen ? (
-          <X className="w-7 h-7 relative z-10 transition-transform duration-200" />
+          <X className="w-6 h-6 sm:w-7 sm:h-7" />
         ) : (
-          <MessageCircle className="w-7 h-7 sm:w-8 sm:h-8 fill-white text-white relative z-10" />
-        )}
-
-        {/* Small Country Flag Badge */}
-        {!isOpen && (
-          <span className="absolute -top-1 -right-1 text-xs bg-white text-slate-800 font-bold px-1.5 py-0.5 rounded-full shadow border border-slate-200">
-            🇺🇸
-          </span>
+          <MessageCircle className="w-7 h-7 sm:w-8 sm:h-8 fill-white" />
         )}
       </button>
     </div>

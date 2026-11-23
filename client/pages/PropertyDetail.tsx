@@ -11,12 +11,19 @@ import {
   ChevronLeft,
   ChevronRight,
   Play,
+  Phone,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 import { useExchangeRate } from "@/hooks/useExchangeRate";
 import { PropertyCard } from "@/components/properties/PropertyCard";
-import { getWhatsAppUrl } from "@/lib/contact";
+import {
+  CALL_US_DISPLAY,
+  CALL_MX_DISPLAY,
+  getWhatsAppUrl,
+  getCallUrl,
+  buildWhatsAppContextMessage,
+} from "@/config/contact";
 
 interface PropertyMedia {
   type: "image" | "video";
@@ -58,6 +65,7 @@ const localProperties: LocalProperty[] = [
       "Hermosa casa colonial con patio interior, acabados de lujo y vista a la ciudad.",
     type: "casa",
     state: "Guanajuato",
+    image: "/images/cliente-feliz-llaves.jpg",
   },
   {
     id: "2",
@@ -90,6 +98,7 @@ const localProperties: LocalProperty[] = [
       "Terreno en desarrollo inmobiliario con servicios incluidos e infraestructura lista.",
     type: "terreno",
     state: "Nuevo León",
+    image: "/images/terreno-residencial-mexico.jpg",
   },
   {
     id: "4",
@@ -106,6 +115,7 @@ const localProperties: LocalProperty[] = [
       "Casa campestre con grandes extensiones, alberca y jardín amplío.",
     type: "casa",
     state: "Michoacán",
+    image: "/images/casa-mexico-fachada.jpg",
   },
   {
     id: "5",
@@ -635,14 +645,55 @@ export default function PropertyDetail() {
                 </div>
               )}
 
-              {/* Contact Button */}
-              <button
-                onClick={handleWhatsApp}
-                className="w-full bg-gradient-turquoise-sky text-white py-4 rounded-lg font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 text-lg"
-              >
-                <MessageCircle className="w-5 h-5" />
-                {language === "es" ? "Contactar por WhatsApp" : "Contact on WhatsApp"}
-              </button>
+              {/* Contact Buttons */}
+              <div className="space-y-3 pt-2">
+                <a
+                  href={getWhatsAppUrl(
+                    buildWhatsAppContextMessage({
+                      title: getPropertyName(),
+                      city: getPropertyCity(),
+                      price: formatPrice(property.price),
+                    })
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-[#25D366] hover:bg-[#20ba59] text-white py-3.5 px-4 rounded-xl font-bold hover:shadow-lg transition-all flex items-center justify-center gap-2 text-base shadow-sm"
+                >
+                  <MessageCircle className="w-5 h-5 fill-white" />
+                  {language === "es" ? "Contactar por WhatsApp Business" : "Chat on WhatsApp Business"}
+                </a>
+
+                {/* Toll-Free Calls to Zadarma */}
+                <div className="space-y-2 pt-2 border-t border-slate-100">
+                  <p className="text-xs font-bold text-slate-700 uppercase tracking-wider text-center">
+                    {language === "es" ? "📞 O llámanos 100% gratis:" : "📞 Or Call Toll-Free:"}
+                  </p>
+                  <a
+                    href={getCallUrl("us")}
+                    className="w-full bg-[#1B4965] hover:bg-[#13374E] text-white py-2.5 px-3 rounded-xl font-bold flex items-center justify-between text-xs sm:text-sm shadow-sm transition-all"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Phone className="w-4 h-4 text-emerald-400" />
+                      <span>🇺🇸 {CALL_US_DISPLAY}</span>
+                    </span>
+                    <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded text-white font-mono">
+                      USA Sin Costo
+                    </span>
+                  </a>
+                  <a
+                    href={getCallUrl("mx")}
+                    className="w-full bg-slate-100 hover:bg-slate-200 text-[#1B4965] py-2.5 px-3 rounded-xl font-bold flex items-center justify-between text-xs sm:text-sm transition-all"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Phone className="w-4 h-4 text-emerald-600" />
+                      <span>🇲🇽 {CALL_MX_DISPLAY}</span>
+                    </span>
+                    <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-mono">
+                      Lada 800 México
+                    </span>
+                  </a>
+                </div>
+              </div>
             </div>
 
           </div>

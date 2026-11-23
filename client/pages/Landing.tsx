@@ -3,7 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
-import { getWhatsAppUrl } from "@/lib/contact";
+import { getWhatsAppUrl, getCallUrl, CALL_US_DISPLAY } from "@/config/contact";
 import {
   CheckCircle,
   ArrowRight,
@@ -150,15 +150,16 @@ export default function Landing() {
     e.preventDefault();
 
     try {
-      // Send to Formspree
-      const response = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
+      // Send to backend API and store in cPanel / Database
+      const response = await fetch("/api/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          phone: formData.phone,
-          interest: formData.interest,
+          whatsapp: formData.phone,
+          city: "Consulta Web / Landing",
+          message: `Interés: ${formData.interest}`,
         }),
       });
 
@@ -208,6 +209,25 @@ export default function Landing() {
                         <p className="text-foreground/80 font-medium">{item}</p>
                       </div>
                     ))}
+                  </div>
+
+                  {/* Asesora Inmobiliaria Dedicada */}
+                  <div className="mt-8 p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center gap-4 shadow-sm">
+                    <img
+                      src="/images/agente-inmobiliaria.jpg"
+                      alt="Asesora Inmobiliaria Tus Raíces"
+                      className="w-16 h-16 rounded-xl object-cover border border-slate-200 flex-shrink-0 shadow-xs"
+                    />
+                    <div>
+                      <p className="font-bold text-sm text-[#101B24]">
+                        {language === "es" ? "Asesoría Personalizada en México" : "Dedicated Advisor in Mexico"}
+                      </p>
+                      <p className="text-xs text-[#465664]">
+                        {language === "es"
+                          ? "Una especialista en territorio mexicano acompaña cada visita, revisión de escrituras y entrega de llaves."
+                          : "A specialist on the ground in Mexico coordinates every visit, deed review, and keys handover."}
+                      </p>
+                    </div>
                   </div>
 
                   {/* Why Now - Mobile friendly cards */}
@@ -356,22 +376,28 @@ export default function Landing() {
                     ? "Mientras tanto, puedes:"
                     : "In the meantime, you can:"}
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <a
                     href={getWhatsAppUrl(
                       language === "es"
-                        ? "Hola, acabo de registrar mis datos en su sitio web y me gustaría chatear con un asesor."
-                        : "Hello, I just submitted my information on your website and would like to chat with an advisor."
+                        ? "Hola Tus Raíces MX, acabo de registrar mis datos en su página web y me gustaría chatear con un asesor."
+                        : "Hello Tus Raíces MX, I just submitted my information on your website and would like to chat with an advisor."
                     )}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+                    className="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white px-4 py-2.5 rounded-lg font-bold shadow-sm transition-colors text-sm"
                   >
-                    {language === "es" ? "Chat WhatsApp" : "Chat WhatsApp"}
+                    <span>Chat WhatsApp</span>
+                  </a>
+                  <a
+                    href={getCallUrl("us")}
+                    className="inline-flex items-center justify-center gap-1.5 bg-[#1B4965] hover:bg-[#13374E] text-white px-4 py-2.5 rounded-lg font-bold shadow-sm transition-colors text-sm"
+                  >
+                    <span>Llamar Gratis {CALL_US_DISPLAY}</span>
                   </a>
                   <a
                     href="/casas"
-                    className="inline-block border-2 border-primary text-primary px-6 py-2 rounded-lg font-semibold hover:bg-primary/5 transition-colors"
+                    className="inline-flex items-center justify-center border-2 border-primary text-primary px-4 py-2.5 rounded-lg font-semibold hover:bg-primary/5 transition-colors text-sm"
                   >
                     {language === "es" ? "Ver Propiedades" : "View Properties"}
                   </a>

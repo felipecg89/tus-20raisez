@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { PropertyCard } from "@/components/properties/PropertyCard";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -15,10 +16,12 @@ interface RentalProperty {
   bathrooms: number;
   area: number;
   description: string;
-  type: "casa" | "terreno" | "departamento" | "oficina";
+  type: "casa" | "terreno" | "departamento" | "oficina" | "comercio" | "salon_fiestas";
   state: string;
   rentalPrice?: number;
-  rentalPeriod?: "monthly" | "yearly";
+  rentalPeriod?: "monthly" | "yearly" | "evento" | "dia" | "anual" | string;
+  capacity?: number;
+  image?: string;
 }
 
 const rentalProperties: RentalProperty[] = [
@@ -36,6 +39,7 @@ const rentalProperties: RentalProperty[] = [
       "Hermosa casa moderna en zona segura, perfecta para familia. Incluye: garaje, jardín, servicios básicos.",
     type: "casa",
     state: "Nuevo León",
+    image: "/images/casa-mexico-fachada.jpg",
   },
   {
     id: "r2",
@@ -66,6 +70,7 @@ const rentalProperties: RentalProperty[] = [
       "Casa en el corazón del centro histórico, ideal para estudiantes o parejas jóvenes.",
     type: "casa",
     state: "Guanajuato",
+    image: "/images/cliente-feliz-llaves.jpg",
   },
   {
     id: "r4",
@@ -96,6 +101,7 @@ const rentalProperties: RentalProperty[] = [
       "Terreno para cultivo o inversión, acceso a agua, zona fértil.",
     type: "terreno",
     state: "Michoacán",
+    image: "/images/terreno-residencial-mexico.jpg",
   },
   {
     id: "r6",
@@ -112,18 +118,60 @@ const rentalProperties: RentalProperty[] = [
     type: "casa",
     state: "Oaxaca",
   },
+  {
+    id: "r7",
+    title: "Salón Campestre Los Laureles para Eventos",
+    price: 1200,
+    rentalPrice: 1200,
+    rentalPeriod: "evento",
+    capacity: 250,
+    location: "Querétaro, QRO",
+    bedrooms: 0,
+    bathrooms: 4,
+    area: 850,
+    description:
+      "Hermoso salón y jardín para bodas, quince años y eventos sociales. Cocina industrial, área techada y estacionamiento.",
+    type: "salon_fiestas",
+    state: "Querétaro",
+    image: "/images/vida-mexico-patio.jpg",
+  },
+  {
+    id: "r8",
+    title: "Local Comercial Plaza del Río",
+    price: 1800,
+    rentalPrice: 1800,
+    rentalPeriod: "monthly",
+    capacity: 80,
+    location: "León, GTO",
+    bedrooms: 0,
+    bathrooms: 2,
+    area: 140,
+    description:
+      "Local comercial con doble altura, cancelería de cristal templado, ideal para franquicia o boutique.",
+    type: "comercio",
+    state: "Guanajuato",
+  },
 ];
 
 export default function Rentals() {
   const { language } = useLanguage();
   const t = translations[language];
   const { exchangeRate } = useExchangeRate();
-  const [filterType, setFilterType] = useState<"all" | string>("all");
-  const [filterState, setFilterState] = useState("all");
+  const [searchParams] = useSearchParams();
+
+  const [filterType, setFilterType] = useState<"all" | string>(searchParams.get("type") || "all");
+  const [filterState, setFilterState] = useState(searchParams.get("state") || "all");
   const [filterCategory, setFilterCategory] = useState<"all" | "compra" | "renta">("all");
   const [filterCommercial, setFilterCommercial] = useState<"all" | "commercial" | "residential">("all");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
   const [showFilters, setShowFilters] = useState(false);
+
+  useEffect(() => {
+    const typeParam = searchParams.get("type");
+    if (typeParam) setFilterType(typeParam);
+    const stateParam = searchParams.get("state");
+    if (stateParam) setFilterState(stateParam);
+  }, [searchParams]);
 
   const states = ["all", ...new Set(rentalProperties.map((p) => p.state))];
 
@@ -217,6 +265,14 @@ export default function Rentals() {
                         {
                           value: "terreno",
                           label: language === "es" ? "Terrenos" : "Land",
+                        },
+                        {
+                          value: "comercio",
+                          label: language === "es" ? "Comercios / Locales" : "Commercial",
+                        },
+                        {
+                          value: "salon_fiestas",
+                          label: language === "es" ? "Salones de Fiestas y Eventos" : "Event Halls",
                         },
                       ].map((type) => (
                         <label key={type.value} className="flex items-center gap-2">
@@ -442,8 +498,10 @@ export default function Rentals() {
                       bathrooms={property.bathrooms}
                       area={property.area}
                       description={property.description}
-                      image=""
+                      image={property.image || ""}
                       type={property.type}
+                      capacity={property.capacity}
+                      rentalPeriod={property.rentalPeriod}
                     />
                   ))}
                 </div>

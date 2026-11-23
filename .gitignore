@@ -24,8 +24,18 @@ dist-ssr
 *.sw?
 
 .config/
-# Environment files
+# Environment files & Secrets
 .env
 .env.*
 .env.local
+.env.development
+.env.production
+*.env
+*.env.*
+*.key
+*.pem
+*.cert
+*.token
+credentials.json
+serviceAccountKey.json
 !.env.example

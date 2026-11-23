@@ -20,6 +20,12 @@ export default function Login() {
     e.preventDefault();
     setError("");
 
+    // Validación de formato de correo
+    if (!email.trim().includes("@")) {
+      setError("Debes ingresar un correo electrónico válido (ejemplo: admin@test.com)");
+      return;
+    }
+
     // Validación de contraseña para sign up
     if (isSignUp && password.length < 6) {
       setError("La contraseña debe tener al menos 6 caracteres");
@@ -30,14 +36,19 @@ export default function Login() {
 
     try {
       if (isSignUp) {
-        await signUp(email, password, "cliente");
+        await signUp(email.trim(), password, "cliente");
       } else {
-        await signIn(email, password);
+        await signIn(email.trim(), password);
       }
       navigate("/admin");
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Error de autenticación";
-      setError(errorMessage);
+      let rawMsg = err instanceof Error ? err.message : "Error de autenticación";
+      if (rawMsg.toLowerCase().includes("invalid login credentials")) {
+        rawMsg = "Correo o contraseña incorrectos. Verifica que el correo y la contraseña sean correctos.";
+      } else if (rawMsg.toLowerCase().includes("email not confirmed")) {
+        rawMsg = "El correo electrónico aún no ha sido confirmado.";
+      }
+      setError(rawMsg);
     } finally {
       setLoading(false);
     }

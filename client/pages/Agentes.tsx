@@ -41,7 +41,7 @@ export default function Agentes() {
                 <Button
                   onClick={() =>
                     window.open(
-                      "https://supabase.com/dashboard/project/ajnenxygedrazpvjdbdo",
+                      "https://supabase.com/dashboard/project/rkddhfwmtvajiswgkonw",
                       "_blank"
                     )
                   }

@@ -20,6 +20,7 @@ import AdminProducts from "@/components/admin/AdminProducts";
 import AdminMessages from "@/components/admin/AdminMessages";
 import AdminContent from "@/components/admin/AdminContent";
 import AdminUsers from "@/components/admin/AdminUsers";
+import AdminLegalContent from "@/components/admin/AdminLegalContent";
 
 export default function Admin() {
   const [stats, setStats] = useState<AdminStats | null>(null);
@@ -192,15 +193,18 @@ export default function Admin() {
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="products" className="w-full">
-                <TabsList className="grid w-full grid-cols-4 bg-slate-700">
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 bg-slate-700 h-auto p-1 gap-1">
                   <TabsTrigger value="products" className="data-[state=active]:bg-emerald-600">
-                    Productos
+                    Propiedades y Salones
+                  </TabsTrigger>
+                  <TabsTrigger value="legal" className="data-[state=active]:bg-amber-600">
+                    Leyes y Trámites
                   </TabsTrigger>
                   <TabsTrigger value="messages" className="data-[state=active]:bg-blue-600">
                     Mensajes
                   </TabsTrigger>
                   <TabsTrigger value="content" className="data-[state=active]:bg-violet-600">
-                    Contenido
+                    Textos del Sitio
                   </TabsTrigger>
                   <TabsTrigger value="users" className="data-[state=active]:bg-orange-600">
                     Usuarios
@@ -209,6 +213,10 @@ export default function Admin() {
 
                 <TabsContent value="products" className="mt-4">
                   <AdminProducts onUpdate={fetchStats} />
+                </TabsContent>
+
+                <TabsContent value="legal" className="mt-4">
+                  <AdminLegalContent />
                 </TabsContent>
 
                 <TabsContent value="messages" className="mt-4">

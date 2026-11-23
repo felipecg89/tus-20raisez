@@ -1,12 +1,22 @@
 import { createClient } from "@supabase/supabase-js";
 
-const SUPABASE_URL = "https://ajnenxygedrazpvjdbdo.supabase.co";
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+const SUPABASE_URL =
+  process.env.SUPABASE_URL ||
+  process.env.VITE_SUPABASE_URL ||
+  "https://rkddhfwmtvajiswgkonw.supabase.co";
+
 const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqbmVueHlnZWRyYXpwdmpkYmRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNjg3NzgsImV4cCI6MjA4MDY0NDc3OH0.TQ3eoWUZWncx9EHt_T1oZruTVVQmXtrztyc8ZHC64RY";
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY;
+
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
 if (!SUPABASE_SERVICE_KEY) {
-  throw new Error("SUPABASE_SERVICE_KEY is not defined");
+  throw new Error("SUPABASE_SERVICE_KEY no está definido en las variables de entorno (.env)");
+}
+
+if (!SUPABASE_ANON_KEY) {
+  throw new Error("SUPABASE_ANON_KEY no está definido en las variables de entorno (.env)");
 }
 
 export const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {

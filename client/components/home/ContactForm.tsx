@@ -3,7 +3,17 @@ import { Mail, Phone, Clock, Send, MessageCircle, CalendarCheck, X, CheckCircle2
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 import { submitHubSpotForm } from "@/lib/hubspotService";
-import { CONTACT_CONFIG, getWhatsAppUrl } from "@/lib/contact";
+import {
+  CALL_US_DISPLAY,
+  CALL_US_TEL,
+  CALL_MX_DISPLAY,
+  CALL_MX_TEL,
+  WHATSAPP_DISPLAY,
+  CONTACT_EMAIL,
+  CONTACT_HOURS_ES,
+  getWhatsAppUrl,
+  getCallUrl,
+} from "@/config/contact";
 
 export const ContactForm = () => {
   const { language } = useLanguage();
@@ -104,48 +114,77 @@ export const ContactForm = () => {
                       <div className="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center text-white">
                         <MessageCircle className="w-4 h-4 fill-white" />
                       </div>
-                      <span>WhatsApp {CONTACT_CONFIG.phoneUSA}</span>
+                      <span>WhatsApp Business Oficial</span>
                     </div>
                     <span className="text-[11px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-md font-mono">
-                      USA + MX
+                      {WHATSAPP_DISPLAY}
                     </span>
                   </a>
                 </div>
 
-                {/* Líneas Gratuitas */}
+                {/* Líneas Gratuitas Zadarma */}
                 <div className="space-y-2 pt-2 border-t border-white/10">
-                  <p className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
-                    {language === "es" ? "Líneas Telefónicas Gratuitas" : "Toll-Free Numbers"}
-                  </p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+                      {language === "es" ? "Líneas Telefónicas Gratuitas" : "Toll-Free Numbers"}
+                    </p>
+                    <span className="text-[10px] bg-emerald-400/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-400/30">
+                      {language === "es" ? "Llamadas 100% sin costo" : "100% Free of Charge"}
+                    </span>
+                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                     <a
-                      href={`tel:${CONTACT_CONFIG.phoneUSARaw}`}
-                      className="p-2.5 rounded-xl bg-white/5 hover:bg-white/15 transition-all border border-white/10 flex flex-col gap-0.5"
+                      href={getCallUrl("us")}
+                      className="p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-all border border-white/15 flex flex-col gap-1 group"
                     >
-                      <span className="text-[10px] text-slate-300">🇺🇸 USA Toll-Free</span>
-                      <span className="font-bold text-white">{CONTACT_CONFIG.phoneUSA}</span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] text-slate-200 font-semibold">🇺🇸 USA Toll-Free</span>
+                        <span className="text-[10px] text-emerald-300 font-bold">Sin Costo</span>
+                      </div>
+                      <span className="font-extrabold text-sm text-white group-hover:text-emerald-300 transition-colors">
+                        {CALL_US_DISPLAY}
+                      </span>
+                      <span className="text-[10px] text-slate-300">
+                        {language === "es" ? "Llamada 100% gratuita desde EE. UU." : "100% free call from the US"}
+                      </span>
                     </a>
                     <a
-                      href={`tel:${CONTACT_CONFIG.phoneMXRaw}`}
-                      className="p-2.5 rounded-xl bg-white/5 hover:bg-white/15 transition-all border border-white/10 flex flex-col gap-0.5"
+                      href={getCallUrl("mx")}
+                      className="p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-all border border-white/15 flex flex-col gap-1 group"
                     >
-                      <span className="text-[10px] text-slate-300">🇲🇽 México Gratuito</span>
-                      <span className="font-bold text-white">{CONTACT_CONFIG.phoneMX}</span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] text-slate-200 font-semibold">🇲🇽 México Lada 800</span>
+                        <span className="text-[10px] text-emerald-300 font-bold">Sin Costo</span>
+                      </div>
+                      <span className="font-extrabold text-sm text-white group-hover:text-emerald-300 transition-colors">
+                        {CALL_MX_DISPLAY}
+                      </span>
+                      <span className="text-[10px] text-slate-300">
+                        {language === "es" ? "Lada gratuita nacional en México" : "Toll-free nationwide in Mexico"}
+                      </span>
                     </a>
                   </div>
+                  <p className="text-[11px] text-emerald-200/90 bg-emerald-950/40 p-2 rounded-lg border border-emerald-800/40 flex items-center gap-1.5">
+                    <span>💡</span>
+                    <span>
+                      {language === "es"
+                        ? "Nuestras líneas telefónicas son 100% gratuitas y sin costo alguno para ti al llamar desde EE. UU. o México."
+                        : "All calls to our toll-free lines are 100% free of charge from the US or Mexico."}
+                    </span>
+                  </p>
                 </div>
 
                 {/* Correo y Horario */}
                 <div className="pt-2 border-t border-white/10 space-y-2.5 text-xs text-slate-200">
                   <div className="flex items-center gap-2.5">
                     <Mail className="w-4 h-4 text-emerald-300 flex-shrink-0" />
-                    <a href={`mailto:${CONTACT_CONFIG.email}`} className="hover:underline">
-                      {CONTACT_CONFIG.email}
+                    <a href={`mailto:${CONTACT_EMAIL}`} className="hover:underline">
+                      {CONTACT_EMAIL}
                     </a>
                   </div>
                   <div className="flex items-center gap-2.5 text-[11px] text-slate-300">
                     <Clock className="w-4 h-4 text-emerald-300 flex-shrink-0" />
-                    <span>{CONTACT_CONFIG.hours}</span>
+                    <span>{CONTACT_HOURS_ES}</span>
                   </div>
                 </div>
               </div>

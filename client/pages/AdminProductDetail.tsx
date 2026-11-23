@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Product, ProductCategory, PRODUCT_CATEGORIES } from "@shared/api";
+import { Product, ProductCategory, PRODUCT_CATEGORIES, ProductType, PRODUCT_TYPES } from "@shared/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -45,8 +45,10 @@ export default function AdminProductDetail() {
     locality: "",
     latitude: "",
     longitude: "",
-    type: "casa" as "casa" | "terreno",
+    type: "casa" as ProductType,
     category: "compra" as ProductCategory,
+    capacity: "",
+    rentalPeriod: "mensual" as "evento" | "dia" | "mensual" | "anual",
     image: "",
     features: "",
     bedrooms: "",
@@ -103,6 +105,8 @@ export default function AdminProductDetail() {
         longitude: data.longitude?.toString() || "",
         type: data.type,
         category: category,
+        capacity: (data as any).capacity?.toString() || "",
+        rentalPeriod: (data as any).rentalPeriod || "mensual",
         image: data.image,
         features: data.features.join(", "),
         bedrooms: (data as any).bedrooms?.toString() || "",
@@ -185,6 +189,8 @@ export default function AdminProductDetail() {
         longitude: formData.longitude ? parseFloat(formData.longitude) : undefined,
         type: formData.type,
         category: formData.category,
+        capacity: formData.capacity ? parseInt(formData.capacity) : undefined,
+        rentalPeriod: formData.rentalPeriod,
         image: formData.image,
         features: formData.features
           .split(",")
@@ -488,20 +494,28 @@ Soluciones:
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-300 mb-2">
-                      Tipo
+                      Tipo de Inmueble / Espacio
                     </label>
                     <Select
                       value={formData.type}
                       onValueChange={(value) =>
-                        setFormData({ ...formData, type: value as "casa" | "terreno" })
+                        setFormData({
+                          ...formData,
+                          type: value as ProductType,
+                          isCommercial: value === "comercio" || value === "salon_fiestas" || formData.isCommercial,
+                          category: value === "salon_fiestas" ? "renta" : formData.category,
+                        })
                       }
                     >
                       <SelectTrigger className="bg-slate-600 border-slate-500 text-white">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-slate-600 border-slate-500">
-                        <SelectItem value="casa" className="text-white">Casa</SelectItem>
-                        <SelectItem value="terreno" className="text-white">Terreno</SelectItem>
+                        {PRODUCT_TYPES.map((pt) => (
+                          <SelectItem key={pt.value} value={pt.value} className="text-white">
+                            {pt.labelEs}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
@@ -525,6 +539,46 @@ Soluciones:
                     </Select>
                   </div>
                 </div>
+
+                {(formData.type === "salon_fiestas" || formData.type === "comercio") && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-700/60 p-4 rounded-lg border border-emerald-500/30">
+                    <div>
+                      <label className="block text-sm font-medium text-emerald-300 mb-2">
+                        Capacidad / Aforo de Personas
+                      </label>
+                      <Input
+                        type="number"
+                        placeholder="Ej. 250 personas"
+                        value={formData.capacity}
+                        onChange={(e) =>
+                          setFormData({ ...formData, capacity: e.target.value })
+                        }
+                        className="bg-slate-600 border-slate-500 text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-emerald-300 mb-2">
+                        Modalidad de Renta
+                      </label>
+                      <Select
+                        value={formData.rentalPeriod}
+                        onValueChange={(val) =>
+                          setFormData({ ...formData, rentalPeriod: val as any })
+                        }
+                      >
+                        <SelectTrigger className="bg-slate-600 border-slate-500 text-white">
+                          <SelectValue placeholder="Periodo" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-slate-600 border-slate-500">
+                          <SelectItem value="evento" className="text-white">Por Evento (Salón / Fiesta)</SelectItem>
+                          <SelectItem value="dia" className="text-white">Por Día</SelectItem>
+                          <SelectItem value="mensual" className="text-white">Mensual (Contrato)</SelectItem>
+                          <SelectItem value="anual" className="text-white">Anual</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                )}
 
                 {/* Specification fields - always visible */}
                 <div className="grid grid-cols-2 gap-4 mb-4">

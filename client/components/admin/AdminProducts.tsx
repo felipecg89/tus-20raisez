@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Product, PRODUCT_CATEGORIES, ProductCategory } from "@shared/api";
+import { Product, PRODUCT_CATEGORIES, ProductCategory, ProductType, PRODUCT_TYPES } from "@shared/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -39,9 +39,11 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
     description: "",
     price: "",
     city: "",
-    type: "casa" as "casa" | "terreno",
+    type: "casa" as ProductType,
     category: "compra" as ProductCategory,
     isCommercial: false,
+    capacity: "",
+    rentalPeriod: "mensual" as "evento" | "dia" | "mensual" | "anual",
     image: "",
     features: "",
     bedrooms: "",
@@ -104,9 +106,11 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
         ...formData,
         price: parseFloat(formData.price),
         category: formData.category,
-        bedrooms: formData.type === "casa" && formData.bedrooms ? parseInt(formData.bedrooms) : 0,
-        bathrooms: formData.type === "casa" && formData.bathrooms ? parseInt(formData.bathrooms) : 0,
-        area: formData.type === "casa" && formData.area ? parseInt(formData.area) : 0,
+        capacity: formData.capacity ? parseInt(formData.capacity) : undefined,
+        rentalPeriod: formData.rentalPeriod,
+        bedrooms: (formData.type === "casa" || formData.type === "departamento") && formData.bedrooms ? parseInt(formData.bedrooms) : 0,
+        bathrooms: (formData.type === "casa" || formData.type === "departamento" || formData.type === "comercio" || formData.type === "salon_fiestas") && formData.bathrooms ? parseInt(formData.bathrooms) : 0,
+        area: formData.area ? parseInt(formData.area) : 0,
         features: formData.features
           .split(",")
           .map((f) => f.trim())
@@ -144,6 +148,8 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
         type: "casa",
         category: "compra",
         isCommercial: false,
+        capacity: "",
+        rentalPeriod: "mensual",
         image: "",
         features: "",
         bedrooms: "",
@@ -169,6 +175,8 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
       type: product.type,
       category: product.category,
       isCommercial: (product as any).isCommercial || false,
+      capacity: (product as any).capacity ? (product as any).capacity.toString() : "",
+      rentalPeriod: (product as any).rentalPeriod || "mensual",
       image: product.image,
       features: product.features.join(", "),
       bedrooms: (product as any).bedrooms ? (product as any).bedrooms.toString() : "",
@@ -190,6 +198,8 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
       type: "casa",
       category: "compra",
       isCommercial: false,
+      capacity: "",
+      rentalPeriod: "mensual",
       image: "",
       features: "",
       bedrooms: "",
@@ -386,22 +396,63 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
                   onValueChange={(value) =>
                     setFormData({
                       ...formData,
-                      type: value as "casa" | "terreno",
+                      type: value as ProductType,
+                      isCommercial: value === "comercio" || value === "salon_fiestas" || formData.isCommercial,
+                      category: value === "salon_fiestas" ? "renta" : formData.category,
                     })
                   }
                 >
                   <SelectTrigger className="bg-slate-600 border-slate-500 text-white">
-                    <SelectValue placeholder="Tipo" />
+                    <SelectValue placeholder="Tipo de Inmueble" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-600 border-slate-500">
-                    <SelectItem value="casa" className="text-white">
-                      Casa
-                    </SelectItem>
-                    <SelectItem value="terreno" className="text-white">
-                      Terreno
-                    </SelectItem>
+                    {PRODUCT_TYPES.map((pt) => (
+                      <SelectItem key={pt.value} value={pt.value} className="text-white">
+                        {pt.labelEs}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
+
+                {(formData.type === "salon_fiestas" || formData.type === "comercio") && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-full bg-slate-700/50 p-4 rounded-lg border border-slate-600">
+                    <div>
+                      <label className="text-xs font-semibold text-emerald-400 mb-1 block">
+                        Capacidad / Aforo de Personas (Salón o Local)
+                      </label>
+                      <Input
+                        type="number"
+                        placeholder="Ej. 250 personas"
+                        value={formData.capacity}
+                        onChange={(e) =>
+                          setFormData({ ...formData, capacity: e.target.value })
+                        }
+                        className="bg-slate-600 border-slate-500 text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-emerald-400 mb-1 block">
+                        Modalidad de Renta
+                      </label>
+                      <Select
+                        value={formData.rentalPeriod}
+                        onValueChange={(val) =>
+                          setFormData({ ...formData, rentalPeriod: val as any })
+                        }
+                      >
+                        <SelectTrigger className="bg-slate-600 border-slate-500 text-white">
+                          <SelectValue placeholder="Periodo de renta" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-slate-600 border-slate-500">
+                          <SelectItem value="evento" className="text-white">Por Evento (Salón / Fiesta)</SelectItem>
+                          <SelectItem value="dia" className="text-white">Por Día</SelectItem>
+                          <SelectItem value="mensual" className="text-white">Mensual (Contrato)</SelectItem>
+                          <SelectItem value="anual" className="text-white">Anual</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                )}
 
                 <Select
                   value={formData.category}

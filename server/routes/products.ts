@@ -1,19 +1,6 @@
 import { RequestHandler } from "express";
 import { Product } from "@shared/api";
-import { createClient } from "@supabase/supabase-js";
-
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || "https://ajnenxygedrazpvjdbdo.supabase.co";
-const SUPABASE_ANON_KEY =
-  process.env.SUPABASE_ANON_KEY ||
-  process.env.SUPABASE_SERVICE_KEY ||
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqbmVueHlnZWRyYXpwdmpkYmRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNjg3NzgsImV4cCI6MjA4MDY0NDc3OH0.TQ3eoWUZWncx9EHt_T1oZruTVVQmXtrztyc8ZHC64RY";
-
-let supabase: any = null;
-try {
-  supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-} catch (e) {
-  console.warn("Supabase client init warning:", e);
-}
+import { supabase, supabaseAdmin } from "../lib/supabase";
 
 // Catálogo base de alta calidad para producción cuando Supabase no esté conectado
 export const FALLBACK_PRODUCTS: Product[] = [
@@ -271,6 +258,8 @@ export const getProducts: RequestHandler = async (req, res) => {
           type: p.type,
           category: p.category || "compra",
           isCommercial: p.is_commercial || false,
+          capacity: p.capacity ? Number(p.capacity) : undefined,
+          rentalPeriod: p.rental_period || undefined,
           image: p.main_image_url,
           features: p.features || [],
           bedrooms: p.bedrooms || 0,
@@ -380,6 +369,8 @@ export const getProduct: RequestHandler = async (req, res) => {
           type: data.type,
           category: data.category || "compra",
           isCommercial: data.is_commercial || false,
+          capacity: data.capacity ? Number(data.capacity) : undefined,
+          rentalPeriod: data.rental_period || undefined,
           image: data.main_image_url,
           features: data.features || [],
           bedrooms: data.bedrooms || 0,
@@ -431,6 +422,8 @@ export const createProduct: RequestHandler = async (req, res) => {
       bathrooms,
       area,
       floors,
+      capacity,
+      rentalPeriod,
     } = req.body;
 
     if (!name || !description || price === undefined || !city || !type || !category) {
@@ -438,7 +431,7 @@ export const createProduct: RequestHandler = async (req, res) => {
       return;
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from("products")
       .insert([
         {
@@ -460,6 +453,8 @@ export const createProduct: RequestHandler = async (req, res) => {
           type,
           category,
           is_commercial: req.body.isCommercial || false,
+          capacity: capacity ? Number(capacity) : null,
+          rental_period: rentalPeriod || (category === "renta" ? "mensual" : null),
           main_image_url: image || null,
           features: features || [],
           bedrooms: bedrooms || 0,
@@ -493,6 +488,8 @@ export const createProduct: RequestHandler = async (req, res) => {
       type: data.type,
       category: data.category,
       isCommercial: data.is_commercial || false,
+      capacity: data.capacity ? Number(data.capacity) : undefined,
+      rentalPeriod: data.rental_period || undefined,
       image: data.main_image_url,
       features: data.features || [],
       bedrooms: data.bedrooms || 0,
@@ -536,9 +533,11 @@ export const updateProduct: RequestHandler = async (req, res) => {
       bathrooms,
       area,
       floors,
+      capacity,
+      rentalPeriod,
     } = req.body;
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from("products")
       .update({
         name,
@@ -559,6 +558,8 @@ export const updateProduct: RequestHandler = async (req, res) => {
         type,
         category,
         is_commercial: req.body.isCommercial || false,
+        capacity: capacity !== undefined ? (capacity ? Number(capacity) : null) : undefined,
+        rental_period: rentalPeriod !== undefined ? rentalPeriod : undefined,
         main_image_url: image || null,
         features: features || [],
         bedrooms: bedrooms || 0,
@@ -602,6 +603,8 @@ export const updateProduct: RequestHandler = async (req, res) => {
       type: data.type,
       category: data.category,
       isCommercial: data.is_commercial || false,
+      capacity: data.capacity ? Number(data.capacity) : undefined,
+      rentalPeriod: data.rental_period || undefined,
       image: data.main_image_url,
       features: data.features || [],
       bedrooms: data.bedrooms || 0,
@@ -621,7 +624,7 @@ export const updateProduct: RequestHandler = async (req, res) => {
 
 export const deleteProduct: RequestHandler = async (req, res) => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from("products")
       .delete()
       .eq("id", req.params.id)

@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Globe, MessageSquare } from "lucide-react";
+import { Menu, X, Globe, MessageSquare, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { translations } from "@/translations";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [langDropdown, setLangDropdown] = useState(false);
   const { language, setLanguage } = useLanguage();
+  const { user } = useAuth();
   const t = translations[language];
 
   const scrollToSection = (id: string) => {
@@ -80,6 +82,17 @@ export const Header = () => {
 
         {/* Zona 3 (Derecha): Selector de idioma + Botón CTA principal */}
         <div className="flex items-center gap-2 md:gap-3">
+          {user && (user.role === "admin" || user.role === "agente") && (
+            <Link
+              to="/admin"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-sm min-h-[38px]"
+              title="Panel Administrativo"
+            >
+              <LayoutDashboard className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">cPanel</span>
+            </Link>
+          )}
+
           {/* Selector de idioma sutil */}
           <div className="relative">
             <button
@@ -218,6 +231,16 @@ export const Header = () => {
             </Link>
             <Link to="/rentals" className="py-2 hover:text-[#1B4965] font-medium" onClick={() => setIsOpen(false)}>
               🏢 {language === "es" ? "Alquilar" : "Rentals"}
+            </Link>
+          </div>
+          <div className="pt-2 border-t border-[#DFE5EA] flex justify-between items-center text-xs">
+            <Link
+              to={user ? "/admin" : "/login"}
+              onClick={() => setIsOpen(false)}
+              className="text-[#1B4965] font-semibold hover:underline flex items-center gap-1.5 py-1"
+            >
+              <LayoutDashboard className="w-4 h-4 text-emerald-600" />
+              {user ? "Ir a cPanel Administrativo" : "Acceso Administrativo / cPanel"}
             </Link>
           </div>
         </div>

@@ -22,10 +22,43 @@ import Admin from "./pages/Admin";
 import AdminProductDetail from "./pages/AdminProductDetail";
 import Login from "./pages/Login";
 import Agentes from "./pages/Agentes";
-import DevSetup from "./pages/DevSetup";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
+
+// Interceptor global para adjuntar automáticamente el token de sesión a peticiones /api/ protegidas
+if (typeof window !== "undefined") {
+  const originalFetch = window.fetch;
+  window.fetch = async (input: RequestInfo | URL, init: RequestInit = {}) => {
+    let url = "";
+    if (typeof input === "string") url = input;
+    else if (input instanceof URL) url = input.toString();
+    else if (input && typeof input === "object" && "url" in input) url = (input as Request).url;
+
+    const isApiRequest = url.startsWith("/api/") || url.includes("/api/");
+    const isPublicAuthRoute = url.includes("/api/auth/login") || url.includes("/api/auth/signup");
+
+    if (isApiRequest && !isPublicAuthRoute) {
+      try {
+        const sessionStr = localStorage.getItem("auth_session");
+        if (sessionStr) {
+          const session = JSON.parse(sessionStr);
+          if (session?.access_token) {
+            const headers = new Headers(init.headers || {});
+            if (!headers.has("Authorization")) {
+              headers.set("Authorization", `Bearer ${session.access_token}`);
+            }
+            init = { ...init, headers };
+          }
+        }
+      } catch (e) {
+        // Ignorar error al leer sesión
+      }
+    }
+
+    return originalFetch(input, init);
+  };
+}
 
 const AppContent = () => {
   useEffect(() => {
@@ -43,11 +76,10 @@ const AppContent = () => {
         <Route path="/imss" element={<Imss />} />
         <Route path="/legal" element={<Legal />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dev/setup" element={<DevSetup />} />
         <Route
           path="/admin"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRoles={["admin", "agente"]}>
               <Admin />
             </ProtectedRoute>
           }
@@ -55,7 +87,7 @@ const AppContent = () => {
         <Route
           path="/admin/productos/:id"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRoles={["admin", "agente"]}>
               <AdminProductDetail />
             </ProtectedRoute>
           }

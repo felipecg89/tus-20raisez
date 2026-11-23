@@ -19,14 +19,17 @@ export const Footer = () => {
     <footer className="bg-[#101B24] text-white border-t border-[#DFE5EA]/20">
       <div className="container mx-auto px-4 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
-          {/* Column 0: Brand & Logo */}
+          {/* Column 0: Brand & Identity */}
           <div className="space-y-4">
             <Link to="/" className="inline-block hover:opacity-90 transition-opacity">
-              <img
-                src="/logo.png"
-                alt="Tus Raíces MX"
-                className="h-14 sm:h-16 w-auto object-contain bg-white rounded-2xl p-2 shadow-md"
-              />
+              <div className="space-y-1">
+                <span className="font-heading font-extrabold text-2xl tracking-tight text-white block">
+                  Tus Raíces <span className="text-emerald-400">MX</span>
+                </span>
+                <span className="inline-block text-[11px] font-bold text-amber-400 tracking-wider uppercase">
+                  Invierte · Protege · Regresa
+                </span>
+              </div>
             </Link>
             <p className="text-xs text-slate-400 leading-relaxed max-w-xs">
               {language === "es"
@@ -70,24 +73,34 @@ export const Footer = () => {
           {/* Column 2: Soporte */}
           <div>
             <h3 className="font-heading font-bold text-base mb-4 text-white">{t.footer.soporte}</h3>
-            <ul className="space-y-2.5 text-xs text-slate-300">
-              <li className="flex items-center gap-2">
-                <span className="text-sm">🇺🇸</span>
-                <a
-                  href="tel:+18884312431"
-                  className="hover:text-white transition-colors font-medium"
-                >
-                  +1 (888) 431-2431 <span className="text-[11px] text-slate-400">(Toll-Free USA)</span>
-                </a>
+            <ul className="space-y-3 text-xs text-slate-300">
+              <li className="flex flex-col gap-0.5">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm">🇺🇸</span>
+                  <a
+                    href="tel:+18884312431"
+                    className="hover:text-white transition-colors font-bold text-sm text-white"
+                  >
+                    +1 (888) 431-2431
+                  </a>
+                </div>
+                <span className="text-[11px] font-semibold text-emerald-400 pl-6">
+                  ✓ Llamada 100% Gratuita (Toll-Free USA sin costo)
+                </span>
               </li>
-              <li className="flex items-center gap-2">
-                <span className="text-sm">🇲🇽</span>
-                <a
-                  href="tel:+528004610316"
-                  className="hover:text-white transition-colors font-medium"
-                >
-                  +52 (800) 461-0316 <span className="text-[11px] text-slate-400">(Gratis México)</span>
-                </a>
+              <li className="flex flex-col gap-0.5 pt-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm">🇲🇽</span>
+                  <a
+                    href="tel:+528004610316"
+                    className="hover:text-white transition-colors font-bold text-sm text-white"
+                  >
+                    +52 (800) 461-0316
+                  </a>
+                </div>
+                <span className="text-[11px] font-semibold text-emerald-400 pl-6">
+                  ✓ Lada 800 Gratuita Nacional (Llamada sin costo en todo México)
+                </span>
               </li>
               <li className="flex items-center gap-2 pt-1">
                 <Mail className="w-4 h-4 text-emerald-400 flex-shrink-0" />

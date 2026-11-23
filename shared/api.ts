@@ -16,9 +16,24 @@ export type ProductCategory =
   | "compra"
   | "renta";
 
+export type ProductType = 
+  | "casa" 
+  | "departamento" 
+  | "terreno" 
+  | "comercio" 
+  | "salon_fiestas";
+
+export const PRODUCT_TYPES: { value: ProductType; label: string; labelEs: string }[] = [
+  { value: "casa", label: "House", labelEs: "Casa Residencial" },
+  { value: "departamento", label: "Apartment", labelEs: "Departamento" },
+  { value: "terreno", label: "Land", labelEs: "Terreno / Lote" },
+  { value: "comercio", label: "Commercial", labelEs: "Comercio / Local / Bodega" },
+  { value: "salon_fiestas", label: "Event Hall", labelEs: "Salón de Fiestas y Eventos" },
+];
+
 export const PRODUCT_CATEGORIES: { value: ProductCategory; label: string; labelEs: string }[] = [
-  { value: "compra", label: "Purchase", labelEs: "Compra" },
-  { value: "renta", label: "Rental", labelEs: "Renta" },
+  { value: "compra", label: "Purchase", labelEs: "Venta / Compra" },
+  { value: "renta", label: "Rental", labelEs: "Renta / Alquiler" },
 ];
 
 export interface Product {
@@ -38,9 +53,11 @@ export interface Product {
   locality?: string;
   latitude?: number;
   longitude?: number;
-  type: "casa" | "terreno";
+  type: ProductType;
   category: ProductCategory;
   isCommercial?: boolean;
+  capacity?: number; // Para salones de fiestas (aforo de personas) o locales
+  rentalPeriod?: "evento" | "dia" | "mensual" | "anual"; // Para rentas temporales o comerciales
   image: string;
   features: string[];
   bedrooms?: number;
@@ -67,6 +84,18 @@ export interface ContentBlock {
   section: string;
   key: string;
   value: any;
+  updatedAt: string;
+}
+
+export interface LegalArticle {
+  id: string;
+  title: string;
+  category: "ley" | "imss" | "infonavit" | "notarial" | "general";
+  summary: string;
+  content: string;
+  importantNotice?: string;
+  published: boolean;
+  order: number;
   updatedAt: string;
 }
 

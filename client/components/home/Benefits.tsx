@@ -44,6 +44,7 @@ export const Benefits = () => {
       name: t.testimonials.testimonial1.name,
       location: t.testimonials.testimonial1.location,
       rating: 5,
+      avatar: "/images/cliente-feliz-llaves.jpg",
     },
     {
       service: language === "es" ? "⚖️ Poder Notarial y Escritura" : "⚖️ Notary Deed & Power",
@@ -51,6 +52,7 @@ export const Benefits = () => {
       name: t.testimonials.testimonial2.name,
       location: t.testimonials.testimonial2.location,
       rating: 5,
+      avatar: "/images/abogada-notaria.jpg",
     },
     {
       service: language === "es" ? "💼 Pensión IMSS Modalidad 40" : "💼 IMSS Mod 40 Pension",
@@ -58,6 +60,7 @@ export const Benefits = () => {
       name: t.testimonials.testimonial3.name,
       location: t.testimonials.testimonial3.location,
       rating: 5,
+      avatar: "/images/vida-mexico-patio.jpg",
     },
   ];
 
@@ -160,9 +163,16 @@ export const Benefits = () => {
                     "{item.text}"
                   </p>
 
-                  {/* Pie: Nombre y ubicación */}
+                  {/* Pie: Nombre, Avatar y ubicación */}
                   <div className="pt-2 border-t border-[#DFE5EA]/80 flex items-center justify-between text-xs">
-                    <span className="font-bold text-[#101B24]">{item.name}</span>
+                    <div className="flex items-center gap-2.5">
+                      <img
+                        src={item.avatar}
+                        alt={item.name}
+                        className="w-8 h-8 rounded-full object-cover border border-[#DFE5EA]"
+                      />
+                      <span className="font-bold text-[#101B24]">{item.name}</span>
+                    </div>
                     <span className="text-[#465664] font-medium">{item.location}</span>
                   </div>
                 </div>

@@ -65,7 +65,10 @@ export const login: RequestHandler = async (req, res) => {
 
 export const signup: RequestHandler = async (req, res) => {
   try {
-    const { email, password, role = "cliente" } = req.body;
+    const { email, password } = req.body;
+    // Seguridad: El registro público siempre asigna rol "cliente".
+    // Solo un administrador autenticado puede ascender roles desde el cPanel.
+    const assignedRole = "cliente";
 
     if (!email || !password) {
       return res.status(400).json({
@@ -103,7 +106,7 @@ export const signup: RequestHandler = async (req, res) => {
       .insert({
         id: authData.user.id,
         email,
-        role,
+        role: assignedRole,
         created_at: new Date().toISOString(),
       });
 
@@ -132,7 +135,7 @@ export const signup: RequestHandler = async (req, res) => {
       user: {
         id: authData.user.id,
         email,
-        role,
+        role: assignedRole,
       },
       session: {
         access_token: sessionData.session.access_token,
@@ -161,7 +164,7 @@ export const getSession: RequestHandler = async (req, res) => {
     const {
       data: { user },
       error,
-    } = await supabaseAdmin.auth.admin.getUserById(token);
+    } = await supabaseAdmin.auth.getUser(token);
 
     if (error || !user) {
       return res.status(401).json({ error: "Invalid token" });

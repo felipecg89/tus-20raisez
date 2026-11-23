@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { LawyerProfile } from "@/components/LawyerProfile";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
-import { getWhatsAppUrl } from "@/lib/contact";
+import {
+  getWhatsAppUrl,
+  getCallUrl,
+  CALL_US_DISPLAY,
+  buildWhatsAppContextMessage,
+} from "@/config/contact";
+import { LegalArticle } from "@shared/api";
 import {
   CheckCircle,
   FileText,
@@ -22,6 +28,16 @@ export default function Legal() {
   const t = translations[language];
   const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
   const [selectedService, setSelectedService] = useState(0);
+  const [liveArticles, setLiveArticles] = useState<LegalArticle[]>([]);
+
+  useEffect(() => {
+    fetch("/api/legal-articles?onlyPublished=true")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) setLiveArticles(data);
+      })
+      .catch((e) => console.warn("Error fetching legal articles:", e));
+  }, []);
 
   const content = {
     es: {
@@ -596,6 +612,49 @@ export default function Legal() {
       {/* Main Content */}
       <main className="flex-1 py-12 md:py-20">
         <div className="container mx-auto px-4 space-y-20">
+          {/* Dynamic Legal & Law Updates from cPanel */}
+          {liveArticles.length > 0 && (
+            <section className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/80 rounded-2xl p-6 md:p-8 shadow-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2.5 bg-amber-500/10 rounded-xl text-amber-700">
+                  <Scale className="h-6 w-6" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-[#101B24]">
+                    {language === "es" ? "Actualizaciones Legales y Normativas para Paisanos" : "Legal Updates & Policies for Cross-Border Families"}
+                  </h2>
+                  <p className="text-sm text-[#465664]">
+                    {language === "es"
+                      ? "Información actualizada en tiempo real sobre reformas en la ley mexicana, trámites consulares, IMSS e Infonavit."
+                      : "Real-time updates regarding Mexican laws, consular formalities, IMSS and Infonavit."}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {liveArticles.map((article) => (
+                  <div key={article.id} className="bg-white p-5 rounded-xl border border-amber-100 shadow-xs space-y-2.5 hover:shadow-md transition-shadow">
+                    <div className="flex items-center justify-between text-xs font-semibold text-amber-800">
+                      <span className="uppercase tracking-wider px-2 py-0.5 bg-amber-100 rounded">
+                        {article.category}
+                      </span>
+                      <span className="text-slate-400">
+                        {new Date(article.updatedAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <h3 className="font-bold text-[#101B24] text-base">{article.title}</h3>
+                    <p className="text-sm text-[#465664] leading-relaxed">{article.content}</p>
+                    {article.importantNotice && (
+                      <div className="text-xs bg-amber-50 text-amber-900 border border-amber-200 p-2.5 rounded-lg flex items-start gap-2">
+                        <span className="font-bold">⚠️ Aviso:</span> {article.importantNotice}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* Services Overview */}
           <section>
             <h2 className="text-3xl font-bold text-foreground text-center mb-12">
@@ -783,21 +842,25 @@ export default function Legal() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href={getWhatsAppUrl(
-                  language === "es"
-                    ? "Hola Lic. Sergio García, vivo en EE.UU. y me gustaría agendar una asesoría legal sobre trámites y escrituración en México."
-                    : "Hello Lic. Sergio García, I live in the US and would like to schedule legal advice regarding legal procedures in Mexico."
+                  buildWhatsAppContextMessage({
+                    service: language === "es" ? "Asesoría Legal Notarial y Escrituración" : "Notary & Legal Advisory",
+                  })
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white text-primary px-8 py-3 rounded-lg font-bold hover:bg-white/90 transition-colors"
+                className="bg-[#25D366] hover:bg-[#20ba59] text-white px-8 py-3.5 rounded-xl font-bold shadow-md transition-colors flex items-center justify-center gap-2"
               >
-                {language === "es"
-                  ? "Contactar por WhatsApp"
-                  : "Contact via WhatsApp"}
+                <span>WhatsApp Business</span>
+              </a>
+              <a
+                href={getCallUrl("us")}
+                className="bg-white text-[#1B4965] hover:bg-white/90 px-8 py-3.5 rounded-xl font-bold transition-colors flex items-center justify-center gap-2 shadow-md"
+              >
+                <span>Llamar Gratis {CALL_US_DISPLAY}</span>
               </a>
               <a
                 href="#contacto"
-                className="bg-white/20 text-white border-2 border-white px-8 py-3 rounded-lg font-bold hover:bg-white/30 transition-colors"
+                className="bg-white/20 text-white border-2 border-white px-8 py-3.5 rounded-xl font-bold hover:bg-white/30 transition-colors flex items-center justify-center gap-2"
               >
                 {language === "es"
                   ? "Agendar Consulta"

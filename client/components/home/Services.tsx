@@ -15,7 +15,7 @@ export const Services = () => {
       title: language === "es" ? "Venta de Casas y Terrenos" : "Homes & Land for Sale",
       tabLabel: language === "es" ? "Casas" : "Homes",
       icon: Home,
-      image: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1000&q=80",
+      image: "/images/casa-mexico-fachada.jpg",
       description:
         language === "es"
           ? "Propiedades verificadas en México con opciones de compra al contado o financiamiento para paisanos en EE. UU."
@@ -33,7 +33,7 @@ export const Services = () => {
       title: language === "es" ? "Asesoría Legal Completa" : "Full Legal Advisory",
       tabLabel: language === "es" ? "Legal" : "Legal",
       icon: Scale,
-      image: "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80",
+      image: "/images/abogada-notaria.jpg",
       description:
         language === "es"
           ? "Abogados certificados para poderes notariales, regularización de escrituras y herencias sin que viajes a México."
@@ -51,7 +51,7 @@ export const Services = () => {
       title: language === "es" ? "IMSS e Infonavit Sin Fronteras" : "IMSS & Infonavit Cross-Border",
       tabLabel: language === "es" ? "IMSS" : "IMSS",
       icon: FileText,
-      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80",
+      image: "/images/vida-mexico-patio.jpg",
       description:
         language === "es"
           ? "Recupera tus semanas cotizadas en México con Modalidad 40 y gestiona tu crédito de vivienda desde el extranjero."
@@ -69,7 +69,7 @@ export const Services = () => {
       title: language === "es" ? "Alquiler de Casas y Terrenos" : "Home & Land Rentals",
       tabLabel: language === "es" ? "Alquiler" : "Rentals",
       icon: Building2,
-      image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+      image: "/images/terreno-residencial-mexico.jpg",
       description:
         language === "es"
           ? "Renta tu propiedad en México con administración integral o encuentra alquileres seguros para tu familia."

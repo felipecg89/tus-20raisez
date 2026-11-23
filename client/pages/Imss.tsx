@@ -3,7 +3,12 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
-import { getWhatsAppUrl } from "@/lib/contact";
+import {
+  getWhatsAppUrl,
+  getCallUrl,
+  CALL_US_DISPLAY,
+  buildWhatsAppContextMessage,
+} from "@/config/contact";
 import {
   CheckCircle,
   FileText,
@@ -316,13 +321,27 @@ export default function Imss() {
       <Header />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary/10 to-secondary/10 py-12 md:py-20">
+      <section className="bg-gradient-to-br from-primary/10 to-secondary/10 py-12 md:py-20 border-b border-[#DFE5EA]">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              {lang.title}
-            </h1>
-            <p className="text-lg text-foreground/70">{lang.subtitle}</p>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-7">
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+                {lang.title}
+              </h1>
+              <p className="text-lg text-foreground/70">{lang.subtitle}</p>
+            </div>
+            <div className="lg:col-span-5">
+              <div className="relative rounded-2xl overflow-hidden shadow-lg border-2 border-white max-h-72">
+                <img
+                  src="/images/vida-mexico-patio.jpg"
+                  alt="Tranquilidad y Retiro Seguro en México"
+                  className="w-full h-full object-cover object-center"
+                />
+                <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-sm text-xs font-bold text-[#1B4965]">
+                  {language === "es" ? "☕ Retiro y Pensión Digna en México" : "☕ Secure Retirement in Mexico"}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -611,19 +630,25 @@ export default function Imss() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href={getWhatsAppUrl(
-                  language === "es"
-                    ? "Hola, vivo en EE.UU. y me gustaría recibir asesoría personalizada sobre pensionarme con IMSS Modalidad 40 o crédito Infonavit Sin Fronteras."
-                    : "Hello, I live in the US and would like advice on IMSS Modalidad 40 pension and Infonavit Sin Fronteras credit."
+                  buildWhatsAppContextMessage({
+                    service: language === "es" ? "Pensión IMSS Modalidad 40 y Crédito Infonavit" : "IMSS Pension & Infonavit Credit",
+                  })
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white text-primary px-8 py-3 rounded-lg font-bold hover:bg-white/90 transition-colors"
+                className="bg-[#25D366] hover:bg-[#20ba59] text-white px-8 py-3.5 rounded-xl font-bold shadow-md transition-colors flex items-center justify-center gap-2"
               >
-                {language === "es" ? "Hablar por WhatsApp" : "Chat on WhatsApp"}
+                <span>WhatsApp Business</span>
+              </a>
+              <a
+                href={getCallUrl("us")}
+                className="bg-white text-[#1B4965] hover:bg-white/90 px-8 py-3.5 rounded-xl font-bold transition-colors flex items-center justify-center gap-2 shadow-md"
+              >
+                <span>Llamar Gratis {CALL_US_DISPLAY}</span>
               </a>
               <a
                 href="#contacto"
-                className="bg-white/20 text-white border-2 border-white px-8 py-3 rounded-lg font-bold hover:bg-white/30 transition-colors"
+                className="bg-white/20 text-white border-2 border-white px-8 py-3.5 rounded-xl font-bold hover:bg-white/30 transition-colors flex items-center justify-center gap-2"
               >
                 {language === "es" ? "Agendar Cita" : "Schedule Call"}
               </a>

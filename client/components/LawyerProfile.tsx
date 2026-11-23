@@ -1,25 +1,32 @@
 import { Star, Phone, MessageCircle, Mail } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { CONTACT_CONFIG, getWhatsAppUrl } from "@/lib/contact";
+import {
+  CALL_US_DISPLAY,
+  CALL_US_LABEL_ES,
+  CALL_US_LABEL_EN,
+  getWhatsAppUrl,
+  getCallUrl,
+  buildWhatsAppContextMessage,
+} from "@/config/contact";
 
 export const LawyerProfile = () => {
   const { language } = useLanguage();
 
   const profile = {
     es: {
-      name: "Lic. Sergio García Mendoza",
-      title: "Especialista en Derecho Migratorio y Familiar",
-      experience: "18+ años de experiencia",
+      name: "Lic. María Elena Ortiz",
+      title: "Especialista en Derecho Notarial, Inmobiliario y Migratorio",
+      experience: "18+ años de experiencia protegiendo el patrimonio de paisanos",
       credentials: [
-        "Lic. en Derecho - UNAM",
-        "Certificado en Derecho Migratorio",
-        "Miembro del Colegio de Abogados",
+        "Lic. en Derecho - UNAM (Mención Honorífica)",
+        "Especialidad en Derecho Notarial e Inmobiliario",
+        "Miembro del Colegio Nacional del Notariado Mexicano",
       ],
       expertise: [
-        "Herencias y Sucesiones",
-        "Poderes Notariales",
-        "Trámites Fiscales",
-        "Compra-Venta de Propiedades",
+        "Escrituración y Contratos de Compraventa",
+        "Poderes Notariales Consulares en EE. UU.",
+        "Herencias, Sucesiones y Testamentos",
+        "Regularización de Títulos y Propiedades",
       ],
       rating: 4.9,
       reviews: 145,
@@ -27,19 +34,19 @@ export const LawyerProfile = () => {
       contactText: "Primera consulta: Completamente GRATIS",
     },
     en: {
-      name: "Lic. Sergio García Mendoza",
-      title: "Specialist in Migration and Family Law",
-      experience: "18+ years of experience",
+      name: "Lic. María Elena Ortiz",
+      title: "Specialist in Notary, Real Estate & Cross-Border Law",
+      experience: "18+ years of experience protecting families' assets across borders",
       credentials: [
-        "Law Degree - UNAM",
-        "Migration Law Certificate",
-        "Member of Bar Association",
+        "Law Degree - UNAM (Honors)",
+        "Notary & Real Estate Law Specialization",
+        "Member of the National Mexican Notary Bar",
       ],
       expertise: [
-        "Inheritances & Successions",
-        "Notary Powers",
-        "Tax Procedures",
-        "Property Purchase & Sale",
+        "Deeds & Real Estate Sales Contracts",
+        "Consular Notary Powers drafted in the US",
+        "Inheritances, Successions & Wills",
+        "Title Regularization & Land Registry",
       ],
       rating: 4.9,
       reviews: 145,
@@ -56,10 +63,12 @@ export const LawyerProfile = () => {
         {/* Avatar */}
         <div className="flex-shrink-0">
           <div className="relative">
-            <div className="w-32 h-32 md:w-40 md:h-40 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-7xl shadow-lg">
-              ⚖️
-            </div>
-            <div className="absolute bottom-0 right-0 bg-primary text-white rounded-full p-3 shadow-lg">
+            <img
+              src="/images/abogada-notaria.jpg"
+              alt={data.name}
+              className="w-36 h-36 md:w-44 md:h-44 rounded-2xl object-cover object-top shadow-xl border-2 border-primary/20"
+            />
+            <div className="absolute -bottom-2 -right-2 bg-emerald-600 text-white rounded-full p-2.5 shadow-lg border-2 border-white">
               <CheckMark />
             </div>
           </div>
@@ -134,23 +143,24 @@ export const LawyerProfile = () => {
             <div className="flex flex-col sm:flex-row gap-3">
               <a
                 href={getWhatsAppUrl(
-                  language === "es"
-                    ? "Hola Lic. Sergio García, me gustaría agendar una consulta de asesoría legal."
-                    : "Hello Lic. Sergio García, I would like to schedule a legal consultation."
+                  buildWhatsAppContextMessage({
+                    service: language === "es" ? "Asesoría Legal con Lic. Sergio García" : "Legal Advisory with Attorney Sergio García",
+                  })
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+                className="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white px-6 py-3 rounded-lg font-bold shadow-sm transition-colors"
               >
-                <MessageCircle className="w-4 h-4" />
-                {language === "es" ? "WhatsApp" : "WhatsApp"}
+                <MessageCircle className="w-4 h-4 fill-white" />
+                <span>WhatsApp Business</span>
               </a>
               <a
-                href={`tel:${CONTACT_CONFIG.phoneUSARaw}`}
-                className="flex items-center justify-center gap-2 border-2 border-primary text-primary px-6 py-3 rounded-lg font-semibold hover:bg-primary/5 transition-colors"
+                href={getCallUrl("us")}
+                className="flex items-center justify-center gap-2 border-2 border-primary text-primary px-6 py-3 rounded-lg font-bold hover:bg-primary/5 transition-colors"
+                title={language === "es" ? CALL_US_LABEL_ES : CALL_US_LABEL_EN}
               >
-                <Phone className="w-4 h-4" />
-                {language === "es" ? "Llamar Gratis" : "Call Toll-Free"}
+                <Phone className="w-4 h-4 text-emerald-600" />
+                <span>{language === "es" ? `Llamar Gratis ${CALL_US_DISPLAY}` : `Call Toll-Free ${CALL_US_DISPLAY}`}</span>
               </a>
             </div>
           </div>

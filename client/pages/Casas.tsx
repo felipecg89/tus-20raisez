@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { PropertyCard } from "@/components/properties/PropertyCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
-import { Sliders, X } from "lucide-react";
+import { Search, X, RotateCcw, Building2, Home, Trees, Store, PartyPopper } from "lucide-react";
 import { Product } from "@shared/api";
 import { useExchangeRate } from "@/hooks/useExchangeRate";
 
@@ -16,9 +17,12 @@ interface Property {
   bathrooms: number;
   area: number;
   description: string;
-  type: "casa" | "terreno";
+  type: "casa" | "departamento" | "terreno" | "comercio" | "salon_fiestas";
   state: string;
   image?: string;
+  category?: string;
+  capacity?: number;
+  rentalPeriod?: string;
 }
 
 const properties: Property[] = [
@@ -34,7 +38,7 @@ const properties: Property[] = [
       "Hermosa casa colonial con patio interior, acabados de cedro, cantera y vista a la ciudad histórica.",
     type: "casa",
     state: "Guanajuato",
-    image: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1000&q=80",
+    image: "/images/cliente-feliz-llaves.jpg",
   },
   {
     id: "2",
@@ -62,7 +66,7 @@ const properties: Property[] = [
       "Espectacular casa contemporánea en fraccionamiento privado con vigilancia y amplio jardín.",
     type: "casa",
     state: "Nuevo León",
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80",
+    image: "/images/casa-mexico-fachada.jpg",
   },
   {
     id: "4",
@@ -76,7 +80,7 @@ const properties: Property[] = [
       "Lote residencial en fraccionamiento consolidado, todos los servicios subterráneos disponibles.",
     type: "terreno",
     state: "Querétaro",
-    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80",
+    image: "/images/terreno-residencial-mexico.jpg",
   },
   {
     id: "5",
@@ -132,7 +136,7 @@ const properties: Property[] = [
       "Propiedad colonial con acabados en cantera rosa, portón de hierro y amplia cochera.",
     type: "casa",
     state: "Zacatecas",
-    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80",
+    image: "/images/vida-mexico-patio.jpg",
   },
 ];
 
@@ -140,32 +144,49 @@ export default function Casas() {
   const { language } = useLanguage();
   const t = translations[language];
   const { exchangeRate } = useExchangeRate();
-  const [filterType, setFilterType] = useState<"all" | "casa" | "terreno">(
-    "all",
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Estados sincronizados con URL
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
+  const [filterType, setFilterType] = useState<string>(searchParams.get("type") || "all");
+  const [filterState, setFilterState] = useState(searchParams.get("state") || "all");
+  const [filterCategory, setFilterCategory] = useState<string>(
+    searchParams.get("operation") || searchParams.get("category") || "all"
   );
-  const [filterState, setFilterState] = useState("all");
-  const [filterCategory, setFilterCategory] = useState<"all" | "compra" | "renta">("all");
-  const [filterCommercial, setFilterCommercial] = useState<"all" | "commercial" | "residential">("all");
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000]);
-  const [showFilters, setShowFilters] = useState(false);
+  const [pricePreset, setPricePreset] = useState<"all" | "under100k" | "100k-200k" | "over200k">("all");
+  
   const [supabaseProperties, setSupabaseProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  // Sincronizar cambios de query params cuando la URL cambie
+  useEffect(() => {
+    const typeParam = searchParams.get("type");
+    if (typeParam) setFilterType(typeParam);
+
+    const stateParam = searchParams.get("state");
+    if (stateParam) setFilterState(stateParam);
+
+    const operationParam = searchParams.get("operation") || searchParams.get("category");
+    if (operationParam) setFilterCategory(operationParam);
+
+    const qParam = searchParams.get("q");
+    if (qParam !== null) setSearchQuery(qParam);
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const params = new URLSearchParams();
         params.append("page", currentPage.toString());
-        params.append("limit", "20");
+        params.append("limit", "50");
         if (filterType !== "all") {
           params.append("type", filterType);
         }
 
         const response = await fetch(`/api/products?${params}`);
         if (!response.ok) {
-          // If server error, fallback safely without throwing uncaught errors
           setSupabaseProperties([]);
           return;
         }
@@ -182,7 +203,10 @@ export default function Casas() {
             bathrooms: product.bathrooms || 0,
             area: product.area || 0,
             description: product.description,
-            type: product.type as "casa" | "terreno",
+            type: product.type as any,
+            category: product.category,
+            capacity: product.capacity,
+            rentalPeriod: product.rentalPeriod,
             state: product.state || product.city || "",
             image: product.image,
           }));
@@ -201,7 +225,10 @@ export default function Casas() {
             bathrooms: product.bathrooms || 0,
             area: product.area || 0,
             description: product.description,
-            type: product.type as "casa" | "terreno",
+            type: product.type as any,
+            category: product.category,
+            capacity: product.capacity,
+            rentalPeriod: product.rentalPeriod,
             state: product.state || product.city || "",
             image: product.image,
           }));
@@ -222,18 +249,64 @@ export default function Casas() {
   }, [currentPage, filterType]);
 
   const allProperties = supabaseProperties.length > 0 ? supabaseProperties : properties;
-  const states = ["all", ...new Set(allProperties.map((p) => p.state))];
+  const states = useMemo(() => ["all", ...new Set(allProperties.map((p) => p.state).filter(Boolean))], [allProperties]);
 
-  const filteredProperties = allProperties.filter((property) => {
-    const typeMatch = filterType === "all" || property.type === filterType;
-    const stateMatch = filterState === "all" || property.state === filterState;
-    const priceMatch =
-      property.price >= priceRange[0] && property.price <= priceRange[1];
-    const categoryMatch = filterCategory === "all" || (property as any).category === filterCategory;
-    const commercialMatch = filterCommercial === "all" ||
-      (filterCommercial === "commercial" ? (property as any).isCommercial : !(property as any).isCommercial);
-    return typeMatch && stateMatch && priceMatch && categoryMatch && commercialMatch;
-  });
+  const filteredProperties = useMemo(() => {
+    return allProperties.filter((property) => {
+      // 1. Filtro de búsqueda por texto libre
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matchesText =
+          property.title.toLowerCase().includes(q) ||
+          property.description.toLowerCase().includes(q) ||
+          property.location.toLowerCase().includes(q) ||
+          property.state.toLowerCase().includes(q);
+        if (!matchesText) return false;
+      }
+
+      // 2. Filtro de tipo de propiedad
+      if (filterType !== "all" && property.type !== filterType) {
+        return false;
+      }
+
+      // 3. Filtro de estado
+      if (filterState !== "all" && property.state !== filterState) {
+        return false;
+      }
+
+      // 4. Filtro de categoría (compra / renta)
+      if (filterCategory !== "all" && (property as any).category && (property as any).category !== filterCategory) {
+        return false;
+      }
+
+      // 5. Presets de precio en USD
+      if (pricePreset === "under100k" && property.price >= 100000) return false;
+      if (pricePreset === "100k-200k" && (property.price < 100000 || property.price > 200000)) return false;
+      if (pricePreset === "over200k" && property.price <= 200000) return false;
+
+      return true;
+    });
+  }, [allProperties, searchQuery, filterType, filterState, filterCategory, pricePreset]);
+
+  // Limpiar todos los filtros
+  const handleClearFilters = () => {
+    setSearchQuery("");
+    setFilterType("all");
+    setFilterState("all");
+    setFilterCategory("all");
+    setPricePreset("all");
+    setSearchParams({});
+  };
+
+  const hasActiveFilters = searchQuery !== "" || filterType !== "all" || filterState !== "all" || filterCategory !== "all" || pricePreset !== "all";
+
+  const typePills = [
+    { id: "all", label: language === "es" ? "Todos los Inmuebles" : "All Properties", icon: Building2 },
+    { id: "casa", label: language === "es" ? "Casas" : "Houses", icon: Home },
+    { id: "terreno", label: language === "es" ? "Terrenos" : "Land", icon: Trees },
+    { id: "comercio", label: language === "es" ? "Comercios / Locales" : "Commercial", icon: Store },
+    { id: "salon_fiestas", label: language === "es" ? "Salones de Eventos" : "Event Halls", icon: PartyPopper },
+  ];
 
   const formatPrice = (price: number) => {
     if (language === "es") {
@@ -269,340 +342,206 @@ export default function Casas() {
       </section>
 
       {/* Main Content */}
-      <main className="flex-1 py-12 md:py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Sidebar Filters */}
-            <div className="relative lg:col-span-1">
-              <div
-                className={`fixed lg:static left-0 top-0 h-screen lg:h-auto w-80 lg:w-full bg-white lg:rounded-2xl border-r lg:border-r-0 lg:border border-border overflow-y-auto lg:overflow-visible z-50 lg:z-auto transition-transform duration-300 ease-in-out lg:transition-none ${
-                  showFilters ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-                } lg:sticky lg:top-20`}
-              >
-                <div className="flex items-center justify-between p-6 border-b border-border lg:sticky lg:top-0 lg:bg-white lg:z-10">
-                  <h3 className="text-lg font-bold text-foreground">
-                    {language === "es" ? "Filtrar por" : "Filter by"}
-                  </h3>
+      <main className="flex-1 py-8 md:py-12 bg-slate-50/50">
+        <div className="container mx-auto px-4 max-w-7xl">
+          {/* Top Search & Filter Bar */}
+          <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-200 mb-8 space-y-4">
+            {/* Row 1: Search Input + Dropdowns */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+              {/* Keyword Search */}
+              <div className="md:col-span-5 relative">
+                <Search className="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={language === "es" ? "Buscar por ciudad, estado o palabra clave..." : "Search by city, state or keywords..."}
+                  className="w-full pl-11 pr-10 py-2.5 bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+                />
+                {searchQuery && (
                   <button
-                    onClick={() => setShowFilters(false)}
-                    className="lg:hidden p-1 hover:bg-muted rounded-lg transition-colors"
-                    aria-label="Close filters"
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
+                    title="Borrar búsqueda"
                   >
-                    <X className="w-5 h-5 text-foreground" />
+                    <X className="w-4 h-4" />
                   </button>
-                </div>
+                )}
+              </div>
 
-                <div className="p-6">
-
-                {/* Type Filter */}
-                <div className="mb-6">
-                  <h4 className="font-semibold text-foreground mb-3">
-                    {language === "es" ? "Tipo" : "Type"}
-                  </h4>
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="type"
-                        checked={filterType === "all"}
-                        onChange={() => setFilterType("all")}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-foreground/70">
-                        {language === "es" ? "Todas" : "All"}
-                      </span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="type"
-                        checked={filterType === "casa"}
-                        onChange={() => setFilterType("casa")}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-foreground/70">
-                        {language === "es" ? "Casas" : "Houses"}
-                      </span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="type"
-                        checked={filterType === "terreno"}
-                        onChange={() => setFilterType("terreno")}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-foreground/70">
-                        {language === "es" ? "Terrenos" : "Land"}
-                      </span>
-                    </label>
-                  </div>
-                </div>
-
-                {/* State Filter */}
-                <div className="mb-6">
-                  <h4 className="font-semibold text-foreground mb-3">
-                    {language === "es" ? "Estado" : "State"}
-                  </h4>
-                  <select
-                    value={filterState}
-                    onChange={(e) => setFilterState(e.target.value)}
-                    className="w-full px-4 py-2 border border-border rounded-lg bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    <option value="all">
-                      {language === "es" ? "Todos" : "All"}
-                    </option>
-                    {states
-                      .filter((s) => s !== "all")
-                      .map((state) => (
-                        <option key={state} value={state}>
-                          {state}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-
-                {/* Price Range */}
-                <div className="mb-6">
-                  <h4 className="font-semibold text-foreground mb-3">
-                    {language === "es" ? "Precio" : "Price"}
-                  </h4>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="text-sm text-foreground/70">
-                        {language === "es" ? "Mínimo" : "Min"}
-                      </label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="500000"
-                        step="10000"
-                        value={priceRange[0]}
-                        onChange={(e) =>
-                          setPriceRange([Number(e.target.value), priceRange[1]])
-                        }
-                        className="w-full"
-                      />
-                      <p className="text-sm font-semibold text-primary mt-1">
-                        {formatPrice(priceRange[0])}
-                      </p>
-                    </div>
-                    <div>
-                      <label className="text-sm text-foreground/70">
-                        {language === "es" ? "Máximo" : "Max"}
-                      </label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="500000"
-                        step="10000"
-                        value={priceRange[1]}
-                        onChange={(e) =>
-                          setPriceRange([priceRange[0], Number(e.target.value)])
-                        }
-                        className="w-full"
-                      />
-                      <p className="text-sm font-semibold text-primary mt-1">
-                        {formatPrice(priceRange[1])}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Category Filter */}
-                <div className="mb-6">
-                  <h4 className="font-semibold text-foreground mb-3">
-                    {language === "es" ? "Categoría" : "Category"}
-                  </h4>
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="category"
-                        checked={filterCategory === "all"}
-                        onChange={() => setFilterCategory("all")}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-foreground/70">
-                        {language === "es" ? "Todas" : "All"}
-                      </span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="category"
-                        checked={filterCategory === "compra"}
-                        onChange={() => setFilterCategory("compra")}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-foreground/70">
-                        {language === "es" ? "Compra" : "Purchase"}
-                      </span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="category"
-                        checked={filterCategory === "renta"}
-                        onChange={() => setFilterCategory("renta")}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-foreground/70">
-                        {language === "es" ? "Renta" : "Rental"}
-                      </span>
-                    </label>
-                  </div>
-                </div>
-
-                {/* Commercial Filter */}
-                <div className="mb-6">
-                  <h4 className="font-semibold text-foreground mb-3">
-                    {language === "es" ? "Tipo de Propiedad" : "Property Type"}
-                  </h4>
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="commercial"
-                        checked={filterCommercial === "all"}
-                        onChange={() => setFilterCommercial("all")}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-foreground/70">
-                        {language === "es" ? "Todas" : "All"}
-                      </span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="commercial"
-                        checked={filterCommercial === "residential"}
-                        onChange={() => setFilterCommercial("residential")}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-foreground/70">
-                        {language === "es" ? "No Comercial" : "Residential"}
-                      </span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="commercial"
-                        checked={filterCommercial === "commercial"}
-                        onChange={() => setFilterCommercial("commercial")}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-foreground/70">
-                        {language === "es" ? "Comercial" : "Commercial"}
-                      </span>
-                    </label>
-                  </div>
-                </div>
-
-                {/* Reset Filters */}
-                <button
-                  onClick={() => {
-                    setFilterType("all");
-                    setFilterState("all");
-                    setFilterCategory("all");
-                    setFilterCommercial("all");
-                    setPriceRange([0, 500000]);
-                  }}
-                  className="w-full border-2 border-primary text-primary py-2 rounded-lg font-semibold hover:bg-primary/5 transition-colors mb-6"
+              {/* State Dropdown */}
+              <div className="md:col-span-3">
+                <select
+                  value={filterState}
+                  onChange={(e) => setFilterState(e.target.value)}
+                  className="w-full py-2.5 px-3 bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
                 >
-                  {language === "es" ? "Limpiar filtros" : "Clear filters"}
-                </button>
-                </div>
+                  <option value="all">{language === "es" ? "📍 Todos los Estados" : "📍 All States"}</option>
+                  {states
+                    .filter((s) => s !== "all")
+                    .map((state) => (
+                      <option key={state} value={state}>
+                        {state}
+                      </option>
+                    ))}
+                </select>
+              </div>
+
+              {/* Price Preset Dropdown */}
+              <div className="md:col-span-2">
+                <select
+                  value={pricePreset}
+                  onChange={(e) => setPricePreset(e.target.value as any)}
+                  className="w-full py-2.5 px-3 bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+                >
+                  <option value="all">{language === "es" ? "💲 Todos los precios" : "💲 All prices"}</option>
+                  <option value="under100k">&lt; $100k USD</option>
+                  <option value="100k-200k">$100k - $200k USD</option>
+                  <option value="over200k">&gt; $200k USD</option>
+                </select>
+              </div>
+
+              {/* Operation Dropdown (Compra / Renta) */}
+              <div className="md:col-span-2">
+                <select
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                  className="w-full py-2.5 px-3 bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+                >
+                  <option value="all">{language === "es" ? "🏷️ Compra y Renta" : "🏷️ Buy & Rent"}</option>
+                  <option value="compra">{language === "es" ? "Comprar" : "For Sale"}</option>
+                  <option value="renta">{language === "es" ? "Rentar" : "For Rent"}</option>
+                </select>
               </div>
             </div>
 
-            {/* Overlay for mobile */}
-            {showFilters && (
-              <div
-                className="fixed inset-0 bg-black/50 lg:hidden z-40"
-                onClick={() => setShowFilters(false)}
-              />
-            )}
+            {/* Row 2: Quick Filter Pills */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar">
+              {typePills.map((pill) => {
+                const Icon = pill.icon;
+                const isSelected = filterType === pill.id;
+                const count = pill.id === "all"
+                  ? allProperties.length
+                  : allProperties.filter((p) => p.type === pill.id).length;
 
-            {/* Properties Grid */}
-            <div className="lg:col-span-3">
-              {/* Filters Button - Mobile Only */}
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className="lg:hidden w-full mb-4 flex items-center justify-center gap-2 bg-primary text-white py-3 px-4 rounded-lg font-semibold shadow-lg hover:bg-primary/90 transition-all"
-              >
-                <Sliders className="w-4 h-4" />
-                {language === "es" ? "Filtros" : "Filters"}
-              </button>
-
-              <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-foreground">
-                  {language === "es"
-                    ? `${filteredProperties.length} Propiedades`
-                    : `${filteredProperties.length} Properties`}
-                </h2>
-              </div>
-
-              {loading ? (
-                <div className="text-center py-20">
-                  <p className="text-lg text-foreground/70">
-                    {language === "es" ? "Cargando propiedades..." : "Loading properties..."}
-                  </p>
-                </div>
-              ) : filteredProperties.length > 0 ? (
-                <>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 md:gap-6 lg:gap-8 mb-8">
-                    {filteredProperties.map((property) => (
-                      <PropertyCard key={property.id} {...property} />
-                    ))}
-                  </div>
-
-                  {totalPages > 1 && (
-                    <div className="flex justify-center items-center gap-4 mt-8">
-                      <button
-                        onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                        disabled={currentPage === 1}
-                        className="px-4 py-2 border border-primary text-primary rounded-lg font-semibold hover:bg-primary/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {language === "es" ? "Anterior" : "Previous"}
-                      </button>
-                      <span className="text-foreground font-medium">
-                        {language === "es" ? "Página" : "Page"} {currentPage} {language === "es" ? "de" : "of"} {totalPages}
-                      </span>
-                      <button
-                        onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                        disabled={currentPage === totalPages}
-                        className="px-4 py-2 border border-primary text-primary rounded-lg font-semibold hover:bg-primary/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {language === "es" ? "Siguiente" : "Next"}
-                      </button>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="text-center py-20">
-                  <p className="text-lg text-foreground/70 mb-4">
-                    {language === "es"
-                      ? "No hay propiedades que coincidan con tus filtros"
-                      : "No properties match your filters"}
-                  </p>
+                return (
                   <button
-                    onClick={() => {
-                      setFilterType("all");
-                      setFilterState("all");
-                      setPriceRange([0, 500000]);
-                      setCurrentPage(1);
-                    }}
-                    className="text-primary font-semibold hover:underline"
+                    key={pill.id}
+                    onClick={() => setFilterType(pill.id)}
+                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs md:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
+                      isSelected
+                        ? "bg-emerald-600 text-white shadow-sm ring-2 ring-emerald-600/30"
+                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                    }`}
                   >
-                    {language === "es"
-                      ? "Ver todas las propiedades"
-                      : "View all properties"}
+                    <Icon className="w-3.5 h-3.5" />
+                    <span>{pill.label}</span>
+                    <span
+                      className={`ml-1 text-[11px] px-1.5 py-0.2 rounded-full font-bold ${
+                        isSelected ? "bg-white/25 text-white" : "bg-slate-200 text-slate-600"
+                      }`}
+                    >
+                      {count}
+                    </span>
                   </button>
-                </div>
+                );
+              })}
+
+              {hasActiveFilters && (
+                <button
+                  onClick={handleClearFilters}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs text-rose-600 hover:bg-rose-50 font-medium transition-colors ml-auto shrink-0"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>{language === "es" ? "Limpiar filtros" : "Clear filters"}</span>
+                </button>
               )}
             </div>
           </div>
+
+          {/* Properties Header & Count */}
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+                {language === "es"
+                  ? `${filteredProperties.length} ${filteredProperties.length === 1 ? "Propiedad disponible" : "Propiedades disponibles"}`
+                  : `${filteredProperties.length} ${filteredProperties.length === 1 ? "Property available" : "Properties available"}`}
+              </h2>
+              {hasActiveFilters && (
+                <p className="text-xs text-slate-500 mt-0.5">
+                  {language === "es" ? "Filtros activos aplicados" : "Active filters applied"}
+                </p>
+              )}
+            </div>
+
+            {hasActiveFilters && (
+              <button
+                onClick={handleClearFilters}
+                className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold"
+              >
+                {language === "es" ? "Restablecer catálogo" : "Reset catalog"}
+              </button>
+            )}
+          </div>
+
+          {/* Properties Grid */}
+          {loading ? (
+            <div className="text-center py-20">
+              <p className="text-lg text-slate-500">
+                {language === "es" ? "Cargando propiedades..." : "Loading properties..."}
+              </p>
+            </div>
+          ) : filteredProperties.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                {filteredProperties.map((property) => (
+                  <PropertyCard key={property.id} {...property} />
+                ))}
+              </div>
+
+              {totalPages > 1 && (
+                <div className="flex justify-center items-center gap-4 mt-8">
+                  <button
+                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg font-semibold hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                  >
+                    {language === "es" ? "Anterior" : "Previous"}
+                  </button>
+                  <span className="text-slate-600 text-sm font-medium">
+                    {language === "es" ? "Página" : "Page"} {currentPage} {language === "es" ? "de" : "of"} {totalPages}
+                  </span>
+                  <button
+                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg font-semibold hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                  >
+                    {language === "es" ? "Siguiente" : "Next"}
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="text-center py-20 bg-white rounded-2xl border border-slate-200 p-8">
+              <p className="text-lg text-slate-700 font-semibold mb-2">
+                {language === "es"
+                  ? "No se encontraron inmuebles con estos criterios"
+                  : "No properties match your search criteria"}
+              </p>
+              <p className="text-sm text-slate-500 mb-5">
+                {language === "es"
+                  ? "Intenta buscar con otra palabra clave o limpiando los filtros."
+                  : "Try searching with different keywords or clearing active filters."}
+              </p>
+              <button
+                onClick={handleClearFilters}
+                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-medium text-sm transition-colors shadow-sm"
+              >
+                <RotateCcw className="w-4 h-4" />
+                <span>{language === "es" ? "Ver todo el catálogo" : "View all properties"}</span>
+              </button>
+            </div>
+          )}
         </div>
       </main>
     </div>
