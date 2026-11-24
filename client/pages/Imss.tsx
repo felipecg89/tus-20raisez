@@ -325,10 +325,10 @@ export default function Imss() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7">
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-foreground mb-3 sm:mb-4">
                 {lang.title}
               </h1>
-              <p className="text-lg text-foreground/70">{lang.subtitle}</p>
+              <p className="text-sm sm:text-base md:text-lg text-foreground/70">{lang.subtitle}</p>
             </div>
             <div className="lg:col-span-5">
               <div className="relative rounded-2xl overflow-hidden shadow-lg border-2 border-white max-h-72">
@@ -365,11 +365,11 @@ export default function Imss() {
           <section>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Modalidad 40 */}
-              <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl border border-border p-8">
+              <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl border border-border p-5 sm:p-8">
                 <div className="inline-block bg-primary/20 p-3 rounded-lg mb-4">
                   <FileText className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-2xl font-bold text-foreground mb-3">
+                <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-3">
                   {lang.modalidad40.title}
                 </h3>
                 <p className="text-foreground/70 mb-6">
@@ -417,11 +417,11 @@ export default function Imss() {
               </div>
 
               {/* Modalidad 44 */}
-              <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl border border-border p-8">
+              <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl border border-border p-5 sm:p-8">
                 <div className="inline-block bg-primary/20 p-3 rounded-lg mb-4">
                   <Home className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-2xl font-bold text-foreground mb-3">
+                <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-3">
                   {lang.modalidad44.title}
                 </h3>
                 <p className="text-foreground/70 mb-6">

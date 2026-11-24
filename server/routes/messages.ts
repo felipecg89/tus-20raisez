@@ -83,22 +83,54 @@ export const getMessage: RequestHandler = async (req, res) => {
 };
 
 export const createMessage: RequestHandler = async (req, res) => {
-  const { name, whatsapp, email, city, message } = req.body;
+  const { name, whatsapp, email, city, message, _honeypot } = req.body;
 
+  // Blindaje Anti-Bot: Si el bot completó el campo trampa invisible, descartar silenciosamente
+  if (_honeypot) {
+    return res.status(201).json({ id: "ok", message: "Mensaje recibido" });
+  }
+
+  // Validación de campos requeridos y tipos
   if (!name || !whatsapp || !email || !city) {
     return res.status(400).json({ error: "Campos requeridos faltantes" });
   }
+
+  // Validación de longitudes máximas para prevenir ataques de carga masiva
+  if (
+    typeof name !== "string" ||
+    typeof whatsapp !== "string" ||
+    typeof email !== "string" ||
+    typeof city !== "string" ||
+    name.length > 100 ||
+    whatsapp.length > 30 ||
+    email.length > 100 ||
+    city.length > 100 ||
+    (message && typeof message === "string" && message.length > 2000)
+  ) {
+    return res.status(400).json({ error: "Los datos exceden el tamaño máximo permitido" });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: "Formato de correo electrónico inválido" });
+  }
+
+  const cleanName = name.trim();
+  const cleanWhatsapp = whatsapp.trim();
+  const cleanEmail = email.trim().toLowerCase();
+  const cleanCity = city.trim();
+  const cleanMessage = typeof message === "string" ? message.trim() : "";
 
   try {
     const { data, error } = await supabaseAdmin
       .from("contact_messages")
       .insert([
         {
-          name,
-          whatsapp,
-          email,
-          city,
-          message: message || "",
+          name: cleanName,
+          whatsapp: cleanWhatsapp,
+          email: cleanEmail,
+          city: cleanCity,
+          message: cleanMessage,
           read: false,
         },
       ])
@@ -123,16 +155,21 @@ export const createMessage: RequestHandler = async (req, res) => {
 
   const newMessage: Message = {
     id: Date.now().toString(),
-    name,
-    whatsapp,
-    email,
-    city,
-    message: message || "",
+    name: cleanName,
+    whatsapp: cleanWhatsapp,
+    email: cleanEmail,
+    city: cleanCity,
+    message: cleanMessage,
     createdAt: new Date().toISOString(),
     read: false,
   };
 
   inMemoryMessages.unshift(newMessage);
+  // Prevenir agotamiento de memoria RAM: limitar a máximo 50 mensajes en caché
+  if (inMemoryMessages.length > 50) {
+    inMemoryMessages.length = 50;
+  }
+
   return res.status(201).json(newMessage);
 };
 

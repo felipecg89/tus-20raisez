@@ -58,8 +58,8 @@ export const LawyerProfile = () => {
   const data = language === "es" ? profile.es : profile.en;
 
   return (
-    <div className="bg-white rounded-2xl border-2 border-primary/20 p-8 md:p-10 shadow-lg hover:shadow-xl transition-shadow">
-      <div className="flex flex-col sm:flex-row gap-8 items-start">
+    <div className="bg-white rounded-2xl border-2 border-primary/20 p-5 sm:p-8 md:p-10 shadow-lg hover:shadow-xl transition-shadow">
+      <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-center sm:items-start">
         {/* Avatar */}
         <div className="flex-shrink-0">
           <div className="relative">

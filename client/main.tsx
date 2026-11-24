@@ -11,6 +11,8 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { WhatsAppWidget } from "@/components/WhatsAppWidget";
 import { initializeHubSpot } from "@/lib/hubspotService";
+import { PRIVATE_ROUTES } from "@/lib/routes";
+import { handleStaticSupabaseApi } from "@/lib/staticApiFallback";
 import Index from "./pages/Index";
 import Casas from "./pages/Casas";
 import PropertyDetail from "./pages/PropertyDetail";
@@ -26,9 +28,9 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-// Interceptor global para adjuntar automáticamente el token de sesión a peticiones /api/ protegidas
+// Interceptor global para adjuntar el token de sesión a /api/ y resolver directo en Supabase en hosting estático
 if (typeof window !== "undefined") {
-  const originalFetch = window.fetch;
+  const originalFetch = window.fetch.bind(window);
   window.fetch = async (input: RequestInfo | URL, init: RequestInit = {}) => {
     let url = "";
     if (typeof input === "string") url = input;
@@ -36,9 +38,9 @@ if (typeof window !== "undefined") {
     else if (input && typeof input === "object" && "url" in input) url = (input as Request).url;
 
     const isApiRequest = url.startsWith("/api/") || url.includes("/api/");
-    const isPublicAuthRoute = url.includes("/api/auth/login") || url.includes("/api/auth/signup");
+    const isAuthRoute = url.includes("/api/auth/");
 
-    if (isApiRequest && !isPublicAuthRoute) {
+    if (isApiRequest && !isAuthRoute) {
       try {
         const sessionStr = localStorage.getItem("auth_session");
         if (sessionStr) {
@@ -51,8 +53,26 @@ if (typeof window !== "undefined") {
             init = { ...init, headers };
           }
         }
-      } catch (e) {
+      } catch {
         // Ignorar error al leer sesión
+      }
+    }
+
+    if (isApiRequest && !isAuthRoute) {
+      try {
+        const response = await originalFetch(input, init);
+        const contentType = response.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
+          return response;
+        }
+        // En hosting estático (Hostinger/Apache), /api/* devuelve index.html (text/html) o 404
+        const fallback = await handleStaticSupabaseApi(url, init);
+        if (fallback) return fallback;
+        return response;
+      } catch (err) {
+        const fallback = await handleStaticSupabaseApi(url, init);
+        if (fallback) return fallback;
+        throw err;
       }
     }
 
@@ -75,9 +95,11 @@ const AppContent = () => {
         <Route path="/rentals" element={<Rentals />} />
         <Route path="/imss" element={<Imss />} />
         <Route path="/legal" element={<Legal />} />
-        <Route path="/login" element={<Login />} />
+
+        {/* Rutas internas privadas no expuestas públicamente */}
+        <Route path={PRIVATE_ROUTES.login} element={<Login />} />
         <Route
-          path="/admin"
+          path={PRIVATE_ROUTES.admin}
           element={
             <ProtectedRoute requiredRoles={["admin", "agente"]}>
               <Admin />
@@ -85,7 +107,7 @@ const AppContent = () => {
           }
         />
         <Route
-          path="/admin/productos/:id"
+          path={PRIVATE_ROUTES.adminProductDetailPattern}
           element={
             <ProtectedRoute requiredRoles={["admin", "agente"]}>
               <AdminProductDetail />
@@ -93,14 +115,15 @@ const AppContent = () => {
           }
         />
         <Route
-          path="/agentes"
+          path={PRIVATE_ROUTES.agentes}
           element={
             <ProtectedRoute requiredRoles={["agente", "admin"]}>
               <Agentes />
             </ProtectedRoute>
           }
         />
-        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+
+        {/* Cualquier intento a /login, /admin o /agentes cae en 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
@@ -136,7 +159,6 @@ function renderApp() {
     throw new Error("Root element not found");
   }
 
-  // Create root only once, store in window to survive HMR
   if (!window.__REACT_ROOT__) {
     window.__REACT_ROOT__ = createRoot(rootElement);
   }
@@ -144,13 +166,11 @@ function renderApp() {
   window.__REACT_ROOT__.render(<AppRoutes />);
 }
 
-// Initial render (only on first load, not on HMR)
 if (!window.__APP_INITIALIZED__) {
   window.__APP_INITIALIZED__ = true;
   renderApp();
 }
 
-// Handle HMR
 if (import.meta.hot) {
   import.meta.hot.accept(
     [
@@ -165,7 +185,6 @@ if (import.meta.hot) {
       "./pages/AdminProductDetail",
       "./pages/Login",
       "./pages/Agentes",
-      "./pages/DevSetup",
     ],
     () => {
       renderApp();

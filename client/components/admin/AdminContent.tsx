@@ -130,8 +130,8 @@ export default function AdminContent() {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-white">
+      <div className="flex flex-wrap justify-between items-center gap-2">
+        <h3 className="text-base sm:text-lg font-semibold text-white">
           Bloques de Contenido ({contentBlocks.length})
         </h3>
         <Button

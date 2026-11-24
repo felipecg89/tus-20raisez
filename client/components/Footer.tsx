@@ -132,11 +132,6 @@ export const Footer = () => {
                   {t.header.contacto}
                 </a>
               </li>
-              <li>
-                <Link to="/admin" className="hover:text-white transition-colors text-slate-400">
-                  {language === "es" ? "Acceso Asesores" : "Agent Portal"}
-                </Link>
-              </li>
             </ul>
           </div>
         </div>

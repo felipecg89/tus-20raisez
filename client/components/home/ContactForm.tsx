@@ -83,8 +83,8 @@ export const ContactForm = () => {
           <div className="max-w-6xl mx-auto rounded-3xl overflow-hidden border border-[#DFE5EA] shadow-xl grid grid-cols-1 lg:grid-cols-12 bg-white">
             
             {/* Columna Izquierda: Azul Hogar Sereno #1B4965 con canales oficiales */}
-            <div className="lg:col-span-5 bg-[#1B4965] text-white p-8 md:p-12 flex flex-col justify-between space-y-8">
-              <div className="space-y-4">
+            <div className="lg:col-span-5 bg-[#1B4965] text-white p-5 sm:p-8 md:p-12 flex flex-col justify-between space-y-6 sm:space-y-8">
+              <div className="space-y-3 sm:space-y-4">
                 <span className="inline-block text-xs font-bold uppercase tracking-wider text-emerald-300 bg-white/10 px-3 py-1 rounded-full">
                   {language === "es" ? "Atención Personalizada" : "Dedicated Support"}
                 </span>
@@ -108,15 +108,15 @@ export const ContactForm = () => {
                     href={getWhatsAppUrl("Hola, me gustaría agendar una asesoría gratuita sobre trámites y propiedades en México.")}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-between w-full p-3 rounded-2xl bg-white/10 hover:bg-white/20 transition-all border border-white/15 text-xs sm:text-sm font-semibold"
+                    className="flex flex-wrap items-center justify-between gap-2 w-full p-3 rounded-2xl bg-white/10 hover:bg-white/20 transition-all border border-white/15 text-xs sm:text-sm font-semibold"
                   >
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center text-white">
+                      <div className="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center text-white shrink-0">
                         <MessageCircle className="w-4 h-4 fill-white" />
                       </div>
                       <span>WhatsApp Business Oficial</span>
                     </div>
-                    <span className="text-[11px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-md font-mono">
+                    <span className="text-[11px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-md font-mono whitespace-nowrap">
                       {WHATSAPP_DISPLAY}
                     </span>
                   </a>
@@ -124,7 +124,7 @@ export const ContactForm = () => {
 
                 {/* Líneas Gratuitas Zadarma */}
                 <div className="space-y-2 pt-2 border-t border-white/10">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-1.5">
                     <p className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
                       {language === "es" ? "Líneas Telefónicas Gratuitas" : "Toll-Free Numbers"}
                     </p>
@@ -201,7 +201,7 @@ export const ContactForm = () => {
             </div>
 
             {/* Columna Derecha: Formulario conectado a HubSpot */}
-            <div className="lg:col-span-7 p-8 md:p-12 bg-white flex flex-col justify-center">
+            <div className="lg:col-span-7 p-5 sm:p-8 md:p-12 bg-white flex flex-col justify-center">
               <div className="mb-6 space-y-1">
                 <h3 className="font-heading font-bold text-2xl text-[#101B24]">
                   {language === "es" ? "Envíanos un mensaje" : "Send us a message"}

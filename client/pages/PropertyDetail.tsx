@@ -43,144 +43,10 @@ interface LocalProperty {
   bathrooms: number;
   area: number;
   description: string;
-  type: "casa" | "terreno";
+  type: "casa" | "terreno" | "departamento" | "comercio" | "salon_fiestas";
   state: string;
   image?: string;
 }
-
-// Local properties data
-const localProperties: LocalProperty[] = [
-  {
-    id: "1",
-    title: "Casa Colonial en Guanajuato",
-    price: 180000,
-    location: "Guanajuato, GTO",
-    address: "Calle Hidalgo 123, Centro, Guanajuato, Guanajuato",
-    latitude: 21.0161,
-    longitude: -101.2546,
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 250,
-    description:
-      "Hermosa casa colonial con patio interior, acabados de lujo y vista a la ciudad.",
-    type: "casa",
-    state: "Guanajuato",
-    image: "/images/cliente-feliz-llaves.jpg",
-  },
-  {
-    id: "2",
-    title: "Departamento Playa Jalisco",
-    price: 250000,
-    location: "Puerto Vallarta, JAL",
-    address: "Avenida México 456, Zona Hotelera, Puerto Vallarta, Jalisco",
-    latitude: 20.6295,
-    longitude: -105.2419,
-    bedrooms: 2,
-    bathrooms: 2,
-    area: 150,
-    description:
-      "Moderno departamento con vista al mar, acceso a playa privada y amenidades.",
-    type: "casa",
-    state: "Jalisco",
-  },
-  {
-    id: "3",
-    title: "Terreno Desarrollo Nuevo",
-    price: 120000,
-    location: "Monterrey, NL",
-    address: "Boulevard Tecnológico KM 3.5, Huajuco, Monterrey, Nuevo León",
-    latitude: 25.6856,
-    longitude: -100.3161,
-    bedrooms: 0,
-    bathrooms: 0,
-    area: 1200,
-    description:
-      "Terreno en desarrollo inmobiliario con servicios incluidos e infraestructura lista.",
-    type: "terreno",
-    state: "Nuevo León",
-    image: "/images/terreno-residencial-mexico.jpg",
-  },
-  {
-    id: "4",
-    title: "Casa Campestre Michoacán",
-    price: 200000,
-    location: "Morelia, MICH",
-    address: "Carretera Morelia-Quiroga KM 8, Morelia, Michoacán",
-    latitude: 19.7033,
-    longitude: -101.1903,
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 320,
-    description:
-      "Casa campestre con grandes extensiones, alberca y jardín amplío.",
-    type: "casa",
-    state: "Michoacán",
-    image: "/images/casa-mexico-fachada.jpg",
-  },
-  {
-    id: "5",
-    title: "Penthouse Centro CDMX",
-    price: 450000,
-    location: "CDMX",
-    address: "Paseo de la Reforma 505, Cuauhtémoc, CDMX",
-    latitude: 19.4326,
-    longitude: -99.1332,
-    bedrooms: 3,
-    bathrooms: 3,
-    area: 280,
-    description:
-      "Elegante penthouse en zona exclusiva con terraza panorámica y seguridad 24/7.",
-    type: "casa",
-    state: "Ciudad de México",
-  },
-  {
-    id: "6",
-    title: "Lote Residencial Querétaro",
-    price: 95000,
-    location: "Querétaro, QRO",
-    address: "Avenida Científica, Fraccionamiento Santa Rosa, Querétaro",
-    latitude: 20.5888,
-    longitude: -100.3899,
-    bedrooms: 0,
-    bathrooms: 0,
-    area: 800,
-    description:
-      "Lote residencial en fraccionamiento consolidado, todos los servicios disponibles.",
-    type: "terreno",
-    state: "Querétaro",
-  },
-  {
-    id: "7",
-    title: "Casita Cozy Oaxaca",
-    price: 85000,
-    location: "Oaxaca, OAX",
-    address: "Calle Murguía 304, Centro, Oaxaca de Juárez, Oaxaca",
-    latitude: 17.0627,
-    longitude: -96.7236,
-    bedrooms: 2,
-    bathrooms: 1,
-    area: 100,
-    description: "Acogedora casa en el centro histórico, perfecta para inversor.",
-    type: "casa",
-    state: "Oaxaca",
-  },
-  {
-    id: "8",
-    title: "Quinta Turística Veracruz",
-    price: 320000,
-    location: "Veracruz, VER",
-    address: "Camino Viejo a Boca del Río KM 5, Veracruz",
-    latitude: 19.1381,
-    longitude: -96.1374,
-    bedrooms: 5,
-    bathrooms: 4,
-    area: 450,
-    description:
-      "Propiedad con potencial turístico, entre naturaleza y comodidades.",
-    type: "casa",
-    state: "Veracruz",
-  },
-];
 
 export default function PropertyDetail() {
   const { id } = useParams<{ id: string }>();
@@ -189,6 +55,7 @@ export default function PropertyDetail() {
   const t = translations[language];
 
   const [property, setProperty] = useState<Product | LocalProperty | null>(null);
+  const [relatedList, setRelatedList] = useState<LocalProperty[]>([]);
   const [media, setMedia] = useState<PropertyMedia[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -201,15 +68,6 @@ export default function PropertyDetail() {
       try {
         setLoading(true);
 
-        // First, check if it's a local property
-        const localProp = localProperties.find((p) => p.id === id);
-        if (localProp) {
-          setProperty(localProp);
-          setIsLocalProperty(true);
-          return;
-        }
-
-        // Otherwise, try Supabase
         const response = await fetch(`/api/products/${id}`);
         if (!response.ok) {
           navigate("/casas");
@@ -219,15 +77,57 @@ export default function PropertyDetail() {
         setProperty(data);
         setIsLocalProperty(false);
 
-        // Fetch media from Supabase only
         try {
           const mediaResponse = await fetch(`/api/products/${id}/media`);
           if (mediaResponse.ok) {
-            const mediaData = await mediaResponse.json();
-            setMedia(mediaData);
+            const mediaJson = await mediaResponse.json();
+            const rawItems = Array.isArray(mediaJson?.data)
+              ? mediaJson.data
+              : Array.isArray(mediaJson)
+                ? mediaJson
+                : [];
+            setMedia(
+              rawItems.map((m: any) => ({
+                type: m.media_type || m.type || "image",
+                url: m.media_url || m.url || "",
+                path: m.storage_path || m.path || "",
+              }))
+            );
           }
         } catch (error) {
           console.error("Error fetching media:", error);
+        }
+
+        try {
+          const relatedResp = await fetch("/api/products?limit=8");
+          if (relatedResp.ok) {
+            const relatedJson = await relatedResp.json();
+            const items: Product[] = Array.isArray(relatedJson?.data)
+              ? relatedJson.data
+              : Array.isArray(relatedJson)
+                ? relatedJson
+                : [];
+            setRelatedList(
+              items
+                .filter((p) => String(p.id) !== String(id))
+                .slice(0, 4)
+                .map((p) => ({
+                  id: String(p.id),
+                  title: p.name,
+                  price: p.price,
+                  location: p.city ? `${p.city}${p.state ? `, ${p.state}` : ""}` : p.state || "México",
+                  bedrooms: p.bedrooms || 0,
+                  bathrooms: p.bathrooms || 0,
+                  area: p.area || 0,
+                  description: p.description || "",
+                  type: (p.type as LocalProperty["type"]) || "casa",
+                  state: p.state || p.city || "",
+                  image: p.image,
+                }))
+            );
+          }
+        } catch {
+          setRelatedList([]);
         }
       } catch (error) {
         console.error("Error fetching property:", error);
@@ -310,26 +210,7 @@ export default function PropertyDetail() {
   };
 
   const getRelatedProperties = () => {
-    if (!property) return [];
-
-    const currentState = "state" in property ? property.state : ("location" in property ? (property as any).location : property.city);
-    const currentType = property.type;
-    const currentId = property.id;
-
-    // Filter properties by type and state, excluding current property
-    const related = localProperties.filter((p) =>
-      p.id !== currentId && p.type === currentType && p.state === currentState
-    );
-
-    // If not enough results, also include properties of same type from other states
-    if (related.length < 4) {
-      const sameType = localProperties.filter((p) =>
-        p.id !== currentId && p.type === currentType && !related.some(r => r.id === p.id)
-      );
-      related.push(...sameType);
-    }
-
-    return related.slice(0, 4);
+    return relatedList;
   };
 
   const handleWhatsApp = () => {

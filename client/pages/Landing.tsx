@@ -183,14 +183,14 @@ export default function Landing() {
           {!submitted ? (
             <>
               {/* Hero Section */}
-              <section className="max-w-3xl mx-auto mb-16 text-center">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+              <section className="max-w-3xl mx-auto mb-10 sm:mb-16 text-center">
+                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 sm:mb-6">
                   {lang.title}
                 </h1>
-                <p className="text-lg md:text-xl text-foreground/70 mb-8">
+                <p className="text-base sm:text-lg md:text-xl text-foreground/70 mb-6 sm:mb-8">
                   {lang.subtitle}
                 </p>
-                <p className="text-primary font-semibold">{lang.cta}</p>
+                <p className="text-primary font-semibold text-sm sm:text-base">{lang.cta}</p>
               </section>
 
               {/* Two Column Layout */}
@@ -256,7 +256,7 @@ export default function Landing() {
 
                 {/* Right Column - Form */}
                 <div className="order-1 lg:order-2">
-                  <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-3xl p-8 border-2 border-primary/20 sticky top-20">
+                  <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-3xl p-5 sm:p-8 border-2 border-primary/20 sticky top-20">
                     <h3 className="text-2xl font-bold text-foreground mb-2">
                       {lang.formTitle}
                     </h3>

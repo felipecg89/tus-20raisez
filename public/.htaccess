@@ -1,0 +1,42 @@
+# 1. Asegurar tipos MIME correctos para JavaScript, CSS e imágenes
+<IfModule mod_mime.c>
+  AddType application/javascript .js .mjs
+  AddType text/css .css
+  AddType image/svg+xml .svg
+  AddType image/webp .webp
+  AddType image/png .png
+  AddType image/jpeg .jpg .jpeg
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 2. Bloquear acceso a archivos sensibles y de configuración
+  RewriteRule ^\.env.* - [F,L]
+  RewriteRule ^\.git.* - [F,L]
+  RewriteRule \.(sql|md|log|sh|bak|config)$ - [F,L]
+  RewriteRule ^package\.json$ - [F,L]
+  RewriteRule ^tsconfig\.json$ - [F,L]
+
+  # 3. Excluir explícitamente recursos estáticos para que LiteSpeed/Hostinger nunca los reescriba a index.html
+  RewriteCond %{REQUEST_URI} ^/(assets|images)/ [OR]
+  RewriteCond %{REQUEST_URI} \.(js|mjs|css|png|jpg|jpeg|gif|ico|svg|webp|woff|woff2|ttf)$
+  RewriteRule ^ - [L]
+
+  # 4. Reglas SPA Frontend (Redirigir rutas de React a index.html)
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# Deshabilitar listado de directorios
+Options -Indexes
+
+# Encabezados de seguridad adicionales
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

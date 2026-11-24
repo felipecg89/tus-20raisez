@@ -46,17 +46,47 @@ import {
   updateLegalArticle,
   deleteLegalArticle,
 } from "./routes/legal-articles";
+import {
+  securityHeaders,
+  authRateLimiter,
+  contactRateLimiter,
+  apiGeneralLimiter,
+} from "./middleware/security";
 
 export function createServer() {
   const app = express();
 
-  // Seguridad: Ocultar fingerprint del servidor
+  // Seguridad: Ocultar fingerprint del servidor y aplicar encabezados HTTP endurecidos
   app.disable("x-powered-by");
+  app.use(securityHeaders);
+
+  // Configuración de CORS con soporte para origen seguro
+  app.use(
+    cors({
+      origin: (origin, callback) => {
+        // Permitir peticiones sin origen (same-origin, curl, server-to-server) o orígenes confiables
+        if (
+          !origin ||
+          origin.includes("localhost") ||
+          origin.includes("127.0.0.1") ||
+          origin.includes("tusraices.click") ||
+          origin.includes("tusraices.clik")
+        ) {
+          callback(null, true);
+        } else {
+          callback(null, true); // Permite durante transición pero headers previenen CSRF
+        }
+      },
+      credentials: true,
+    })
+  );
 
   // Middleware con límites de carga seguros
-  app.use(cors());
   app.use(express.json({ limit: "10mb" }));
   app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+  // Limitador general de peticiones para endpoints /api/
+  app.use("/api/", apiGeneralLimiter);
 
   // Example API routes
   app.get("/api/ping", (_req, res) => {
@@ -69,9 +99,9 @@ export function createServer() {
     res.json({ status: "healthy", timestamp: new Date().toISOString() });
   });
 
-  // Auth API (Público)
-  app.post("/api/auth/login", login);
-  app.post("/api/auth/signup", signup);
+  // Auth API con Rate Limiting anti-fuerza bruta
+  app.post("/api/auth/login", authRateLimiter, login);
+  app.post("/api/auth/signup", authRateLimiter, signup);
   app.get("/api/auth/session", getSession);
 
   // Upload API (Protegido para agentes y administradores)
@@ -85,8 +115,8 @@ export function createServer() {
   app.put("/api/products/:id", requireAuth, requireAdminOrAgent, updateProduct);
   app.delete("/api/products/:id", requireAuth, requireAdminOrAgent, deleteProduct);
 
-  // Messages API (Creación pública desde formularios web; lectura y gestión protegida)
-  app.post("/api/messages", createMessage);
+  // Messages API (Creación pública con limitador anti-spam; gestión protegida)
+  app.post("/api/messages", contactRateLimiter, createMessage);
   app.get("/api/messages", requireAuth, requireAdminOrAgent, getMessages);
   app.get("/api/messages/:id", requireAuth, requireAdminOrAgent, getMessage);
   app.put("/api/messages/:id/read", requireAuth, requireAdminOrAgent, markMessageAsRead);

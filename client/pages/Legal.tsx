@@ -600,11 +600,11 @@ export default function Legal() {
       <section className="bg-gradient-to-br from-primary/10 to-secondary/10 py-12 md:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-foreground mb-3 sm:mb-4">
               {lang.title}
             </h1>
-            <p className="text-lg text-foreground/70 mb-4">{lang.subtitle}</p>
-            <p className="text-foreground/60">{lang.intro}</p>
+            <p className="text-base sm:text-lg text-foreground/70 mb-3 sm:mb-4">{lang.subtitle}</p>
+            <p className="text-sm sm:text-base text-foreground/60">{lang.intro}</p>
           </div>
         </div>
       </section>
@@ -684,14 +684,14 @@ export default function Legal() {
             </div>
 
             {/* Service Details */}
-            <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl border border-border p-8">
-              <div className="flex items-start gap-4 mb-6">
-                <div className="text-5xl">{currentService.icon}</div>
-                <div className="flex-1">
-                  <h3 className="text-3xl font-bold text-foreground mb-2">
+            <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl border border-border p-5 sm:p-8">
+              <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 mb-6">
+                <div className="text-4xl sm:text-5xl">{currentService.icon}</div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-2">
                     {currentService.title}
                   </h3>
-                  <p className="text-lg text-foreground/70 mb-4">
+                  <p className="text-sm sm:text-base md:text-lg text-foreground/70 mb-4">
                     {currentService.description}
                   </p>
                   <div className="flex flex-col sm:flex-row gap-6 text-sm">

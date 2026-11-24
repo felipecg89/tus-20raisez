@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/home/Hero";
+import { FeaturedProperties } from "@/components/home/FeaturedProperties";
 import { Services } from "@/components/home/Services";
 import { Benefits } from "@/components/home/Benefits";
 import { HowItWorks } from "@/components/home/HowItWorks";
@@ -12,6 +13,7 @@ export default function Index() {
       <Header />
       <main className="flex-1">
         <Hero />
+        <FeaturedProperties />
         <Services />
         <Benefits />
         <HowItWorks />

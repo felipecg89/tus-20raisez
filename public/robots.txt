@@ -1,14 +1,38 @@
+# ==============================================================================
+# Tus Raíces MX - Robots & AI Bot Exclusion Policy
+# ==============================================================================
+
+# 1. Buscadores Generales Legítimos
 User-agent: Googlebot
-Allow: /
-
 User-agent: Bingbot
+User-agent: Applebot
 Allow: /
+Disallow: /api/
+Disallow: /*?*search=
 
+# 2. Redes Sociales (Previews)
 User-agent: Twitterbot
-Allow: /
-
 User-agent: facebookexternalhit
+User-agent: LinkedInBot
+User-agent: WhatsApp
 Allow: /
 
+# 3. Bloqueo de Scrapers y Agentes de IA Agresivos
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: CCBot
+User-agent: anthropic-ai
+User-agent: Claude-Web
+User-agent: ClaudeBot
+User-agent: PerplexityBot
+User-agent: ByteSpider
+User-agent: Bytespider
+User-agent: Google-Extended
+User-agent: Scrapy
+User-agent: Diffbot
+Disallow: /
+
+# 4. Regla por defecto para el resto
 User-agent: *
 Allow: /
+Disallow: /api/

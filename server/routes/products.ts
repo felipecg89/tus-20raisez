@@ -2,193 +2,8 @@ import { RequestHandler } from "express";
 import { Product } from "@shared/api";
 import { supabase, supabaseAdmin } from "../lib/supabase";
 
-// Catálogo base de alta calidad para producción cuando Supabase no esté conectado
-export const FALLBACK_PRODUCTS: Product[] = [
-  {
-    id: "1",
-    name: "Casa Colonial en Guanajuato",
-    description:
-      "Hermosa casa colonial con patio interior, cantera mexicana, acabados de cedro y vista panorámica a la ciudad histórica.",
-    price: 180000,
-    city: "Guanajuato",
-    state: "Guanajuato",
-    postalCode: "36000",
-    neighborhood: "Centro Histórico",
-    address: "Calle Cantarranas 45",
-    type: "casa",
-    category: "compra",
-    isCommercial: false,
-    image: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1000&q=80",
-    features: ["Patio central con fuente", "Cochera techada", "Terraza con vista", "Cisterna de 10,000 L"],
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 250,
-    floors: 2,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    name: "Departamento Vista al Mar en Jalisco",
-    description:
-      "Moderno departamento frente a la bahía en Puerto Vallarta, acceso directo a la playa, alberca infinity y amenidades de lujo.",
-    price: 250000,
-    city: "Puerto Vallarta",
-    state: "Jalisco",
-    postalCode: "48300",
-    neighborhood: "Zona Hotelera Norte",
-    address: "Av. Paseo de la Marina 210",
-    type: "casa",
-    category: "compra",
-    isCommercial: false,
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=80",
-    features: ["Alberca infinity", "Seguridad 24/7", "Balcón privado con vista al mar", "Gimnasio y spa"],
-    bedrooms: 2,
-    bathrooms: 2,
-    area: 150,
-    floors: 1,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "3",
-    name: "Residencia Contemporánea Monterrey",
-    description:
-      "Espectacular casa contemporánea en fraccionamiento privado con vigilancia, acabados de mármol y amplio jardín.",
-    price: 320000,
-    city: "Monterrey",
-    state: "Nuevo León",
-    postalCode: "66260",
-    neighborhood: "Valle Oriente",
-    address: "Paseo de las Cumbres 500",
-    type: "casa",
-    category: "compra",
-    isCommercial: false,
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80",
-    features: ["Clima central inverter", "Cochera triple", "Cocina integral equipada", "Jardín privado"],
-    bedrooms: 4,
-    bathrooms: 4,
-    area: 380,
-    floors: 2,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "4",
-    name: "Lote Residencial en Querétaro",
-    description:
-      "Terreno listo para construir dentro de clúster con campo de golf, servicios subterráneos y club deportivo familiar.",
-    price: 95000,
-    city: "Querétaro",
-    state: "Querétaro",
-    postalCode: "76900",
-    neighborhood: "El Campanario",
-    address: "Circuito de los Virreyes Lote 14",
-    type: "terreno",
-    category: "compra",
-    isCommercial: false,
-    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80",
-    features: ["Servicios subterráneos", "Escrituración inmediata", "Seguridad privada", "Casa club"],
-    bedrooms: 0,
-    bathrooms: 0,
-    area: 800,
-    floors: 0,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "5",
-    name: "Casa Campestre Morelia",
-    description:
-      "Propiedad campestre de descanso con amplios jardines arbolados, alberca climatizada y terraza para eventos familiares.",
-    price: 200000,
-    city: "Morelia",
-    state: "Michoacán",
-    postalCode: "58000",
-    neighborhood: "Altozano",
-    address: "Camino a Santa María 80",
-    type: "casa",
-    category: "compra",
-    isCommercial: false,
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80",
-    features: ["Alberca y asador", "Jardín de 1,000 m²", "Chimenea rústica", "Bardeado perimetral"],
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 320,
-    floors: 2,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "6",
-    name: "Penthouse de Lujo CDMX",
-    description:
-      "Exclusivo penthouse de dos niveles con roof garden privado, vistas a la ciudad y acabados importados de alta gama.",
-    price: 450000,
-    city: "Ciudad de México",
-    state: "Ciudad de México",
-    postalCode: "11560",
-    neighborhood: "Polanco / Reforma",
-    address: "Campos Elíseos 120",
-    type: "casa",
-    category: "compra",
-    isCommercial: false,
-    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1000&q=80",
-    features: ["Roof garden privado", "Elevador directo", "2 estacionamientos", "Seguridad 24/7"],
-    bedrooms: 3,
-    bathrooms: 3,
-    area: 280,
-    floors: 2,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "7",
-    name: "Casa Yucateca con Alberca en Mérida",
-    description:
-      "Arquitectura tradicional de techos altos y muros de mampostería combinada con confort moderno y alberca chukum.",
-    price: 165000,
-    city: "Mérida",
-    state: "Yucatán",
-    postalCode: "97000",
-    neighborhood: "Santiago Centro",
-    address: "Calle 59 x 68",
-    type: "casa",
-    category: "compra",
-    isCommercial: false,
-    image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=80",
-    features: ["Alberca acabado chukum", "Cocina abierta", "Jardín tropical", "Techos de 4 metros"],
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 210,
-    floors: 1,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "8",
-    name: "Quinta Colonial Zacatecas",
-    description:
-      "Encantadora quinta con muros de cantera rosa zacatecana, portón de hierro forjado y ubicación privilegiada.",
-    price: 215000,
-    city: "Zacatecas",
-    state: "Zacatecas",
-    postalCode: "98000",
-    neighborhood: "La Bufa Residencial",
-    address: "Paseo Díaz Ordaz 410",
-    type: "casa",
-    category: "compra",
-    isCommercial: false,
-    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80",
-    features: ["Cantera rosa original", "Cava subterránea", "Balcones coloniales", "Cochera para 3 autos"],
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 310,
-    floors: 2,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
+// Sin datos de relleno: el catálogo muestra exclusivamente las propiedades reales de Supabase
+export const FALLBACK_PRODUCTS: Product[] = [];
 
 export const getProducts: RequestHandler = async (req, res) => {
   const page = Math.max(1, parseInt(req.query.page as string) || 1);
@@ -222,8 +37,13 @@ export const getProducts: RequestHandler = async (req, res) => {
       if (maxPrice !== undefined) {
         query = query.lte("price", maxPrice);
       }
-      if (search) {
-        query = query.or(`name.ilike.%${search}%,description.ilike.%${search}%`);
+      if (search && typeof search === "string") {
+        const sanitizedSearch = search.replace(/[,.()%\\"]/g, " ").trim();
+        if (sanitizedSearch.length > 0) {
+          query = query.or(
+            `name.ilike.%${sanitizedSearch}%,description.ilike.%${sanitizedSearch}%`
+          );
+        }
       }
 
       // Timeout safety promise (3 seconds max)
@@ -237,7 +57,7 @@ export const getProducts: RequestHandler = async (req, res) => {
 
       const { data, error, count } = (await Promise.race([queryPromise, timeoutPromise])) as any;
 
-      if (!error && Array.isArray(data) && data.length > 0) {
+      if (!error && Array.isArray(data)) {
         const products = data.map((p: any) => ({
           id: p.id,
           name: p.name,

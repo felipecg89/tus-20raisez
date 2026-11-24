@@ -5,10 +5,10 @@
 
 export const BUILDER_CONFIG = {
   // Replace with your actual Builder API key
-  apiKey: process.env.VITE_BUILDER_API_KEY || "YOUR_BUILDER_API_KEY",
+  apiKey: (import.meta as any).env?.VITE_BUILDER_API_KEY || "YOUR_BUILDER_API_KEY",
   
   // Replace with your actual Builder Space ID
-  spaceId: process.env.VITE_BUILDER_SPACE_ID || "YOUR_BUILDER_SPACE_ID",
+  spaceId: (import.meta as any).env?.VITE_BUILDER_SPACE_ID || "YOUR_BUILDER_SPACE_ID",
 };
 
 // Builder.io Content URLs patterns

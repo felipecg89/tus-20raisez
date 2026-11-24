@@ -4,6 +4,7 @@ import { Menu, X, Globe, MessageSquare, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { PRIVATE_ROUTES } from "@/lib/routes";
 import { translations } from "@/translations";
 
 export const Header = () => {
@@ -36,60 +37,48 @@ export const Header = () => {
           />
         </Link>
 
-        {/* Zona 2 (Centro): 4 enlaces cortos centrados en escritorio (ocultos en móvil) */}
-        <div className="hidden lg:flex items-center gap-7">
-          <a
-            href="#servicios"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("servicios");
-            }}
-            className="text-sm font-medium text-[#465664] hover:text-[#1B4965] transition-colors"
+        {/* Zona 2 (Centro): Módulos principales de la plataforma en escritorio */}
+        <div className="hidden lg:flex items-center gap-6">
+          <Link
+            to="/casas"
+            className="text-sm font-semibold text-[#101B24] hover:text-[#1B4965] transition-colors flex items-center gap-1.5"
           >
-            {language === "es" ? "Servicios" : "Services"}
-          </a>
-          <a
-            href="#respaldo"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("respaldo");
-            }}
-            className="text-sm font-medium text-[#465664] hover:text-[#1B4965] transition-colors"
+            <span>🏡</span>
+            <span>{t.header.casas || "Casas y Terrenos"}</span>
+          </Link>
+          <Link
+            to="/rentals"
+            className="text-sm font-semibold text-[#101B24] hover:text-[#1B4965] transition-colors flex items-center gap-1.5"
           >
-            {language === "es" ? "Respaldo" : "Trust & Support"}
-          </a>
-          <a
-            href="#como-funciona"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("como-funciona");
-            }}
-            className="text-sm font-medium text-[#465664] hover:text-[#1B4965] transition-colors"
+            <span>🏢</span>
+            <span>{language === "es" ? "Alquilar" : "Rentals"}</span>
+          </Link>
+          <Link
+            to="/imss"
+            className="text-sm font-semibold text-[#101B24] hover:text-[#1B4965] transition-colors flex items-center gap-1.5"
           >
-            {language === "es" ? "Cómo funciona" : "How it works"}
-          </a>
-          <a
-            href="#testimonios"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("testimonios");
-            }}
-            className="text-sm font-medium text-[#465664] hover:text-[#1B4965] transition-colors"
+            <span>💼</span>
+            <span>{t.header.imssInfonavit || "IMSS e Infonavit"}</span>
+          </Link>
+          <Link
+            to="/legal"
+            className="text-sm font-semibold text-[#101B24] hover:text-[#1B4965] transition-colors flex items-center gap-1.5"
           >
-            {language === "es" ? "Testimonios" : "Testimonials"}
-          </a>
+            <span>⚖️</span>
+            <span>{t.header.asesoriaLegal || "Asesoría Legal"}</span>
+          </Link>
         </div>
 
         {/* Zona 3 (Derecha): Selector de idioma + Botón CTA principal */}
         <div className="flex items-center gap-2 md:gap-3">
           {user && (user.role === "admin" || user.role === "agente") && (
             <Link
-              to="/admin"
+              to={PRIVATE_ROUTES.admin}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-sm min-h-[38px]"
               title="Panel Administrativo"
             >
               <LayoutDashboard className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">cPanel</span>
+              <span className="hidden sm:inline">Panel</span>
             </Link>
           )}
 
@@ -175,74 +164,55 @@ export const Header = () => {
 
       {/* Menú Móvil Desplegable */}
       {isOpen && (
-        <div className="lg:hidden border-t border-[#DFE5EA] bg-white px-4 py-4 shadow-lg space-y-2 animate-in fade-in slide-in-from-top-2">
-          <div className="grid grid-cols-2 gap-2 pb-2 border-b border-[#DFE5EA]">
-            <a
-              href="#servicios"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection("servicios");
-              }}
-              className="p-2.5 rounded-lg text-sm font-medium text-[#101B24] bg-[#F7F8FA] hover:bg-[#DFE5EA]/40 text-center"
+        <div className="lg:hidden border-t border-[#DFE5EA] bg-white px-4 py-4 shadow-lg space-y-3 animate-in fade-in slide-in-from-top-2">
+          {/* Módulos Principales */}
+          <div className="grid grid-cols-2 gap-2 pb-3 border-b border-[#DFE5EA]">
+            <Link
+              to="/casas"
+              onClick={() => setIsOpen(false)}
+              className="p-3 rounded-xl text-sm font-bold text-[#101B24] bg-[#F7F8FA] hover:bg-[#1B4965]/10 hover:text-[#1B4965] flex items-center gap-2 transition-colors border border-[#DFE5EA]"
             >
-              {language === "es" ? "Servicios" : "Services"}
-            </a>
-            <a
-              href="#respaldo"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection("respaldo");
-              }}
-              className="p-2.5 rounded-lg text-sm font-medium text-[#101B24] bg-[#F7F8FA] hover:bg-[#DFE5EA]/40 text-center"
+              <span className="text-lg">🏡</span>
+              <span>{t.header.casas || "Casas"}</span>
+            </Link>
+            <Link
+              to="/rentals"
+              onClick={() => setIsOpen(false)}
+              className="p-3 rounded-xl text-sm font-bold text-[#101B24] bg-[#F7F8FA] hover:bg-[#1B4965]/10 hover:text-[#1B4965] flex items-center gap-2 transition-colors border border-[#DFE5EA]"
             >
-              {language === "es" ? "Respaldo" : "Trust & Support"}
-            </a>
-            <a
-              href="#como-funciona"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection("como-funciona");
-              }}
-              className="p-2.5 rounded-lg text-sm font-medium text-[#101B24] bg-[#F7F8FA] hover:bg-[#DFE5EA]/40 text-center"
+              <span className="text-lg">🏢</span>
+              <span>{language === "es" ? "Alquilar" : "Rentals"}</span>
+            </Link>
+            <Link
+              to="/imss"
+              onClick={() => setIsOpen(false)}
+              className="p-3 rounded-xl text-sm font-bold text-[#101B24] bg-[#F7F8FA] hover:bg-[#1B4965]/10 hover:text-[#1B4965] flex items-center gap-2 transition-colors border border-[#DFE5EA]"
             >
-              {language === "es" ? "Cómo funciona" : "How it works"}
-            </a>
-            <a
-              href="#testimonios"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection("testimonios");
-              }}
-              className="p-2.5 rounded-lg text-sm font-medium text-[#101B24] bg-[#F7F8FA] hover:bg-[#DFE5EA]/40 text-center"
+              <span className="text-lg">💼</span>
+              <span>IMSS / Infonavit</span>
+            </Link>
+            <Link
+              to="/legal"
+              onClick={() => setIsOpen(false)}
+              className="p-3 rounded-xl text-sm font-bold text-[#101B24] bg-[#F7F8FA] hover:bg-[#1B4965]/10 hover:text-[#1B4965] flex items-center gap-2 transition-colors border border-[#DFE5EA]"
             >
-              {language === "es" ? "Testimonios" : "Testimonials"}
-            </a>
+              <span className="text-lg">⚖️</span>
+              <span>Asesoría Legal</span>
+            </Link>
           </div>
 
-          <div className="pt-2 flex flex-col gap-1.5 text-xs text-[#465664]">
-            <Link to="/casas" className="py-2 hover:text-[#1B4965] font-medium" onClick={() => setIsOpen(false)}>
-              🏡 {t.header.casas}
-            </Link>
-            <Link to="/imss" className="py-2 hover:text-[#1B4965] font-medium" onClick={() => setIsOpen(false)}>
-              💼 {t.header.imssInfonavit}
-            </Link>
-            <Link to="/legal" className="py-2 hover:text-[#1B4965] font-medium" onClick={() => setIsOpen(false)}>
-              ⚖️ {t.header.asesoriaLegal}
-            </Link>
-            <Link to="/rentals" className="py-2 hover:text-[#1B4965] font-medium" onClick={() => setIsOpen(false)}>
-              🏢 {language === "es" ? "Alquilar" : "Rentals"}
-            </Link>
-          </div>
-          <div className="pt-2 border-t border-[#DFE5EA] flex justify-between items-center text-xs">
-            <Link
-              to={user ? "/admin" : "/login"}
-              onClick={() => setIsOpen(false)}
-              className="text-[#1B4965] font-semibold hover:underline flex items-center gap-1.5 py-1"
-            >
-              <LayoutDashboard className="w-4 h-4 text-emerald-600" />
-              {user ? "Ir a cPanel Administrativo" : "Acceso Administrativo / cPanel"}
-            </Link>
-          </div>
+          {user && (user.role === "admin" || user.role === "agente") && (
+            <div className="pt-1 border-t border-[#DFE5EA] flex justify-between items-center text-xs">
+              <Link
+                to={PRIVATE_ROUTES.admin}
+                onClick={() => setIsOpen(false)}
+                className="text-[#1B4965] font-semibold hover:underline flex items-center gap-1.5 py-1.5"
+              >
+                <LayoutDashboard className="w-4 h-4 text-emerald-600" />
+                Ir al Panel Administrativo
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </header>

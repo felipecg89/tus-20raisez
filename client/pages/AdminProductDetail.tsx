@@ -16,6 +16,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Trash2, Upload, X, ArrowLeft, Save } from "lucide-react";
 import { toast } from "sonner";
 import { uploadProductImage, MediaFile } from "@/lib/uploadService";
+import { PRIVATE_ROUTES } from "@/lib/routes";
 import ProductMediaGallery from "@/components/admin/ProductMediaGallery";
 
 export default function AdminProductDetail() {
@@ -215,7 +216,7 @@ export default function AdminProductDetail() {
       if (!response.ok) throw new Error(id === "new" ? "Error creating product" : "Error updating product");
 
       toast.success(id === "new" ? "Producto creado correctamente" : "Producto actualizado correctamente");
-      navigate("/admin", { state: { tab: "productos" } });
+      navigate(PRIVATE_ROUTES.admin, { state: { tab: "productos" } });
     } catch (error) {
       console.error("Error:", error);
       toast.error("Error al guardar el producto");
@@ -379,7 +380,7 @@ Soluciones:
       if (!response.ok) throw new Error("Error deleting product");
 
       toast.success("Producto eliminado correctamente");
-      navigate("/admin", { state: { tab: "productos" } });
+      navigate(PRIVATE_ROUTES.admin, { state: { tab: "productos" } });
     } catch (error) {
       console.error("Error:", error);
       toast.error("Error al eliminar el producto");
@@ -399,7 +400,7 @@ Soluciones:
       <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
         <div className="max-w-4xl mx-auto">
           <Button
-            onClick={() => navigate("/admin")}
+            onClick={() => navigate(PRIVATE_ROUTES.admin)}
             variant="outline"
             className="mb-4 text-white border-slate-600 hover:bg-slate-700"
           >
@@ -417,19 +418,19 @@ Soluciones:
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-3 sm:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0">
             <Button
-              onClick={() => navigate("/admin")}
+              onClick={() => navigate(PRIVATE_ROUTES.admin)}
               variant="outline"
-              className="text-white border-slate-600 hover:bg-slate-700"
+              className="text-white border-slate-600 hover:bg-slate-700 shrink-0"
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-3xl font-bold text-white">
+            <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-white leading-snug">
               {id === "new" ? "Crear Nuevo Producto" : product?.name}
             </h1>
           </div>
@@ -467,7 +468,7 @@ Soluciones:
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-300 mb-2">
                       Ciudad
@@ -491,7 +492,7 @@ Soluciones:
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-300 mb-2">
                       Tipo de Inmueble / Espacio
@@ -581,7 +582,7 @@ Soluciones:
                 )}
 
                 {/* Specification fields - always visible */}
-                <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-300 mb-2">
                       Recámaras
@@ -670,7 +671,7 @@ Soluciones:
                 <div className="border-t border-slate-600 pt-4">
                   <h3 className="text-lg font-semibold text-white mb-4">Ubicación Detallada</h3>
 
-                  <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-300 mb-2">
                         Estado
@@ -695,7 +696,7 @@ Soluciones:
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-300 mb-2">
                         Código Postal
@@ -720,7 +721,7 @@ Soluciones:
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-300 mb-2">
                         Tipo de Vía
@@ -756,7 +757,7 @@ Soluciones:
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-300 mb-2">
                         Número Exterior
@@ -782,14 +783,14 @@ Soluciones:
                   </div>
 
                   {/* Save Address Button */}
-                  <div className="flex gap-2 mb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-4">
                     <Button
                       onClick={handleGeocodeAddress}
-                      className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+                      className="w-full sm:flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
                     >
                       💾 Guardar Domicilio
                     </Button>
-                    <p className="text-xs text-slate-400 flex items-center">
+                    <p className="text-xs text-slate-400">
                       Geocodifica automáticamente la dirección
                     </p>
                   </div>
@@ -830,7 +831,7 @@ Soluciones:
                   {/* Coordinates Section */}
                   <div className="border-t border-slate-600 pt-4">
                     <h4 className="text-sm font-semibold text-slate-300 mb-3">Coordenadas GPS</h4>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-slate-300 mb-2">
                           Latitud
@@ -932,17 +933,17 @@ Soluciones:
             </Card>
 
             {/* Action Buttons */}
-            <div className="flex gap-2 justify-end">
+            <div className="flex flex-col-reverse sm:flex-row gap-2 sm:justify-end">
               <Button
-                onClick={() => navigate("/admin")}
-                className="bg-slate-600 hover:bg-slate-500"
+                onClick={() => navigate(PRIVATE_ROUTES.admin)}
+                className="w-full sm:w-auto bg-slate-600 hover:bg-slate-500"
               >
                 Cancelar
               </Button>
               {id !== "new" && (
                 <Button
                   onClick={handleDelete}
-                  className="bg-red-600 hover:bg-red-700"
+                  className="w-full sm:w-auto bg-red-600 hover:bg-red-700"
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
                   Eliminar Producto
@@ -951,7 +952,7 @@ Soluciones:
               <Button
                 onClick={handleSave}
                 disabled={saving}
-                className="bg-emerald-600 hover:bg-emerald-700"
+                className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700"
               >
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? "Guardando..." : id === "new" ? "Crear Producto" : "Guardar Cambios"}

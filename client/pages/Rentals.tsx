@@ -5,6 +5,7 @@ import { PropertyCard } from "@/components/properties/PropertyCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 import { Sliders } from "lucide-react";
+import { Product } from "@shared/api";
 import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 interface RentalProperty {
@@ -18,140 +19,13 @@ interface RentalProperty {
   description: string;
   type: "casa" | "terreno" | "departamento" | "oficina" | "comercio" | "salon_fiestas";
   state: string;
+  category?: string;
+  isCommercial?: boolean;
   rentalPrice?: number;
   rentalPeriod?: "monthly" | "yearly" | "evento" | "dia" | "anual" | string;
   capacity?: number;
   image?: string;
 }
-
-const rentalProperties: RentalProperty[] = [
-  {
-    id: "r1",
-    title: "Casa Moderna Monterrey - Alquiler",
-    price: 1200,
-    rentalPrice: 1200,
-    rentalPeriod: "monthly",
-    location: "Monterrey, NL",
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 200,
-    description:
-      "Hermosa casa moderna en zona segura, perfecta para familia. Incluye: garaje, jardín, servicios básicos.",
-    type: "casa",
-    state: "Nuevo León",
-    image: "/images/casa-mexico-fachada.jpg",
-  },
-  {
-    id: "r2",
-    title: "Departamento Playa Vallarta - Alquiler",
-    price: 1800,
-    rentalPrice: 1800,
-    rentalPeriod: "monthly",
-    location: "Puerto Vallarta, JAL",
-    bedrooms: 2,
-    bathrooms: 2,
-    area: 120,
-    description:
-      "Departamento con vista al mar, amueblado, ideal para ejecutivos o turismo de larga estancia.",
-    type: "departamento",
-    state: "Jalisco",
-  },
-  {
-    id: "r3",
-    title: "Casa Céntrica Guanajuato - Alquiler",
-    price: 900,
-    rentalPrice: 900,
-    rentalPeriod: "monthly",
-    location: "Guanajuato, GTO",
-    bedrooms: 2,
-    bathrooms: 1,
-    area: 100,
-    description:
-      "Casa en el corazón del centro histórico, ideal para estudiantes o parejas jóvenes.",
-    type: "casa",
-    state: "Guanajuato",
-    image: "/images/cliente-feliz-llaves.jpg",
-  },
-  {
-    id: "r4",
-    title: "Oficina Corporativa CDMX - Alquiler",
-    price: 2500,
-    rentalPrice: 2500,
-    rentalPeriod: "monthly",
-    location: "CDMX",
-    bedrooms: 0,
-    bathrooms: 2,
-    area: 180,
-    description:
-      "Oficina moderna, totalmente equipada, en zona de negocios premium con estacionamiento.",
-    type: "oficina",
-    state: "Ciudad de México",
-  },
-  {
-    id: "r5",
-    title: "Terreno Agrícola Michoacán - Alquiler",
-    price: 300,
-    rentalPrice: 300,
-    rentalPeriod: "monthly",
-    location: "Morelia, MICH",
-    bedrooms: 0,
-    bathrooms: 0,
-    area: 5000,
-    description:
-      "Terreno para cultivo o inversión, acceso a agua, zona fértil.",
-    type: "terreno",
-    state: "Michoacán",
-    image: "/images/terreno-residencial-mexico.jpg",
-  },
-  {
-    id: "r6",
-    title: "Casa Vacacional Oaxaca - Alquiler",
-    price: 1500,
-    rentalPrice: 1500,
-    rentalPeriod: "monthly",
-    location: "Oaxaca, OAX",
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 250,
-    description:
-      "Casa con piscina y terraza, perfecta para vacaciones o retiros corporativos.",
-    type: "casa",
-    state: "Oaxaca",
-  },
-  {
-    id: "r7",
-    title: "Salón Campestre Los Laureles para Eventos",
-    price: 1200,
-    rentalPrice: 1200,
-    rentalPeriod: "evento",
-    capacity: 250,
-    location: "Querétaro, QRO",
-    bedrooms: 0,
-    bathrooms: 4,
-    area: 850,
-    description:
-      "Hermoso salón y jardín para bodas, quince años y eventos sociales. Cocina industrial, área techada y estacionamiento.",
-    type: "salon_fiestas",
-    state: "Querétaro",
-    image: "/images/vida-mexico-patio.jpg",
-  },
-  {
-    id: "r8",
-    title: "Local Comercial Plaza del Río",
-    price: 1800,
-    rentalPrice: 1800,
-    rentalPeriod: "monthly",
-    capacity: 80,
-    location: "León, GTO",
-    bedrooms: 0,
-    bathrooms: 2,
-    area: 140,
-    description:
-      "Local comercial con doble altura, cancelería de cristal templado, ideal para franquicia o boutique.",
-    type: "comercio",
-    state: "Guanajuato",
-  },
-];
 
 export default function Rentals() {
   const { language } = useLanguage();
@@ -159,6 +33,8 @@ export default function Rentals() {
   const { exchangeRate } = useExchangeRate();
   const [searchParams] = useSearchParams();
 
+  const [rentalProperties, setRentalProperties] = useState<RentalProperty[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState<"all" | string>(searchParams.get("type") || "all");
   const [filterState, setFilterState] = useState(searchParams.get("state") || "all");
   const [filterCategory, setFilterCategory] = useState<"all" | "compra" | "renta">("all");
@@ -173,16 +49,63 @@ export default function Rentals() {
     if (stateParam) setFilterState(stateParam);
   }, [searchParams]);
 
-  const states = ["all", ...new Set(rentalProperties.map((p) => p.state))];
+  useEffect(() => {
+    const fetchRentals = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/products?category=renta&limit=50");
+        const contentType = response.headers.get("content-type") || "";
+        if (response.ok && contentType.includes("application/json")) {
+          const result = await response.json();
+          const list: Product[] = Array.isArray(result?.data)
+            ? result.data
+            : Array.isArray(result)
+              ? result
+              : [];
+          setRentalProperties(
+            list.map((p) => ({
+              id: String(p.id),
+              title: p.name,
+              price: Number(p.price || 0),
+              rentalPrice: Number(p.price || 0),
+              rentalPeriod: p.rentalPeriod || "mensual",
+              capacity: p.capacity,
+              location: p.city ? `${p.city}${p.state ? `, ${p.state}` : ""}` : p.state || "México",
+              bedrooms: p.bedrooms || 0,
+              bathrooms: p.bathrooms || 0,
+              area: p.area || 0,
+              description: p.description || "",
+              type: (p.type as RentalProperty["type"]) || "casa",
+              state: p.state || p.city || "",
+              category: p.category,
+              isCommercial: p.isCommercial,
+              image: p.image,
+            }))
+          );
+        } else {
+          setRentalProperties([]);
+        }
+      } catch {
+        setRentalProperties([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRentals();
+  }, []);
+
+  const states = ["all", ...new Set(rentalProperties.map((p) => p.state).filter(Boolean))];
 
   const filteredProperties = rentalProperties.filter((property) => {
     const typeMatch = filterType === "all" || property.type === filterType;
     const stateMatch = filterState === "all" || property.state === filterState;
     const priceMatch =
-      property.price >= priceRange[0] && property.price <= priceRange[1];
-    const categoryMatch = filterCategory === "all" || (property as any).category === filterCategory;
-    const commercialMatch = filterCommercial === "all" ||
-      (filterCommercial === "commercial" ? (property as any).isCommercial : !(property as any).isCommercial);
+      property.price >= priceRange[0] &&
+      (priceRange[1] >= 5000 ? true : property.price <= priceRange[1]);
+    const categoryMatch = filterCategory === "all" || property.category === filterCategory;
+    const commercialMatch =
+      filterCommercial === "all" ||
+      (filterCommercial === "commercial" ? property.isCommercial : !property.isCommercial);
     return typeMatch && stateMatch && priceMatch && categoryMatch && commercialMatch;
   });
 
@@ -211,12 +134,12 @@ export default function Rentals() {
       <section className="bg-gradient-to-br from-purple-50 to-blue-50 py-12 md:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-foreground mb-3 sm:mb-4">
               {language === "es"
                 ? "Alquila tu Casa o Terreno"
                 : "Rent Your Property"}
             </h1>
-            <p className="text-lg text-foreground/70">
+            <p className="text-sm sm:text-base md:text-lg text-foreground/70">
               {language === "es"
                 ? "Propiedades disponibles para alquiler a paisanos en Estados Unidos. Gana dinero pasivo mientras viajas."
                 : "Properties available for rent to paisanos in the United States. Earn passive income while you travel."}
@@ -486,7 +409,7 @@ export default function Rentals() {
               </div>
 
               {filteredProperties.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 md:gap-6 lg:gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
                   {filteredProperties.map((property) => (
                     <PropertyCard
                       key={property.id}

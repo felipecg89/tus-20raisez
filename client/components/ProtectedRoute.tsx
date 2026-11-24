@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth, UserRole } from "@/contexts/AuthContext";
+import { PRIVATE_ROUTES } from "@/lib/routes";
 import { Spinner } from "@/components/ui/spinner";
 
 interface ProtectedRouteProps {
@@ -23,13 +24,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to={PRIVATE_ROUTES.login} state={{ from: location }} replace />;
   }
 
   if (requiredRoles.length > 0 && !hasRole(requiredRoles)) {
-    return (
-      <Navigate to="/" replace />
-    );
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;

@@ -192,8 +192,8 @@ export default function AdminUsers() {
   return (
     <div className="space-y-6">
       {/* Header con botón crear */}
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-white">Gestión de Usuarios</h2>
+      <div className="flex flex-wrap justify-between items-center gap-2">
+        <h2 className="text-lg sm:text-2xl font-bold text-white">Gestión de Usuarios</h2>
         <Button
           onClick={() => setShowCreateForm(!showCreateForm)}
           className="bg-emerald-600 hover:bg-emerald-700"
@@ -279,8 +279,8 @@ export default function AdminUsers() {
       ) : users.length === 0 ? (
         <div className="text-center py-8 text-slate-400">No hay usuarios</div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm text-slate-300">
+        <div className="overflow-x-auto -mx-2 px-2">
+          <table className="w-full min-w-[520px] text-xs sm:text-sm text-slate-300">
             <thead className="border-b border-slate-600">
               <tr>
                 <th className="px-4 py-3 text-left font-semibold">Email</th>

@@ -10,6 +10,10 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dist_*.zip
+dist_*.tar.gz
+carpeta de almacen  de prod ventas/
+Nueva carpeta/
 *.local
 
 # Editor directories and files

@@ -47,7 +47,7 @@ export const HowItWorks = () => {
           <p className="text-xs md:text-sm font-bold text-[#1B4965] uppercase tracking-wider">
             {language === "es" ? "Proceso Transparente y Seguro" : "Clear & Secure Process"}
           </p>
-          <h2 className="font-heading font-extrabold text-3xl md:text-4xl lg:text-5xl text-[#101B24] tracking-tight">
+          <h2 className="font-heading font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[#101B24] tracking-tight">
             {language === "es" ? "Cómo logramos tu objetivo en 4 pasos" : "How it works in 4 easy steps"}
           </h2>
           <p className="text-sm md:text-base text-[#465664]">

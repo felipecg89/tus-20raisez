@@ -251,7 +251,7 @@ export const WhatsAppWidget = () => {
 
       {/* Speech bubble / Tooltip when closed */}
       {!isOpen && showTooltip && (
-        <div className="relative bg-white text-slate-800 text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-xl shadow-2xl border border-emerald-100 flex items-center gap-2 max-w-xs animate-fade-in-up">
+        <div className="relative bg-white text-slate-800 text-[11px] sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-xl shadow-2xl border border-emerald-100 flex items-center gap-2 max-w-[calc(100vw-5.5rem)] sm:max-w-xs animate-fade-in-up">
           <button
             onClick={() => setIsOpen(true)}
             className="text-left hover:text-emerald-700 transition-colors"

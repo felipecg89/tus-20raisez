@@ -72,7 +72,7 @@ export const Benefits = () => {
           <p className="text-xs md:text-sm font-bold text-[#1B4965] uppercase tracking-wider">
             {language === "es" ? "Respaldo y Confianza Binacional" : "Cross-Border Trust & Track Record"}
           </p>
-          <h2 className="font-heading font-extrabold text-3xl md:text-4xl lg:text-5xl text-[#101B24] tracking-tight">
+          <h2 className="font-heading font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[#101B24] tracking-tight">
             {language === "es" ? "¿Por qué los paisanos eligen Tus Raíces?" : "Why US Latinos choose Tus Raíces"}
           </h2>
           <p className="text-sm md:text-base text-[#465664]">

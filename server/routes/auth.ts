@@ -63,93 +63,10 @@ export const login: RequestHandler = async (req, res) => {
   }
 };
 
-export const signup: RequestHandler = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    // Seguridad: El registro público siempre asigna rol "cliente".
-    // Solo un administrador autenticado puede ascender roles desde el cPanel.
-    const assignedRole = "cliente";
-
-    if (!email || !password) {
-      return res.status(400).json({
-        error: "Email and password are required",
-      });
-    }
-
-    if (password.length < 6) {
-      return res.status(400).json({
-        error: "Password must be at least 6 characters",
-      });
-    }
-
-    // Create user in auth using regular client
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    if (authError) {
-      return res.status(400).json({
-        error: authError.message || "Failed to create user",
-      });
-    }
-
-    if (!authData.user) {
-      return res.status(500).json({
-        error: "Failed to create user",
-      });
-    }
-
-    // Create user profile using admin client
-    const { error: profileError } = await supabaseAdmin
-      .from("user_profiles")
-      .insert({
-        id: authData.user.id,
-        email,
-        role: assignedRole,
-        created_at: new Date().toISOString(),
-      });
-
-    if (profileError) {
-      // Clean up auth user if profile creation fails
-      await supabaseAdmin.auth.admin.deleteUser(authData.user.id).catch(() => {});
-      return res.status(500).json({
-        error: "Failed to create user profile",
-      });
-    }
-
-    // Sign in the new user
-    const { data: sessionData, error: sessionError } =
-      await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-    if (sessionError || !sessionData.session) {
-      return res.status(500).json({
-        error: "Failed to create session",
-      });
-    }
-
-    return res.json({
-      user: {
-        id: authData.user.id,
-        email,
-        role: assignedRole,
-      },
-      session: {
-        access_token: sessionData.session.access_token,
-        refresh_token: sessionData.session.refresh_token,
-        expires_at: sessionData.session.expires_at,
-      },
-    });
-  } catch (error) {
-    console.error("Signup error:", error);
-    res.status(500).json({
-      error: "Internal server error",
-      details: error instanceof Error ? error.message : "Unknown error",
-    });
-  }
+export const signup: RequestHandler = async (_req, res) => {
+  return res.status(403).json({
+    error: "El registro público está deshabilitado. Solo un administrador puede dar de alta cuentas.",
+  });
 };
 
 export const getSession: RequestHandler = async (req, res) => {

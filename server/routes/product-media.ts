@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { supabase } from "../lib/supabase";
+import { supabaseAdmin } from "../lib/supabase";
 
 export const getProductMedia: RequestHandler = async (req, res) => {
   try {
@@ -8,7 +8,7 @@ export const getProductMedia: RequestHandler = async (req, res) => {
     const limit = Math.min(100, parseInt(req.query.limit as string) || 50);
     const offset = (page - 1) * limit;
 
-    const { data, error, count } = await supabase
+    const { data, error, count } = await supabaseAdmin
       .from("product_media")
       .select("*", { count: "exact" })
       .eq("product_id", productId)
@@ -44,7 +44,7 @@ export const addProductMedia: RequestHandler = async (req, res) => {
     }
 
     // Get current max order
-    const { data: existingMedia } = await supabase
+    const { data: existingMedia } = await supabaseAdmin
       .from("product_media")
       .select("display_order")
       .eq("product_id", productId)
@@ -53,7 +53,7 @@ export const addProductMedia: RequestHandler = async (req, res) => {
 
     const displayOrder = (existingMedia?.[0]?.display_order ?? -1) + 1;
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from("product_media")
       .insert([
         {
@@ -80,7 +80,7 @@ export const deleteProductMedia: RequestHandler = async (req, res) => {
   try {
     const { mediaId } = req.params;
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from("product_media")
       .delete()
       .eq("id", mediaId)
@@ -108,7 +108,7 @@ export const reorderProductMedia: RequestHandler = async (req, res) => {
       return;
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from("product_media")
       .update({ display_order: newOrder })
       .eq("id", mediaId)
@@ -143,7 +143,7 @@ export const bulkAddProductMedia: RequestHandler = async (req, res) => {
     }
 
     // Get current max order
-    const { data: existingMedia } = await supabase
+    const { data: existingMedia } = await supabaseAdmin
       .from("product_media")
       .select("display_order")
       .eq("product_id", productId)
@@ -161,7 +161,7 @@ export const bulkAddProductMedia: RequestHandler = async (req, res) => {
       display_order: startOrder + index,
     }));
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from("product_media")
       .insert(itemsToInsert)
       .select();

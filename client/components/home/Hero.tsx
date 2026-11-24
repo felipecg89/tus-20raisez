@@ -45,25 +45,27 @@ export const Hero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
           {/* Columna Izquierda (7 cols en escritorio) */}
           <div className="lg:col-span-7 flex flex-col justify-center space-y-5">
-            {/* Nuevo Logotipo Oficial Estilizado - Marca de la Empresa (Grande arriba del título) */}
-            <div className="inline-block">
+            {/* Nuevo Logotipo Oficial Estilizado - Centrado en celular, alineado a la izquierda en escritorio */}
+            <div className="flex justify-center md:justify-start">
               <img
                 src="/images/logo-marca-grande.jpg"
                 alt="Tus Raíces MX - Invierte. Protege. Regresa."
-                className="h-24 sm:h-32 md:h-36 lg:h-40 w-auto object-contain mix-blend-multiply drop-shadow-xs"
+                className="h-28 sm:h-32 md:h-36 lg:h-40 w-auto object-contain mix-blend-multiply drop-shadow-xs"
               />
             </div>
 
             {/* Texto corto superior de atención binacional */}
-            <div className="flex items-center gap-2 text-xs md:text-sm font-semibold text-[#1B4965] tracking-wide uppercase">
-              <span className="inline-block w-2 h-2 rounded-full bg-[#C8102E]"></span>
-              {language === "es"
-                ? "Atención binacional · EE. UU. y México"
-                : "Bi-national Service · US and Mexico"}
+            <div className="flex items-center justify-center md:justify-start gap-2 text-[11px] sm:text-xs md:text-sm font-semibold text-[#1B4965] tracking-wide uppercase text-center md:text-left">
+              <span className="inline-block w-2 h-2 rounded-full bg-[#C8102E] shrink-0"></span>
+              <span>
+                {language === "es"
+                  ? "Atención binacional · EE. UU. y México"
+                  : "Bi-national Service · US and Mexico"}
+              </span>
             </div>
 
-            {/* Titular completo con text-balance asegurando que México nunca se corte */}
-            <h1 className="font-heading font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[54px] text-[#101B24] leading-[1.12] tracking-tight [text-wrap:balance]">
+            {/* Titular completo con escala móvil limpia */}
+            <h1 className="font-heading font-extrabold text-[26px] sm:text-4xl md:text-5xl lg:text-[54px] text-[#101B24] leading-[1.15] tracking-tight [text-wrap:balance]">
               {language === "es" ? (
                 <>
                   Conecta tus sueños de Estados Unidos con tu hogar en{" "}
@@ -257,58 +259,58 @@ export const Hero = () => {
 
         {/* Debajo del Hero: Franja de 4 métricas clave (grid-cols-2 en móvil, grid-cols-4 en PC) */}
         <div className="mt-10 sm:mt-12 pt-6 border-t border-[#DFE5EA]">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            <div className="bg-white p-4 rounded-2xl border border-[#DFE5EA] shadow-xs flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#1B4965]/10 flex items-center justify-center flex-shrink-0 text-[#1B4965]">
-                <Clock className="w-5 h-5" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+            <div className="bg-white p-3 sm:p-4 rounded-2xl border border-[#DFE5EA] shadow-xs flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#1B4965]/10 flex items-center justify-center flex-shrink-0 text-[#1B4965]">
+                <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <div>
-                <p className="font-heading font-bold text-lg sm:text-xl text-[#101B24] leading-tight">
+              <div className="min-w-0">
+                <p className="font-heading font-bold text-base sm:text-xl text-[#101B24] leading-tight">
                   &lt; 1 hora
                 </p>
-                <p className="text-xs text-[#465664]">
+                <p className="text-[11px] sm:text-xs text-[#465664] leading-snug">
                   {language === "es" ? "Respuesta inicial" : "First response"}
                 </p>
               </div>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-[#DFE5EA] shadow-xs flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center flex-shrink-0 text-emerald-700">
-                <CheckCircle2 className="w-5 h-5" />
+            <div className="bg-white p-3 sm:p-4 rounded-2xl border border-[#DFE5EA] shadow-xs flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center flex-shrink-0 text-emerald-700">
+                <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <div>
-                <p className="font-heading font-bold text-lg sm:text-xl text-[#101B24] leading-tight">
+              <div className="min-w-0">
+                <p className="font-heading font-bold text-base sm:text-xl text-[#101B24] leading-tight">
                   100%
                 </p>
-                <p className="text-xs text-[#465664]">
+                <p className="text-[11px] sm:text-xs text-[#465664] leading-snug">
                   {language === "es" ? "Digital y presencial" : "Digital & in-person"}
                 </p>
               </div>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-[#DFE5EA] shadow-xs flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#C8102E]/10 flex items-center justify-center flex-shrink-0 text-[#C8102E]">
-                <Globe2 className="w-5 h-5" />
+            <div className="bg-white p-3 sm:p-4 rounded-2xl border border-[#DFE5EA] shadow-xs flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#C8102E]/10 flex items-center justify-center flex-shrink-0 text-[#C8102E]">
+                <Globe2 className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <div>
-                <p className="font-heading font-bold text-lg sm:text-xl text-[#101B24] leading-tight">
+              <div className="min-w-0">
+                <p className="font-heading font-bold text-base sm:text-xl text-[#101B24] leading-tight">
                   EE. UU. / MX
                 </p>
-                <p className="text-xs text-[#465664]">
+                <p className="text-[11px] sm:text-xs text-[#465664] leading-snug">
                   {language === "es" ? "Español e inglés" : "Spanish & English"}
                 </p>
               </div>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-[#DFE5EA] shadow-xs flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#1B4965]/10 flex items-center justify-center flex-shrink-0 text-[#1B4965]">
-                <Layers className="w-5 h-5" />
+            <div className="bg-white p-3 sm:p-4 rounded-2xl border border-[#DFE5EA] shadow-xs flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#1B4965]/10 flex items-center justify-center flex-shrink-0 text-[#1B4965]">
+                <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <div>
-                <p className="font-heading font-bold text-lg sm:text-xl text-[#101B24] leading-tight">
+              <div className="min-w-0">
+                <p className="font-heading font-bold text-base sm:text-xl text-[#101B24] leading-tight">
                   4 áreas
                 </p>
-                <p className="text-xs text-[#465664]">
+                <p className="text-[11px] sm:text-xs text-[#465664] leading-snug">
                   {language === "es" ? "Soluciones integrales" : "Complete solutions"}
                 </p>
               </div>

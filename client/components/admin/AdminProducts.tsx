@@ -15,6 +15,8 @@ import {
 import { Trash2, Edit2, Plus, Upload, X, Filter, Grid3x3, List } from "lucide-react";
 import { toast } from "sonner";
 import { uploadProductImage, MediaFile } from "@/lib/uploadService";
+import { supabase } from "@/lib/supabase";
+import { PRIVATE_ROUTES } from "@/lib/routes";
 import ProductMediaGallery from "./ProductMediaGallery";
 import ProductTableView from "./ProductTableView";
 
@@ -72,13 +74,45 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
       }
 
       const response = await fetch(`/api/products?${params}`);
-      const result = await response.json();
-
-      if (result.data) {
-        setProducts(result.data);
-        setTotalPages(result.pagination.totalPages);
+      const contentType = response.headers.get("content-type") || "";
+      if (response.ok && contentType.includes("application/json")) {
+        const result = await response.json();
+        if (result.data) {
+          setProducts(result.data);
+          setTotalPages(result.pagination.totalPages);
+        } else {
+          setProducts(Array.isArray(result) ? result : []);
+        }
       } else {
-        setProducts(result);
+        // Fallback a consulta directa de Supabase
+        let query = supabase.from("products").select("*");
+        if (categoryFilter) query = query.eq("category", categoryFilter);
+        const { data: supaProducts } = await query;
+        if (supaProducts) {
+          setProducts(
+            supaProducts.map((p: any) => ({
+              id: p.id,
+              name: p.name,
+              description: p.description,
+              price: p.price,
+              city: p.city,
+              state: p.state,
+              type: p.type,
+              category: p.category,
+              isCommercial: p.is_commercial,
+              capacity: p.capacity,
+              rentalPeriod: p.rental_period,
+              image: p.main_image_url || p.image,
+              features: p.features || [],
+              bedrooms: p.bedrooms,
+              bathrooms: p.bathrooms,
+              area: p.area,
+              floors: p.floors,
+              createdAt: p.created_at || new Date().toISOString(),
+              updatedAt: p.updated_at || new Date().toISOString(),
+            }))
+          );
+        }
       }
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -264,7 +298,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
 
 
   const handleViewProduct = (product: Product) => {
-    navigate(`/admin/productos/${product.id}`);
+    navigate(PRIVATE_ROUTES.adminProductDetail(product.id));
   };
 
   if (loading) {
@@ -274,7 +308,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
   return (
     <div className="space-y-4">
       <div className="space-y-4">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-wrap justify-between items-center gap-2">
           <div className="flex items-center gap-2">
             <h3 className="text-lg font-semibold text-white">Productos</h3>
             <div className="flex gap-1 border border-slate-600 rounded-lg p-1">
@@ -304,7 +338,7 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
           </div>
           <Button
             onClick={() => {
-              navigate("/admin/productos/new");
+              navigate(PRIVATE_ROUTES.adminProductDetail("new"));
             }}
             className="bg-emerald-600 hover:bg-emerald-700"
           >
@@ -653,21 +687,23 @@ export default function AdminProducts({ onUpdate }: AdminProductsProps) {
                   />
                 </div>
               )}
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-white">{product.name}</CardTitle>
-                    <p className="text-sm text-slate-400 mt-1">{product.city}</p>
+              <CardHeader className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
+                  <div className="min-w-0">
+                    <CardTitle className="text-base sm:text-xl text-white leading-snug">
+                      {product.name}
+                    </CardTitle>
+                    <p className="text-xs sm:text-sm text-slate-400 mt-1">{product.city}</p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-lg font-bold text-emerald-400">
+                  <div className="sm:text-right shrink-0">
+                    <p className="text-base sm:text-lg font-bold text-emerald-400">
                       ${product.price.toLocaleString()}
                     </p>
-                    <div className="flex gap-1 justify-end mt-1">
-                      <span className="inline-block px-2 py-1 text-xs bg-slate-600 text-slate-200 rounded">
+                    <div className="flex flex-wrap gap-1 sm:justify-end mt-1">
+                      <span className="inline-block px-2 py-0.5 text-xs bg-slate-600 text-slate-200 rounded">
                         {product.type}
                       </span>
-                      <span className="inline-block px-2 py-1 text-xs bg-blue-600 text-white rounded">
+                      <span className="inline-block px-2 py-0.5 text-xs bg-blue-600 text-white rounded">
                         {PRODUCT_CATEGORIES.find(c => c.value === product.category)?.labelEs || product.category}
                       </span>
                     </div>

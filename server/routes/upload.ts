@@ -1,47 +1,88 @@
 import { RequestHandler } from "express";
 import { supabaseAdmin } from "../lib/supabase";
 
+/**
+ * Validador de firmas binarias (Magic Bytes) para imágenes permitidas
+ */
+function detectImageType(buffer: Buffer): { mime: string; ext: string } | null {
+  if (buffer.length < 12) return null;
+
+  // JPEG (FF D8 FF)
+  if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) {
+    return { mime: "image/jpeg", ext: "jpg" };
+  }
+
+  // PNG (89 50 4E 47 0D 0A 1A 0A)
+  if (
+    buffer[0] === 0x89 &&
+    buffer[1] === 0x50 &&
+    buffer[2] === 0x4e &&
+    buffer[3] === 0x47
+  ) {
+    return { mime: "image/png", ext: "png" };
+  }
+
+  // WEBP (RIFF .... WEBP)
+  if (
+    buffer.toString("ascii", 0, 4) === "RIFF" &&
+    buffer.toString("ascii", 8, 12) === "WEBP"
+  ) {
+    return { mime: "image/webp", ext: "webp" };
+  }
+
+  return null;
+}
+
 export const uploadImage: RequestHandler = async (req, res) => {
   try {
-    const { imageData, fileName } = req.body;
+    const { imageData } = req.body;
 
-    if (!imageData) {
+    if (!imageData || typeof imageData !== "string") {
       return res.status(400).json({
-        error: "Image data is required",
+        error: "Datos de imagen requeridos",
       });
     }
 
-    // Convert base64 to buffer
-    let fileBuffer: Buffer;
-    if (typeof imageData === "string") {
-      // Remove data URL prefix if present (e.g., "data:image/jpeg;base64,")
-      const base64Data = imageData.replace(/^data:image\/\w+;base64,/, "");
-      fileBuffer = Buffer.from(base64Data, "base64");
-    } else {
-      fileBuffer = Buffer.from(imageData);
+    // Convertir base64 a buffer
+    const base64Data = imageData.replace(/^data:image\/\w+;base64,/, "");
+    const fileBuffer = Buffer.from(base64Data, "base64");
+
+    // Límite estricto de tamaño: 5MB
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+    if (fileBuffer.length > MAX_FILE_SIZE) {
+      return res.status(400).json({
+        error: "El archivo excede el tamaño máximo permitido (5MB)",
+      });
     }
 
-    // Create unique filename
-    const timestamp = Date.now();
-    const filename = `${timestamp}-${Date.now().toString(36)}.jpg`;
-    const path = `products/${filename}`;
+    // Inspección profunda de Magic Bytes (bloquea PHP, SVG maliciosos, ejecutables)
+    const detectedType = detectImageType(fileBuffer);
+    if (!detectedType) {
+      return res.status(400).json({
+        error: "Formato no permitido. Solo se aceptan imágenes legítimas JPEG, PNG o WEBP.",
+      });
+    }
 
-    // Upload to Supabase Storage
-    const { data, error } = await supabaseAdmin.storage
+    // Nombre seguro generado en backend
+    const uniqueSuffix = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    const path = `products/${uniqueSuffix}.${detectedType.ext}`;
+
+    // Subir a Supabase Storage
+    const { error } = await supabaseAdmin.storage
       .from("product-images")
       .upload(path, fileBuffer, {
-        contentType: "image/jpeg",
-        cacheControl: "3600",
+        contentType: detectedType.mime,
+        cacheControl: "31536000",
         upsert: false,
       });
 
     if (error) {
       return res.status(400).json({
-        error: `Upload failed: ${error.message}`,
+        error: "Error al almacenar el archivo",
       });
     }
 
-    // Get public URL
+    // Obtener URL pública
     const {
       data: { publicUrl },
     } = supabaseAdmin.storage.from("product-images").getPublicUrl(path);
@@ -54,8 +95,7 @@ export const uploadImage: RequestHandler = async (req, res) => {
   } catch (error) {
     console.error("Upload error:", error);
     res.status(500).json({
-      error: "Upload failed",
-      details: error instanceof Error ? error.message : "Unknown error",
+      error: "Error interno al procesar el archivo",
     });
   }
 };
@@ -64,9 +104,17 @@ export const deleteImage: RequestHandler = async (req, res) => {
   try {
     const { path } = req.body;
 
-    if (!path) {
+    if (!path || typeof path !== "string") {
       return res.status(400).json({
-        error: "Path is required",
+        error: "Ruta de archivo requerida",
+      });
+    }
+
+    // Sanitización anti-Path-Traversal: Debe iniciar con "products/" y caracteres alfanuméricos seguros
+    const safePathRegex = /^products\/[a-zA-Z0-9_\-\.]+\.(jpg|jpeg|png|webp)$/;
+    if (!safePathRegex.test(path) || path.includes("..")) {
+      return res.status(400).json({
+        error: "Ruta de archivo no permitida",
       });
     }
 
@@ -76,19 +124,18 @@ export const deleteImage: RequestHandler = async (req, res) => {
 
     if (error) {
       return res.status(400).json({
-        error: `Delete failed: ${error.message}`,
+        error: "No se pudo eliminar el archivo",
       });
     }
 
     res.json({
       success: true,
-      message: "Image deleted",
+      message: "Imagen eliminada exitosamente",
     });
   } catch (error) {
     console.error("Delete error:", error);
     res.status(500).json({
-      error: "Delete failed",
-      details: error instanceof Error ? error.message : "Unknown error",
+      error: "Error interno al eliminar el archivo",
     });
   }
 };

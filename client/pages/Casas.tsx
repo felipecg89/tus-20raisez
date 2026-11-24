@@ -25,121 +25,6 @@ interface Property {
   rentalPeriod?: string;
 }
 
-const properties: Property[] = [
-  {
-    id: "1",
-    title: "Casa Colonial en Guanajuato",
-    price: 180000,
-    location: "Guanajuato, GTO",
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 250,
-    description:
-      "Hermosa casa colonial con patio interior, acabados de cedro, cantera y vista a la ciudad histórica.",
-    type: "casa",
-    state: "Guanajuato",
-    image: "/images/cliente-feliz-llaves.jpg",
-  },
-  {
-    id: "2",
-    title: "Departamento Vista al Mar Jalisco",
-    price: 250000,
-    location: "Puerto Vallarta, JAL",
-    bedrooms: 2,
-    bathrooms: 2,
-    area: 150,
-    description:
-      "Moderno departamento con vista a la bahía, acceso a playa privada y amenidades de lujo.",
-    type: "casa",
-    state: "Jalisco",
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=80",
-  },
-  {
-    id: "3",
-    title: "Residencia Contemporánea Monterrey",
-    price: 320000,
-    location: "Monterrey, NL",
-    bedrooms: 4,
-    bathrooms: 4,
-    area: 380,
-    description:
-      "Espectacular casa contemporánea en fraccionamiento privado con vigilancia y amplio jardín.",
-    type: "casa",
-    state: "Nuevo León",
-    image: "/images/casa-mexico-fachada.jpg",
-  },
-  {
-    id: "4",
-    title: "Lote Residencial Querétaro",
-    price: 95000,
-    location: "Querétaro, QRO",
-    bedrooms: 0,
-    bathrooms: 0,
-    area: 800,
-    description:
-      "Lote residencial en fraccionamiento consolidado, todos los servicios subterráneos disponibles.",
-    type: "terreno",
-    state: "Querétaro",
-    image: "/images/terreno-residencial-mexico.jpg",
-  },
-  {
-    id: "5",
-    title: "Casa Campestre Morelia",
-    price: 200000,
-    location: "Morelia, MICH",
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 320,
-    description:
-      "Casa campestre con grandes extensiones de jardín, alberca privada y chimenea rústica.",
-    type: "casa",
-    state: "Michoacán",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80",
-  },
-  {
-    id: "6",
-    title: "Penthouse de Lujo CDMX",
-    price: 450000,
-    location: "CDMX",
-    bedrooms: 3,
-    bathrooms: 3,
-    area: 280,
-    description:
-      "Elegante penthouse en zona exclusiva con terraza panorámica, roof garden y seguridad 24/7.",
-    type: "casa",
-    state: "Ciudad de México",
-    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1000&q=80",
-  },
-  {
-    id: "7",
-    title: "Casa Yucateca con Alberca Mérida",
-    price: 165000,
-    location: "Mérida, YUC",
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 210,
-    description:
-      "Acogedora casa tradicional en el centro de Mérida con alberca chukum y patio colonial.",
-    type: "casa",
-    state: "Yucatán",
-    image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=80",
-  },
-  {
-    id: "8",
-    title: "Quinta Colonial Zacatecas",
-    price: 215000,
-    location: "Zacatecas, ZAC",
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 310,
-    description:
-      "Propiedad colonial con acabados en cantera rosa, portón de hierro y amplia cochera.",
-    type: "casa",
-    state: "Zacatecas",
-    image: "/images/vida-mexico-patio.jpg",
-  },
-];
-
 export default function Casas() {
   const { language } = useLanguage();
   const t = translations[language];
@@ -186,7 +71,8 @@ export default function Casas() {
         }
 
         const response = await fetch(`/api/products?${params}`);
-        if (!response.ok) {
+        const contentType = response.headers.get("content-type") || "";
+        if (!response.ok || !contentType.includes("application/json")) {
           setSupabaseProperties([]);
           return;
         }
@@ -248,7 +134,7 @@ export default function Casas() {
     fetchProducts();
   }, [currentPage, filterType]);
 
-  const allProperties = supabaseProperties.length > 0 ? supabaseProperties : properties;
+  const allProperties = supabaseProperties;
   const states = useMemo(() => ["all", ...new Set(allProperties.map((p) => p.state).filter(Boolean))], [allProperties]);
 
   const filteredProperties = useMemo(() => {
@@ -333,10 +219,10 @@ export default function Casas() {
       <section className="bg-gradient-to-br from-primary/10 to-secondary/10 py-12 md:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-foreground mb-3 sm:mb-4">
               {t.casas.title}
             </h1>
-            <p className="text-lg text-foreground/70">{t.casas.description}</p>
+            <p className="text-sm sm:text-base md:text-lg text-foreground/70">{t.casas.description}</p>
           </div>
         </div>
       </section>
@@ -524,22 +410,32 @@ export default function Casas() {
           ) : (
             <div className="text-center py-20 bg-white rounded-2xl border border-slate-200 p-8">
               <p className="text-lg text-slate-700 font-semibold mb-2">
-                {language === "es"
-                  ? "No se encontraron inmuebles con estos criterios"
-                  : "No properties match your search criteria"}
+                {allProperties.length === 0 && !hasActiveFilters
+                  ? language === "es"
+                    ? "Catálogo en actualización"
+                    : "Catalog currently updating"
+                  : language === "es"
+                    ? "No se encontraron inmuebles con estos criterios"
+                    : "No properties match your search criteria"}
               </p>
               <p className="text-sm text-slate-500 mb-5">
-                {language === "es"
-                  ? "Intenta buscar con otra palabra clave o limpiando los filtros."
-                  : "Try searching with different keywords or clearing active filters."}
+                {allProperties.length === 0 && !hasActiveFilters
+                  ? language === "es"
+                    ? "Muy pronto verás aquí nuestras nuevas propiedades disponibles."
+                    : "New verified properties will be published here shortly."
+                  : language === "es"
+                    ? "Intenta buscar con otra palabra clave o limpiando los filtros."
+                    : "Try searching with different keywords or clearing active filters."}
               </p>
-              <button
-                onClick={handleClearFilters}
-                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-medium text-sm transition-colors shadow-sm"
-              >
-                <RotateCcw className="w-4 h-4" />
-                <span>{language === "es" ? "Ver todo el catálogo" : "View all properties"}</span>
-              </button>
+              {hasActiveFilters && (
+                <button
+                  onClick={handleClearFilters}
+                  className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-medium text-sm transition-colors shadow-sm"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  <span>{language === "es" ? "Ver todo el catálogo" : "View all properties"}</span>
+                </button>
+              )}
             </div>
           )}
         </div>

@@ -92,7 +92,7 @@ export const Services = () => {
           <p className="text-xs md:text-sm font-bold text-[#1B4965] uppercase tracking-wider">
             {language === "es" ? "Soluciones Integrales Binacionales" : "Comprehensive Cross-Border Solutions"}
           </p>
-          <h2 className="font-heading font-extrabold text-3xl md:text-4xl lg:text-5xl text-[#101B24] tracking-tight">
+          <h2 className="font-heading font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[#101B24] tracking-tight">
             {language === "es" ? "Todo lo que necesitas en México, desde EE. UU." : "Everything you need in Mexico, from the US"}
           </h2>
           <p className="text-sm md:text-base text-[#465664]">

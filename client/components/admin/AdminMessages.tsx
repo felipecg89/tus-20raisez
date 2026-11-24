@@ -86,7 +86,7 @@ export default function AdminMessages({ onUpdate }: AdminMessagesProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap justify-between items-center gap-2">
         <h3 className="text-lg font-semibold text-white">
           Mensajes ({filteredMessages.length})
         </h3>
@@ -147,20 +147,20 @@ export default function AdminMessages({ onUpdate }: AdminMessagesProps) {
           {selectedMessage ? (
             <Card className="bg-slate-700 border-slate-600">
               <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-white">{selectedMessage.name}</CardTitle>
-                    <p className="text-sm text-slate-400 mt-2">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
+                  <div className="min-w-0">
+                    <CardTitle className="text-white text-lg sm:text-xl">{selectedMessage.name}</CardTitle>
+                    <p className="text-xs sm:text-sm text-slate-400 mt-2">
                       📍 {selectedMessage.city}
                     </p>
-                    <p className="text-sm text-slate-400">
+                    <p className="text-xs sm:text-sm text-slate-400 break-all">
                       📧 {selectedMessage.email}
                     </p>
-                    <p className="text-sm text-slate-400">
+                    <p className="text-xs sm:text-sm text-slate-400">
                       📱 {selectedMessage.whatsapp}
                     </p>
                   </div>
-                  <div className="text-right">
+                  <div className="sm:text-right shrink-0">
                     <p className="text-xs text-slate-400">
                       {new Date(selectedMessage.createdAt).toLocaleString("es-MX")}
                     </p>
@@ -182,7 +182,7 @@ export default function AdminMessages({ onUpdate }: AdminMessagesProps) {
                   </div>
                 )}
 
-                <div className="border-t border-slate-600 pt-4 flex gap-2">
+                <div className="border-t border-slate-600 pt-4 flex flex-wrap gap-2">
                   {!selectedMessage.read && (
                     <Button
                       onClick={() => handleMarkAsRead(selectedMessage.id)}

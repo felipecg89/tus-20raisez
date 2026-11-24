@@ -130,12 +130,12 @@ export default function AdminLegalContent() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Scale className="h-6 w-6 text-amber-400" />
-            Leyes, Reformas y Trámites para Paisanos
+        <div className="min-w-0">
+          <h2 className="text-lg sm:text-2xl font-bold text-white flex items-center gap-2">
+            <Scale className="h-5 w-5 sm:h-6 sm:w-6 text-amber-400 shrink-0" />
+            <span>Leyes, Reformas y Trámites para Paisanos</span>
           </h2>
-          <p className="text-slate-400 text-sm">
+          <p className="text-slate-400 text-xs sm:text-sm mt-1">
             Publica y actualiza información legal, cambios en el IMSS, Infonavit y convenios consulares que se reflejan en vivo en el sitio web.
           </p>
         </div>
@@ -236,7 +236,7 @@ export default function AdminLegalContent() {
                 />
               </div>
 
-              <div className="flex items-center gap-4 pt-2">
+              <div className="flex flex-wrap items-center gap-2 pt-2">
                 <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700 text-white">
                   <Save className="h-4 w-4 mr-2" />
                   {editingId ? "Guardar Cambios" : "Publicar Aviso"}
