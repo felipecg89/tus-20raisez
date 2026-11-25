@@ -35,7 +35,7 @@ export const WHATSAPP_DISPLAY =
 export const SMS_ENABLED_US = false;
 
 // Correo oficial
-export const CONTACT_EMAIL = "asesores@tusraices.com.mx";
+export const CONTACT_EMAIL = "asesor-patrimonial@tusraices.click";
 export const CONTACT_HOURS_ES = "Lunes a Viernes de 9:00 AM a 6:00 PM (CST)";
 export const CONTACT_HOURS_EN = "Monday to Friday from 9:00 AM to 6:00 PM (CST)";
 

@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Mail, Phone, Clock, Send, MessageCircle, CalendarCheck, X, CheckCircle2 } from "lucide-react";
+import { Mail, Phone, Clock, Send, MessageCircle, CalendarCheck, X, CheckCircle2, AlertCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
-import { submitHubSpotForm } from "@/lib/hubspotService";
 import {
   CALL_US_DISPLAY,
   CALL_US_TEL,
@@ -24,12 +23,17 @@ export const ContactForm = () => {
     whatsapp: "",
     email: "",
     city: "",
+    message: "",
+    _honeypot: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState("");
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -37,38 +41,55 @@ export const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStatus("idle");
+    setSubmitMessage("");
 
     try {
-      const result = await submitHubSpotForm({
-        name: formData.name,
-        whatsapp: formData.whatsapp,
-        email: formData.email,
-        city: formData.city,
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       });
 
-      if (result.success) {
+      const result = await response.json().catch(() => ({}));
+
+      if (response.ok) {
+        setSubmitStatus("success");
         setSubmitMessage(
           language === "es"
-            ? "¡Mensaje enviado con éxito! Un asesor te contactará en menos de 1 hora."
+            ? "¡Mensaje enviado con éxito! Un asesor patrimonial te contactará en menos de 1 hora."
             : "Message sent successfully! An advisor will reach out in less than 1 hour."
         );
-        setFormData({ name: "", whatsapp: "", email: "", city: "" });
+        setFormData({
+          name: "",
+          whatsapp: "",
+          email: "",
+          city: "",
+          message: "",
+          _honeypot: "",
+        });
         setTimeout(() => {
           setSubmitMessage("");
+          setSubmitStatus("idle");
           setIsBottomSheetOpen(false);
-        }, 4000);
+        }, 5000);
       } else {
+        setSubmitStatus("error");
         setSubmitMessage(
-          language === "es"
-            ? "Ocurrió un error. Por favor inténtalo de nuevo o contáctanos por WhatsApp."
-            : "An error occurred. Please try again or reach out via WhatsApp."
+          result?.error ||
+            (language === "es"
+              ? "Ocurrió un error. Por favor inténtalo de nuevo o contáctanos por WhatsApp."
+              : "An error occurred. Please try again or reach out via WhatsApp.")
         );
       }
     } catch (error) {
+      setSubmitStatus("error");
       setSubmitMessage(
         language === "es"
-          ? "Ocurrió un error al enviar el formulario."
-          : "An error occurred while submitting the form."
+          ? "Ocurrió un error de conexión al enviar el formulario."
+          : "A connection error occurred while submitting the form."
       );
     } finally {
       setIsSubmitting(false);
@@ -200,7 +221,7 @@ export const ContactForm = () => {
               </div>
             </div>
 
-            {/* Columna Derecha: Formulario conectado a HubSpot */}
+            {/* Columna Derecha: Formulario conectado a SMTP Hostinger */}
             <div className="lg:col-span-7 p-5 sm:p-8 md:p-12 bg-white flex flex-col justify-center">
               <div className="mb-6 space-y-1">
                 <h3 className="font-heading font-bold text-2xl text-[#101B24]">
@@ -216,17 +237,33 @@ export const ContactForm = () => {
               {submitMessage && (
                 <div
                   className={`p-4 rounded-xl text-xs font-semibold mb-6 flex items-center gap-2 ${
-                    submitMessage.includes("éxito") || submitMessage.includes("success")
+                    submitStatus === "success"
                       ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
                       : "bg-red-50 text-red-800 border border-red-200"
                   }`}
                 >
-                  <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+                  {submitStatus === "success" ? (
+                    <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+                  ) : (
+                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  )}
                   <span>{submitMessage}</span>
                 </div>
               )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Campo trampa anti-spam (honeypot invisible para humanos) */}
+                <input
+                  type="text"
+                  name="_honeypot"
+                  value={formData._honeypot}
+                  onChange={handleChange}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="hidden"
+                />
+
                 <div>
                   <label className="block text-xs font-bold text-[#101B24] mb-1">
                     {t.contactForm.nameLabel || "Nombre Completo"} *
@@ -285,6 +322,26 @@ export const ContactForm = () => {
                     required
                     placeholder={language === "es" ? "Ej. Los Ángeles, CA / Dallas, TX / Zacatecas" : "e.g. Los Angeles, CA / Dallas, TX"}
                     className="w-full bg-[#F7F8FA] border border-[#DFE5EA] rounded-xl px-4 py-3 text-xs sm:text-sm text-[#101B24] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1B4965] focus:bg-white transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#101B24] mb-1">
+                    {language === "es"
+                      ? "¿En qué trámite o propiedad te podemos ayudar? (Opcional)"
+                      : "How can we help you? (Optional)"}
+                  </label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={3}
+                    placeholder={
+                      language === "es"
+                        ? "Ej. Compra de casa en México, regularización de escrituras, pensión IMSS Modalidad 40..."
+                        : "e.g. Buying a home in Mexico, deed regularization, IMSS pension..."
+                    }
+                    className="w-full bg-[#F7F8FA] border border-[#DFE5EA] rounded-xl px-4 py-3 text-xs sm:text-sm text-[#101B24] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1B4965] focus:bg-white transition-all resize-none"
                   />
                 </div>
 
@@ -368,18 +425,32 @@ export const ContactForm = () => {
             {submitMessage && (
               <div
                 className={`p-3 rounded-xl text-xs font-semibold flex items-center gap-2 ${
-                  submitMessage.includes("éxito") || submitMessage.includes("success")
+                  submitStatus === "success"
                     ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
                     : "bg-red-50 text-red-800 border border-red-200"
                 }`}
               >
-                <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+                {submitStatus === "success" ? (
+                  <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+                ) : (
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                )}
                 <span>{submitMessage}</span>
               </div>
             )}
 
-            {/* Formulario móvil conectado a HubSpot */}
+            {/* Formulario móvil conectado a SMTP Hostinger */}
             <form onSubmit={handleSubmit} className="space-y-3 pt-1">
+              <input
+                type="text"
+                name="_honeypot"
+                value={formData._honeypot}
+                onChange={handleChange}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="hidden"
+              />
               <div>
                 <label className="block text-xs font-bold text-[#101B24] mb-1">
                   {t.contactForm.nameLabel || "Nombre"} *
@@ -437,6 +508,24 @@ export const ContactForm = () => {
                   required
                   placeholder="Ej. Los Ángeles, CA / Dallas, TX"
                   className="w-full bg-[#F7F8FA] border border-[#DFE5EA] rounded-xl px-3.5 py-2.5 text-xs text-[#101B24] focus:outline-none focus:ring-2 focus:ring-[#1B4965] focus:bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#101B24] mb-1">
+                  {language === "es" ? "Mensaje (Opcional)" : "Message (Optional)"}
+                </label>
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows={2}
+                  placeholder={
+                    language === "es"
+                      ? "¿Qué propiedad o trámite te interesa?"
+                      : "Which property or service are you interested in?"
+                  }
+                  className="w-full bg-[#F7F8FA] border border-[#DFE5EA] rounded-xl px-3.5 py-2.5 text-xs text-[#101B24] focus:outline-none focus:ring-2 focus:ring-[#1B4965] focus:bg-white resize-none"
                 />
               </div>
 

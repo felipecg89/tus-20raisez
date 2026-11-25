@@ -115,7 +115,8 @@ export function createServer() {
   app.put("/api/products/:id", requireAuth, requireAdminOrAgent, updateProduct);
   app.delete("/api/products/:id", requireAuth, requireAdminOrAgent, deleteProduct);
 
-  // Messages API (Creación pública con limitador anti-spam; gestión protegida)
+  // Messages & Contact API (Creación pública con limitador anti-spam; gestión protegida)
+  app.post("/api/contact", contactRateLimiter, createMessage);
   app.post("/api/messages", contactRateLimiter, createMessage);
   app.get("/api/messages", requireAuth, requireAdminOrAgent, getMessages);
   app.get("/api/messages/:id", requireAuth, requireAdminOrAgent, getMessage);

@@ -453,7 +453,7 @@ export async function handleStaticSupabaseApi(
     });
   }
 
-  if (path === "/api/messages") {
+  if (path === "/api/messages" || path === "/api/contact") {
     if (method === "GET") {
       const { data, error } = await supabase
         .from("contact_messages")
@@ -477,26 +477,49 @@ export async function handleStaticSupabaseApi(
 
     if (method === "POST") {
       if (body._honeypot) {
-        return jsonResponse({ id: "ok", message: "Mensaje recibido" }, 201);
+        return jsonResponse({ id: "ok", message: "Mensaje recibido", emailSent: true }, 201);
       }
       const { name, whatsapp, email, city, message } = body;
       if (!name || !whatsapp || !email || !city) {
         return jsonResponse({ error: "Campos requeridos faltantes" }, 400);
       }
 
+      const cleanPayload = {
+        name: String(name).trim().slice(0, 100),
+        whatsapp: String(whatsapp).trim().slice(0, 30),
+        email: String(email).trim().toLowerCase().slice(0, 100),
+        city: String(city).trim().slice(0, 100),
+        message: typeof message === "string" ? message.trim().slice(0, 2000) : "",
+      };
+
       const { error } = await supabase.from("contact_messages").insert([
         {
-          name: String(name).trim().slice(0, 100),
-          whatsapp: String(whatsapp).trim().slice(0, 30),
-          email: String(email).trim().toLowerCase().slice(0, 100),
-          city: String(city).trim().slice(0, 100),
-          message: typeof message === "string" ? message.trim().slice(0, 2000) : "",
+          ...cleanPayload,
           read: false,
         },
       ]);
 
-      if (error) return jsonResponse({ error: error.message }, 400);
-      return jsonResponse({ id: "ok", message: "Mensaje enviado correctamente" }, 201);
+      // Disparar envío SMTP en Hostinger Web Hosting si el endpoint PHP está disponible
+      let phpEmailOk = false;
+      try {
+        const phpRes = await window.fetch("/api/contact.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(cleanPayload),
+        });
+        const ct = phpRes.headers.get("content-type") || "";
+        if (phpRes.ok && ct.includes("application/json")) {
+          phpEmailOk = true;
+        }
+      } catch {
+        // Ignorar si no hay runtime PHP
+      }
+
+      if (error && !phpEmailOk) return jsonResponse({ error: error.message }, 400);
+      return jsonResponse(
+        { id: "ok", message: "Mensaje enviado correctamente", emailSent: phpEmailOk },
+        201
+      );
     }
   }
 

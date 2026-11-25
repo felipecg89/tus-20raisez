@@ -29,9 +29,14 @@ export default defineConfig({
         "buffer",
         "querystring",
         "child_process",
+        "net",
+        "tls",
+        "dns",
+        "zlib",
         // External dependencies that should not be bundled
         "express",
         "cors",
+        "nodemailer",
       ],
       output: {
         format: "es",

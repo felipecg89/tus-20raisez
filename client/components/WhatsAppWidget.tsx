@@ -77,8 +77,12 @@ export const WhatsAppWidget = () => {
           <div className="bg-[#075E54] text-white p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center p-1 shadow-inner overflow-hidden border border-emerald-300">
-                  <img src="/logo.png" alt="Tus Raíces MX" className="w-full h-full object-contain" />
+                <div className="w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-inner overflow-hidden border border-emerald-300">
+                  <img
+                    src="/favicon-whatsapp.png"
+                    alt="Tus Raíces MX"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-[#075E54] rounded-full"></span>
               </div>

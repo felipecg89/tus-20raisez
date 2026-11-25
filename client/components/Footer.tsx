@@ -105,10 +105,10 @@ export const Footer = () => {
               <li className="flex items-center gap-2 pt-1">
                 <Mail className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                 <a
-                  href="mailto:asesores@tusraices.com.mx"
-                  className="hover:text-white transition-colors"
+                  href="mailto:asesor-patrimonial@tusraices.click"
+                  className="hover:text-white transition-colors break-all"
                 >
-                  asesores@tusraices.com.mx
+                  asesor-patrimonial@tusraices.click
                 </a>
               </li>
               <li className="flex items-center gap-2 text-slate-400">

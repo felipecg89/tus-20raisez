@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { Message } from "@shared/api";
 import { supabase, supabaseAdmin } from "../lib/supabase";
+import { sendContactNotificationEmail } from "../lib/mailer";
 
 let inMemoryMessages: Message[] = [
   {
@@ -121,6 +122,8 @@ export const createMessage: RequestHandler = async (req, res) => {
   const cleanCity = city.trim();
   const cleanMessage = typeof message === "string" ? message.trim() : "";
 
+  let savedMessage: Message | null = null;
+
   try {
     const { data, error } = await supabaseAdmin
       .from("contact_messages")
@@ -138,7 +141,7 @@ export const createMessage: RequestHandler = async (req, res) => {
       .single();
 
     if (!error && data) {
-      return res.status(201).json({
+      savedMessage = {
         id: data.id,
         name: data.name,
         whatsapp: data.whatsapp,
@@ -147,30 +150,55 @@ export const createMessage: RequestHandler = async (req, res) => {
         message: data.message,
         createdAt: data.created_at,
         read: data.read,
-      });
+      };
     }
   } catch (e) {
     console.warn("Error inserting message into Supabase:", e);
   }
 
-  const newMessage: Message = {
-    id: Date.now().toString(),
+  if (!savedMessage) {
+    savedMessage = {
+      id: Date.now().toString(),
+      name: cleanName,
+      whatsapp: cleanWhatsapp,
+      email: cleanEmail,
+      city: cleanCity,
+      message: cleanMessage,
+      createdAt: new Date().toISOString(),
+      read: false,
+    };
+
+    inMemoryMessages.unshift(savedMessage);
+    // Prevenir agotamiento de memoria RAM: limitar a máximo 50 mensajes en caché
+    if (inMemoryMessages.length > 50) {
+      inMemoryMessages.length = 50;
+    }
+  }
+
+  // Enviar notificación automática por SMTP de Hostinger a asesor-patrimonial@tusraices.click
+  const emailResult = await sendContactNotificationEmail({
     name: cleanName,
     whatsapp: cleanWhatsapp,
     email: cleanEmail,
     city: cleanCity,
     message: cleanMessage,
-    createdAt: new Date().toISOString(),
-    read: false,
-  };
+  });
 
-  inMemoryMessages.unshift(newMessage);
-  // Prevenir agotamiento de memoria RAM: limitar a máximo 50 mensajes en caché
-  if (inMemoryMessages.length > 50) {
-    inMemoryMessages.length = 50;
+  if (!emailResult.sent) {
+    const isDev = process.env.NODE_ENV !== "production";
+    return res.status(500).json({
+      error: isDev
+        ? emailResult.error || "Error al enviar el correo por SMTP"
+        : "No pudimos procesar el envío automático en este momento. Por favor intenta de nuevo o escríbenos por WhatsApp.",
+      emailSent: false,
+      savedMessageId: savedMessage.id,
+    });
   }
 
-  return res.status(201).json(newMessage);
+  return res.status(201).json({
+    ...savedMessage,
+    emailSent: true,
+  });
 };
 
 export const markMessageAsRead: RequestHandler = async (req, res) => {
